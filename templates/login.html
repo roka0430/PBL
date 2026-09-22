@@ -11,6 +11,13 @@
 
 <body>
   <h1>PBL6 Login</h1>
+  <div>{{ error }}</div>
+
+  <form method="post" action="/login">
+    <input type="password" name="password">
+    <button type="submit">ログイン</button>
+  </form>
+
   <script src="{{ url_for('static', filename='js/login.js') }}" defer></script>
 </body>
 
