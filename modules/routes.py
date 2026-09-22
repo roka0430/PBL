@@ -7,14 +7,20 @@ from flask_login import (
     login_required,
 )
 from werkzeug.security import check_password_hash
+from dotenv import load_dotenv
+import os
 
 
 class Admin(UserMixin):
     id = "admin"
 
 
+load_dotenv()
+SECRET_KEY = os.environ["SECRET_KEY"]
+ADMIN_PASSWORD_HASH = os.environ["ADMIN_PASSWORD_HASH"]
+
 app = Flask(__name__, template_folder="../templates")
-app.secret_key = "secret_key"
+app.secret_key = SECRET_KEY
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -39,13 +45,13 @@ def login_get():
 @app.post("/login")
 def login_post():
     if current_user.is_authenticated:
-        return redirect(url_for("routes.home"))
+        return redirect(url_for("home"))
 
     password = request.form["password"]
 
-    if check_password_hash("password_hash", password):
+    if check_password_hash(ADMIN_PASSWORD_HASH, password):
         login_user(Admin())
-        return redirect(url_for("routes.home"))
+        return redirect(url_for("home"))
 
     return render_template("login.html", error="パスワードが正しくありません")
 
