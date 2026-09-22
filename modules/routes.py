@@ -19,7 +19,7 @@ load_dotenv()
 SECRET_KEY = os.environ["SECRET_KEY"]
 ADMIN_PASSWORD_HASH = os.environ["ADMIN_PASSWORD_HASH"]
 
-app = Flask(__name__, template_folder="../templates")
+app = Flask(__name__, template_folder="../templates", static_folder="../static")
 app.secret_key = SECRET_KEY
 
 login_manager = LoginManager()
