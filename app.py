@@ -1,6 +1,6 @@
-import threading
-import logging
 import time
+import logging
+import threading
 
 from modules.routes import run_server
 

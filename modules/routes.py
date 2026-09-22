@@ -1,3 +1,7 @@
+import os
+
+from dotenv import load_dotenv
+from werkzeug.security import check_password_hash
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import (
     LoginManager,
@@ -7,9 +11,6 @@ from flask_login import (
     current_user,
     login_required,
 )
-from werkzeug.security import check_password_hash
-from dotenv import load_dotenv
-import os
 
 
 class Admin(UserMixin):
