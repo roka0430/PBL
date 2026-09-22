@@ -4,6 +4,11 @@ from flask_login import LoginManager, UserMixin, login_user, login_required
 app = Flask(__name__, template_folder="../templates")
 
 
+@app.route("/login")
+def login():
+    return render_template("login.html")
+
+
 @app.route("/")
 def home():
     return render_template("index.html")
