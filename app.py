@@ -1,7 +1,10 @@
 import threading
+import logging
 import time
 
 from modules.routes import run_server
+
+logging.getLogger("werkzeug").setLevel(logging.WARNING)
 
 
 def main():
