@@ -12,6 +12,11 @@
 
 <body>
   <h1>PBL6 Auto Watering System</h1>
+
+  <form action="{{ url_for('logout') }}" method="post">
+    <button type="submit">ログアウト</button>
+  </form>
+
   <script src="{{ url_for('static', filename='js/home.js') }}" defer></script>
 </body>
 

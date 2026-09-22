@@ -3,6 +3,7 @@ from flask_login import (
     LoginManager,
     UserMixin,
     login_user,
+    logout_user,
     current_user,
     login_required,
 )
@@ -54,6 +55,12 @@ def login_post():
         return redirect(url_for("home"))
 
     return render_template("login.html", error="パスワードが正しくありません")
+
+
+@app.post("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for("login_get"))
 
 
 @app.get("/")
