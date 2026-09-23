@@ -18,7 +18,7 @@
 <body>
   <h1>PBL6 Admin</h1>
 
-  <div x-data="themeChange">
+  <div x-data="common_theme">
     <button @click="setSystemTheme()">user system settings</button>
     <button @click="setLightTheme()">light</button>
     <button @click="setDarkTheme()">dark</button>
@@ -28,6 +28,7 @@
     <button type="submit">ログアウト</button>
   </form>
 
+  <script src="{{ url_for('static', filename='js/common.js') }}" type="module" defer></script>
   <script src="{{ url_for('static', filename='js/admin.js') }}" type="module" defer></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
