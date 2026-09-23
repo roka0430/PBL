@@ -66,3 +66,9 @@ source .venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+
+### `.env`の生成
+
+```bash
+python3 setup_env.py
+```
