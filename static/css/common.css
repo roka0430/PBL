@@ -18,8 +18,8 @@
 }
 
 [data-theme="dark"] {
-  --color-background: #181a1b;
-  --color-surface: #242628;
+  --color-background: #1f1e1e;
+  --color-surface: #181717;
 
   --color-text: #f3f4f6;
   --color-text-muted: #9ca3af;
