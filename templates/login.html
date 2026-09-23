@@ -19,9 +19,19 @@
   <h1>PBL6 Login</h1>
 
   <form method="post" action="/login">
+    <label>
+      <input type="radio" name="role" value="viewer" checked="true">
+      閲覧者
+    </label>
+    <label>
+      <input type="radio" name="role" value="admin">
+      管理者
+    </label>
+
     <input type="password" name="password">
     <button type="submit">ログイン</button>
   </form>
+
   <div>{{ error }}</div>
 
   <script src="{{ url_for('static', filename='js/login.js') }}" type="module" defer></script>

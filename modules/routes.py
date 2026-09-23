@@ -13,13 +13,16 @@ from flask_login import (
 )
 
 
-class Admin(UserMixin):
-    id = "admin"
+class User(UserMixin):
+    def __init__(self, user_id: str, role: str):
+        self.id = user_id
+        self.role = role
 
 
 load_dotenv()
 SECRET_KEY = os.environ["SECRET_KEY"]
 ADMIN_PASSWORD_HASH = os.environ["ADMIN_PASSWORD_HASH"]
+VIEWER_PASSWORD_HASH = os.environ["VIEWER_PASSWORD_HASH"]
 
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
 app.secret_key = SECRET_KEY
@@ -30,9 +33,13 @@ login_manager.login_view = "login_get"
 
 
 @login_manager.user_loader
-def load_user(user_id) -> Admin | None:
+def load_user(user_id: str) -> User | None:
     if user_id == "admin":
-        return Admin()
+        return User("admin", "admin")
+
+    if user_id == "viewer":
+        return User("viewer", "viewer")
+
     return None
 
 
@@ -49,11 +56,18 @@ def login_post():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
 
+    role = request.form["role"]
     password = request.form["password"]
 
-    if check_password_hash(ADMIN_PASSWORD_HASH, password):
-        login_user(Admin())
-        return redirect(url_for("home"))
+    if role == "admin":
+        if check_password_hash(ADMIN_PASSWORD_HASH, password):
+            login_user(User("admin", "admin"))
+            return redirect(url_for("home"))
+
+    elif role == "viewer":
+        if check_password_hash(VIEWER_PASSWORD_HASH, password):
+            login_user(User("viewer", "viewer"))
+            return redirect(url_for("home"))
 
     return render_template("login.html", error="パスワードが正しくありません")
 
