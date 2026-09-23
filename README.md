@@ -70,5 +70,5 @@ pip install -r requirements.txt
 ### `.env`の生成
 
 ```bash
-python3 setup_env.py
+python3 tools/setup_env.py
 ```
