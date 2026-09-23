@@ -1,8 +1,9 @@
 import os
+from functools import wraps
 
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, abort, render_template, request, redirect, url_for
 from flask_login import (
     LoginManager,
     UserMixin,
@@ -30,6 +31,16 @@ app.secret_key = SECRET_KEY
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login_get"
+
+
+def admin_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if getattr(current_user, "role", None) != "admin":
+            abort(403)
+        return func(*args, **kwargs)
+
+    return wrapper
 
 
 @login_manager.user_loader
@@ -80,6 +91,7 @@ def logout():
 
 @app.get("/admin")
 @login_required
+@admin_required
 def admin():
     return render_template("admin.html")
 
