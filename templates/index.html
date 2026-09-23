@@ -11,10 +11,7 @@
 
   <script>
     const theme = localStorage.getItem("PBL:theme");
-
-    if (theme == "dark") {
-      document.documentElement.dataset.theme = "dark";
-    }
+    document.documentElement.dataset.theme = theme;
   </script>
 </head>
 
@@ -22,9 +19,9 @@
   <h1>PBL6 自動水やり機</h1>
 
   <div x-data="themeChange">
-    <button @click="toggleTheme()">
-      <span x-text="isDark ? 'light' : 'dark'"></span>
-    </button>
+    <button @click="setSystemTheme()">user system settings</button>
+    <button @click="setLightTheme()">light</button>
+    <button @click="setDarkTheme()">dark</button>
   </div>
 
   <form action="{{ url_for('logout') }}" method="post">

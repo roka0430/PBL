@@ -1,21 +1,31 @@
 const THEME_STORAGE_KEY = "PBL:theme";
 
 export default {
-  isDark: localStorage.getItem(THEME_STORAGE_KEY) === "dark",
+  theme: localStorage.getItem(THEME_STORAGE_KEY) ?? "system",
 
   init() {
     this.applyTheme();
   },
 
-  toggleTheme() {
-    this.isDark = !this.isDark;
+  setSystemTheme() {
+    this.setTheme("system");
+  },
+
+  setLightTheme() {
+    this.setTheme("light");
+  },
+
+  setDarkTheme() {
+    this.setTheme("dark");
+  },
+
+  setTheme(theme) {
+    this.theme = theme;
     this.applyTheme();
   },
 
   applyTheme() {
-    const theme = this.isDark ? "dark" : "light";
-
-    document.documentElement.dataset.theme = theme;
-    localStorage.setItem(THEME_STORAGE_KEY, theme);
+    document.documentElement.dataset.theme = this.theme;
+    localStorage.setItem(THEME_STORAGE_KEY, this.theme);
   },
 };

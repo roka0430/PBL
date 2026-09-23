@@ -11,21 +11,12 @@
 
   <script>
     const theme = localStorage.getItem("PBL:theme");
-
-    if (theme == "dark") {
-      document.documentElement.dataset.theme = "dark";
-    }
+    document.documentElement.dataset.theme = theme;
   </script>
 </head>
 
 <body>
   <h1>PBL6 Login</h1>
-
-  <div x-data="themeChange">
-    <button @click="toggleTheme()">
-      <span x-text="isDark ? 'light' : 'dark'"></span>
-    </button>
-  </div>
 
   <form method="post" action="/login">
     <input type="password" name="password">
