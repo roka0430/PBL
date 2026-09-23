@@ -20,7 +20,7 @@
 
   <form method="post" action="/login">
     <label>
-      <input type="radio" name="role" value="viewer" checked="true">
+      <input type="radio" name="role" value="viewer" checked>
       閲覧者
     </label>
     <label>
@@ -28,7 +28,7 @@
       管理者
     </label>
 
-    <input type="password" name="password">
+    <input type="password" name="password" autocomplete="current-password" autofocus required>
     <button type="submit">ログイン</button>
   </form>
 
