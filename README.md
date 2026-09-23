@@ -1,5 +1,23 @@
 # PBL6 自動水やり機
 
+## Pi↔PC SSH接続
+
+事前にRaspberry PiのSSH機能を有効化しておく。
+
+```bash
+ssh user@ip
+```
+または
+```bash
+ssh user@host.local
+```
+
+成功するとパスワードが要求される。
+PC側ターミナルからPiを操作できる。
+
+
+
+
 ## セットアップ
 
 ### プロキシの設定
