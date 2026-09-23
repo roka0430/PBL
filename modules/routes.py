@@ -78,6 +78,12 @@ def logout():
     return redirect(url_for("login_get"))
 
 
+@app.get("/admin")
+@login_required
+def admin():
+    return render_template("admin.html")
+
+
 @app.get("/")
 @login_required
 def home():

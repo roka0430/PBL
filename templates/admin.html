@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+  <title>PBL6 | Admin</title>
+
+  <script>
+    const theme = localStorage.getItem("PBL:theme");
+    document.documentElement.dataset.theme = theme;
+  </script>
+</head>
+
+<body>
+  <h1>PBL6 Admin</h1>
+
+  <div x-data="themeChange">
+    <button @click="setSystemTheme()">user system settings</button>
+    <button @click="setLightTheme()">light</button>
+    <button @click="setDarkTheme()">dark</button>
+  </div>
+
+  <form action="{{ url_for('logout') }}" method="post">
+    <button type="submit">ログアウト</button>
+  </form>
+
+  <script src="{{ url_for('static', filename='js/admin.js') }}" type="module" defer></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</body>
+
+</html>
