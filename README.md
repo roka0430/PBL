@@ -12,7 +12,7 @@ sudo nano /etc/apt/apt.conf
 sudo nano /etc/apt/apt.conf.d/80proxy
 ```
 
-```bash
+```
 Acquire::http::Proxy "http://example.com:PORT/";
 Acquire::https::Proxy "http://example.com:PORT/";
 ```
