@@ -29,6 +29,8 @@
 
   --color-text: #222222;
   --color-text-muted: #6b7280;
+  --color-text-invert: #f3f4f6;
+  --color-text-white: #f2f4f9;
 
   --color-border: #d1d5db;
 
@@ -49,6 +51,9 @@
 
   --color-text: #f3f4f6;
   --color-text-muted: #9ca3af;
+  --color-text-invert: #222222;
+  --color-text-white: #f2f4f9;
+
   --color-border: #3a3d40;
 
   --color-primary: #10b981;
@@ -69,6 +74,9 @@
 
     --color-text: #f3f4f6;
     --color-text-muted: #9ca3af;
+    --color-text-invert: #222222;
+    --color-text-white: #f2f4f9;
+
     --color-border: #3a3d40;
 
     --color-primary: #10b981;

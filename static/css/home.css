@@ -42,8 +42,10 @@
 }
 
 .site-title__role.is-admin {
-  border-color: transparent;
   background: var(--color-primary);
+  border-color: transparent;
+
+  color: var(--color-text-white);
 }
 
 /*------------------------------ sidebar ------------------------------*/
