@@ -94,3 +94,17 @@ select {
 textarea {
   resize: none;
 }
+
+/*  */
+
+.auth-cover {
+  position: fixed;
+  inset: 0;
+
+  display: grid;
+  place-items: center;
+
+  background: var(--color-surface);
+
+  z-index: 9999;
+}
