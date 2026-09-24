@@ -171,6 +171,11 @@
   padding: 0;
 }
 
+body:not([data-user-role="admin"]) .sidebar__action-item:has(.admin-link) {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .logout-form {
   width: 100%;
   height: 100%;
