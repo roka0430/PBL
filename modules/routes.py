@@ -20,14 +20,17 @@ class User(UserMixin):
         self.role = role
 
 
+# ---------- 環境変数 ----------
 load_dotenv()
 SECRET_KEY = os.environ["SECRET_KEY"]
 ADMIN_PASSWORD_HASH = os.environ["ADMIN_PASSWORD_HASH"]
 VIEWER_PASSWORD_HASH = os.environ["VIEWER_PASSWORD_HASH"]
 
+# ---------- Flask ----------
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
 app.secret_key = SECRET_KEY
 
+# ---------- Flask-Login ----------
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login_get"
