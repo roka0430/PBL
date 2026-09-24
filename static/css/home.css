@@ -171,6 +171,27 @@
   padding: 0;
 }
 
+.logout-form {
+  width: 100%;
+  height: 100%;
+}
+
+.logout-form button {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+  padding-inline: 16px;
+
+  cursor: pointer;
+}
+
+.sidebar__action-item:has(.logout-form) {
+  padding: 0;
+}
+
 /*------------------------------ header ------------------------------*/
 
 .home__header {
