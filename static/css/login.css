@@ -29,7 +29,6 @@
 }
 
 .login__header img {
-  filter: var(--logo-filter);
   -webkit-user-drag: none;
   user-select: none;
 }
