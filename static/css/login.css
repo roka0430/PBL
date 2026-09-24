@@ -28,11 +28,6 @@
   margin-bottom: 30px;
 }
 
-.login__header img {
-  -webkit-user-drag: none;
-  user-select: none;
-}
-
 .login__header h2 {
   margin-top: 10px;
 }

@@ -99,3 +99,8 @@ textarea {
 
   z-index: 9999;
 }
+
+.logo {
+  -webkit-user-drag: none;
+  user-select: none;
+}
