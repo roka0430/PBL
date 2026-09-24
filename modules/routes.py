@@ -61,7 +61,22 @@ def admin_required(func):
     @login_required
     def wrapper(*args, **kwargs):
         if getattr(current_user, "role", None) != "admin":
+            return redirect(url_for("home"))
+
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+def admin_api_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not current_user.is_authenticated:
+            abort(401)
+
+        if getattr(current_user, "role", None) != "admin":
             abort(403)
+
         return func(*args, **kwargs)
 
     return wrapper
