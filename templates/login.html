@@ -25,6 +25,7 @@
         <p>パスワードを入力してログイン</p>
       </header>
       <div class="login__content">
+        <p class="password__error">{{ error }}</p>
         <form method="post" action="/login">
           <div class="login__password" x-data="{ showPassword: false }">
             <input type="password" name="password" class="login__password-input" placeholder="パスワード" autocomplete="current-password" autofocus required :type="showPassword ? 'text' : 'password'">

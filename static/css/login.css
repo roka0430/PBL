@@ -17,6 +17,8 @@
 
 .login__header img {
   filter: var(--logo-filter);
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .login__header h2 {
@@ -62,6 +64,13 @@
 
 .login__password-toggle:hover svg {
   stroke: var(--color-text);
+}
+
+.password__error {
+  width: 100%;
+  margin-bottom: 5px;
+  color: var(--color-error);
+  font-size: 0.85rem;
 }
 
 .login__submit-viewer {
