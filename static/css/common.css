@@ -85,7 +85,12 @@ button,
 select {
   background: transparent;
   border: 0;
+  outline: none;
 
   color: inherit;
   font: inherit;
+}
+
+textarea {
+  resize: none;
 }

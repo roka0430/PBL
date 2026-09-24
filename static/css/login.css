@@ -31,15 +31,37 @@
 }
 
 .login__password {
+  display: flex;
+
   width: 100%;
   height: 44px;
-  padding: 0 16px;
 
-  background: none;
   border: solid 1px var(--color-border);
   border-radius: 3px;
+}
 
-  outline: none;
+.login__password-input {
+  flex: 1;
+  padding-inline: 16px 0;
+}
+
+.login__password-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+
+  cursor: pointer;
+}
+
+.login__password-toggle svg {
+  stroke: var(--color-text-muted);
+  transition: stroke 0.15s ease;
+}
+
+.login__password-toggle:hover svg {
+  stroke: var(--color-text);
 }
 
 .login__submit-viewer {
