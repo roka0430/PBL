@@ -27,7 +27,7 @@
     <div class="auth-cover__spinner">読み込み中</div>
   </div>
 
-  <h1>PBL6 自動水やり機</h1>
+  <!-- <h1>PBL6 自動水やり機</h1>
 
   <div x-data="common_theme">
     <button @click="setSystemTheme()">user system settings</button>
@@ -39,7 +39,98 @@
     <button type="submit">ログアウト</button>
   </form>
 
-  <a href="/admin">管理者ページ</a>
+  <a href="/admin">管理者ページ</a> -->
+
+  <div class="home" x-data="home">
+    <div class="home__sidebar-overlay" x-show="sidebarOpen" @click="sidebarOpen = false"></div>
+    <aside class="home__sidebar" :class="{ 'is-open': sidebarOpen }">
+      <div class="sidebar__header">
+        <a href="/" class="site-title">
+          <img src="{{ url_for('static', filename='images/logo.svg') }}" width="24" height="24" alt="logo" class="logo">
+          <h1>PBL6</h1>
+        </a>
+        <button class="sidebar__header-close" @click="sidebarOpen = false">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M18 6l-12 12" />
+            <path d="M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="sidebar__actions">
+        <div class="sidebar__action-item">
+          <div class="theme-change" x-data="common_theme">
+            <button @click="setSystemTheme()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-device-desktop">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M3 5a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1v-10" />
+                <path d="M7 20h10" />
+                <path d="M9 16v4" />
+                <path d="M15 16v4" />
+              </svg>
+              <div>システムの設定に従う</div>
+            </button>
+            <button @click="setLightTheme()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-sun">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
+              </svg>
+              <div>ライトモード</div>
+            </button>
+            <button @click="setDarkTheme()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-moon">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454l0 .008" />
+              </svg>
+              <div>ダークモード</div>
+            </button>
+          </div>
+        </div>
+        <div class="sidebar__action-item">
+          <a href="/admin" class="admin-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-cog">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+              <path d="M6 21v-2a4 4 0 0 1 4 -4h2.5" />
+              <path d="M17.001 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+              <path d="M19.001 15.5v1.5" />
+              <path d="M19.001 21v1.5" />
+              <path d="M22.032 17.25l-1.299 .75" />
+              <path d="M17.27 20l-1.3 .75" />
+              <path d="M15.97 17.25l1.3 .75" />
+              <path d="M20.733 20l1.3 .75" />
+            </svg>
+            <div>管理者ページ</div>
+          </a>
+        </div>
+        <div class="sidebar__action-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-logout">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
+            <path d="M9 12h12l-3 -3" />
+            <path d="M18 15l3 -3" />
+          </svg>
+          <div>ログアウト</div>
+        </div>
+      </div>
+    </aside>
+    <header class="home__header">
+      <button class="header__menu-button" @click="sidebarOpen = !sidebarOpen">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-2">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M4 6l16 0" />
+          <path d="M4 12l16 0" />
+          <path d="M4 18l16 0" />
+        </svg>
+      </button>
+      <a href="/" class="site-title">
+        <img src="{{ url_for('static', filename='images/logo.svg') }}" width="24" height="24" alt="logo" class="logo">
+        <h1>PBL6</h1>
+      </a>
+    </header>
+    <main class="home__content"></main>
+  </div>
 
   <script src="{{ url_for('static', filename='js/common.js') }}" type="module" defer></script>
   <script src="{{ url_for('static', filename='js/home.js') }}" type="module" defer></script>
