@@ -33,6 +33,16 @@ login_manager.init_app(app)
 login_manager.login_view = "login_get"
 
 
+@app.after_request
+def add_no_cache(response):
+    if request.path.startswith("/static/"):
+        response.headers["Cache-Control"] = "public, max-age=3600"
+    else:
+        response.headers["Cache-Control"] = "no-store"
+
+    return response
+
+
 def admin_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
