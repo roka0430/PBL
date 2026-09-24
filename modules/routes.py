@@ -33,6 +33,11 @@ login_manager.init_app(app)
 login_manager.login_view = "login_get"
 
 
+# ==================================================
+# キャッシュ制御
+# ==================================================
+
+
 @app.after_request
 def add_no_cache(response):
     if request.path.startswith("/static/"):
@@ -43,14 +48,25 @@ def add_no_cache(response):
     return response
 
 
+# ==================================================
+# 管理者権限
+# ==================================================
+
+
 def admin_required(func):
     @wraps(func)
+    @login_required
     def wrapper(*args, **kwargs):
         if getattr(current_user, "role", None) != "admin":
             abort(403)
         return func(*args, **kwargs)
 
     return wrapper
+
+
+# ==================================================
+# ログイン・ログアウト処理
+# ==================================================
 
 
 @login_manager.user_loader
@@ -99,17 +115,26 @@ def logout():
     return redirect(url_for("login_get"))
 
 
-@app.get("/admin")
-@login_required
-@admin_required
-def admin():
-    return render_template("admin.html")
+# ==================================================
+# ページ表示
+# ==================================================
 
 
 @app.get("/")
 @login_required
 def home():
     return render_template("index.html")
+
+
+@app.get("/admin")
+@admin_required
+def admin():
+    return render_template("admin.html")
+
+
+# ==================================================
+# API
+# ==================================================
 
 
 def run_server():
