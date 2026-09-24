@@ -51,10 +51,13 @@
 
 .login__password-input {
   flex: 1;
+  min-width: 0;
   padding-inline: 16px 0;
 }
 
 .login__password-toggle {
+  flex: 0 0 44px;
+
   display: flex;
   align-items: center;
   justify-content: center;
