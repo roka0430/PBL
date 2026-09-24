@@ -15,6 +15,9 @@
   --color-warning: #d97706;
   --color-error: #dc2626;
   --color-info: #2563eb;
+
+  --logo-filter: brightness(0) saturate(100%) invert(5%) sepia(4%) saturate(259%) hue-rotate(314deg) brightness(107%)
+    contrast(81%);
 }
 
 [data-theme="dark"] {
@@ -33,6 +36,9 @@
   --color-warning: #f59e0b;
   --color-error: #ef4444;
   --color-info: #3b82f6;
+
+  --logo-filter: brightness(0) saturate(100%) invert(100%) sepia(12%) saturate(4749%) hue-rotate(180deg) brightness(99%)
+    contrast(95%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -52,6 +58,9 @@
     --color-warning: #f59e0b;
     --color-error: #ef4444;
     --color-info: #3b82f6;
+
+    --logo-filter: brightness(0) saturate(100%) invert(100%) sepia(12%) saturate(4749%) hue-rotate(180deg)
+      brightness(99%) contrast(95%);
   }
 }
 
@@ -62,12 +71,21 @@
 }
 
 body {
-  min-height: 100dvh;
-
   background: var(--color-background);
 
   color: var(--color-text);
   font-size: 16px;
 
   overflow-x: hidden;
+}
+
+input,
+textarea,
+button,
+select {
+  background: transparent;
+  border: 0;
+
+  color: inherit;
+  font: inherit;
 }
