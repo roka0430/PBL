@@ -1,6 +1,7 @@
 :root {
   --color-background: #f2f4f9;
   --color-surface: #fbfbfb;
+  --color-surface-hover: #e8ebf0;
 
   --color-text: #222222;
   --color-text-muted: #6b7280;
@@ -20,6 +21,7 @@
 [data-theme="dark"] {
   --color-background: #1f1e1e;
   --color-surface: #181717;
+  --color-surface-hover: #242323;
 
   --color-text: #f3f4f6;
   --color-text-muted: #9ca3af;
@@ -39,6 +41,7 @@
   :root[data-theme="system"] {
     --color-background: #1f1e1e;
     --color-surface: #181717;
+    --color-surface-hover: #242323;
 
     --color-text: #f3f4f6;
     --color-text-muted: #9ca3af;

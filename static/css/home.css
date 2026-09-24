@@ -130,6 +130,10 @@
   cursor: pointer;
 }
 
+.sidebar__action-item:hover {
+  background: var(--color-surface-hover);
+}
+
 .theme-change {
   flex: 1;
 
@@ -147,6 +151,10 @@
 
 .sidebar__action-item:has(.theme-change) {
   cursor: default;
+}
+
+.sidebar__action-item:has(.theme-change):hover {
+  background: inherit;
 }
 
 .theme-change button {
