@@ -31,7 +31,9 @@
   font-size: 1rem;
 }
 
-.site-title__role {
+.site-role {
+  height: fit-content;
+
   padding-block: 2px 1px;
   padding-inline: 6px;
 
@@ -41,7 +43,7 @@
   font-size: 0.75rem;
 }
 
-.site-title__role.is-admin {
+.site-role.is-admin {
   background: var(--color-primary);
   border-color: transparent;
 
@@ -105,9 +107,21 @@
   justify-content: space-between;
 
   height: var(--home-header-height);
-  padding-inline: 12px;
+  padding-inline: 12px 18px;
 
   border-bottom: solid 1px var(--color-border);
+}
+
+@media (max-width: 500px) {
+  .sidebar__header {
+    padding-inline: 12px;
+  }
+}
+
+.sidebar__header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .sidebar__header-close {
