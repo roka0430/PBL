@@ -121,6 +121,8 @@
         <img src="{{ url_for('static', filename='images/logo.svg') }}" width="24" height="24" alt="logo" class="logo">
         <h1>PBL6</h1>
       </a>
+      <div class="home__header-spacer"></div>
+      <div class="site-role" :class="{ 'is-admin': $store.role.role === 'admin' }" x-text="$store.role.label"></div>
     </header>
     <main class="home__content"></main>
   </div>

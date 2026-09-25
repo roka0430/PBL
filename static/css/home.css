@@ -249,7 +249,7 @@
   left: 0;
 
   height: var(--home-header-height);
-  padding-inline: 16px;
+  padding-inline: 16px 18px;
 
   background: var(--color-background);
   border-bottom: solid 1px var(--color-border);
@@ -272,6 +272,10 @@
   height: 25px;
 
   cursor: pointer;
+}
+
+.home__header-spacer {
+  flex: 1;
 }
 
 /*------------------------------ content ------------------------------*/
