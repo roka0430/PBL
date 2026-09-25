@@ -1,4 +1,5 @@
 import os
+import time
 from functools import wraps
 
 from dotenv import load_dotenv
@@ -98,14 +99,6 @@ def load_user(user_id: str) -> User | None:
     return None
 
 
-@app.get("/login")
-def login_get():
-    if current_user.is_authenticated:
-        return redirect(url_for("home"))
-
-    return render_template("login.html")
-
-
 @app.post("/login")
 def login_post():
     if current_user.is_authenticated:
@@ -141,13 +134,21 @@ def logout():
 @app.get("/")
 @login_required
 def home():
-    return render_template("index.html")
+    return render_template("index.html", cache_buster=time.time())
+
+
+@app.get("/login")
+def login_get():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
+
+    return render_template("login.html", cache_buster=time.time())
 
 
 @app.get("/admin")
 @admin_required
 def admin():
-    return render_template("admin.html")
+    return render_template("admin.html", cache_buster=time.time())
 
 
 # ==================================================

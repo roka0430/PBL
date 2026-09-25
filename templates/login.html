@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}?t={{ cache_buster }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}?t={{ cache_buster }}">
   <title>PBL6 | Login</title>
 
   <script>
@@ -54,8 +54,8 @@
     </div>
   </div>
 
-  <script src="{{ url_for('static', filename='js/common.js') }}" type="module" defer></script>
-  <script src="{{ url_for('static', filename='js/login.js') }}" type="module" defer></script>
+  <script src="{{ url_for('static', filename='js/common.js') }}?t={{ cache_buster }}" type="module" defer></script>
+  <script src="{{ url_for('static', filename='js/login.js') }}?t={{ cache_buster }}" type="module" defer></script>
   <script src="{{ url_for('static', filename='js/alpine.js') }}" defer></script>
 </body>
 
