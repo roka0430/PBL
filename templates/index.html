@@ -124,7 +124,12 @@
       <div class="home__header-spacer"></div>
       <div class="site-role" :class="{ 'is-admin': $store.role.role === 'admin' }" x-text="$store.role.label"></div>
     </header>
-    <main class="home__content"></main>
+    <main class="home__content">
+      <!-- <form method="post" action="/api/watering">
+        <input type="number" name="amount" required>
+        <button type="submit">watering</button>
+      </form> -->
+    </main>
   </div>
 
   <script src="{{ url_for('static', filename='js/common.js') }}?t={{ cache_buster }}" type="module" defer></script>

@@ -156,10 +156,12 @@ def admin():
 # ==================================================
 
 
-@app.get("/api/watering")
-def watering_test():
-    app.watering.request_watering(100)
-    return "<h1>watering</h1>"
+@app.post("/api/watering")
+@admin_api_required
+def watering():
+    amount_ml = request.form["amount"]
+    success = app.watering.request_watering(amount_ml)
+    return {"success": success}
 
 
 # ==================================================
