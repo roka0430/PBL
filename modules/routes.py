@@ -156,5 +156,17 @@ def admin():
 # ==================================================
 
 
-def run_server():
+@app.get("/api/watering")
+def watering_test():
+    app.watering.request_watering(100)
+    return "<h1>watering</h1>"
+
+
+# ==================================================
+# 起動
+# ==================================================
+
+
+def run_server(watering):
+    app.watering = watering
     app.run(host="0.0.0.0", port=5000, debug=False, use_reloader=False)

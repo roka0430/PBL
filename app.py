@@ -3,13 +3,27 @@ import logging
 import threading
 
 from modules.routes import run_server
+from modules.watering import WateringController
 
-logging.getLogger("werkzeug").setLevel(logging.WARNING)
+# logging.getLogger("werkzeug").setLevel(logging.WARNING)
 
 
 def main():
-    server_thread = threading.Thread(target=run_server, daemon=True)
+    watering = WateringController()
+
+    server_thread = threading.Thread(
+        target=run_server,
+        args=(watering,),
+        daemon=True,
+    )
+
+    watering_thread = threading.Thread(
+        target=watering.mainloop,
+        daemon=True,
+    )
+
     server_thread.start()
+    watering_thread.start()
 
     try:
         while True:
