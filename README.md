@@ -85,6 +85,12 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+Pi用ライブラリは個別インストール：
+
+```bash
+pip install gpiozero spidev
+```
+
 ### `.env`の生成
 
 ```bash
