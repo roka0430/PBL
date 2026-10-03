@@ -1,26 +1,17 @@
 import time
 import base64
 import threading
-from enum import Enum
 from pathlib import Path  # デモ用
 from datetime import datetime
 from dataclasses import dataclass, fields
+
+from .enums import SystemStatus, WateringRequestResult
 
 SENSOR_STARTUP_DELAY_SEC = 0  # センサー起動待ち時間
 SENSOR_CHECK_INTERVAL_SEC = 3  # センシング間隔
 
 MIN_WATER_AMOUNT_ML = 10  # 1回給水量下限
 MAX_WATER_AMOUNT_ML = 200  # 1回給水量上限
-
-
-# ------------------------------ Status ------------------------------
-
-
-class SystemStatus(Enum):
-    IDLE = "idle"  # 待機中
-    WATERING = "watering"  # 給水中
-    CALIBRATING = "calibrating"  # 校正中
-    ERROR = "error"  # 異常
 
 
 # ------------------------------ Value ------------------------------
@@ -122,24 +113,24 @@ class SystemController:
 
     # ========== 外部から呼び出し ==========
 
-    def request_watering(self, amount_ml) -> bool:
+    def request_watering(self, amount_ml) -> WateringRequestResult:
         try:
             amount_ml = int(amount_ml)
         except (TypeError, ValueError):
-            return False
+            return WateringRequestResult.INVALID_AMOUNT
 
         # さらに水やり条件を追加
         if not MIN_WATER_AMOUNT_ML <= amount_ml <= MAX_WATER_AMOUNT_ML:
-            return False
+            return WateringRequestResult.INVALID_AMOUNT
 
         with self._status_lock:
             if self.status != SystemStatus.IDLE:
-                return False
+                return WateringRequestResult.NOT_IDLE
             self.status = SystemStatus.WATERING
 
         threading.Thread(target=self._watering, args=(amount_ml,), daemon=False).start()
 
-        return True
+        return WateringRequestResult.ACCEPTED
 
     def get_sensor_values(self) -> SensorValues:
         return self.sensor_values

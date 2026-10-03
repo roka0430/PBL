@@ -23,6 +23,8 @@ from flask_login import (
     login_required,
 )
 
+from .enums import SystemStatus, WateringRequestResult
+
 
 class User(UserMixin):
     def __init__(self, user_id: str, role: str):
@@ -169,8 +171,16 @@ def admin():
 @admin_api_required
 def watering():
     amount_ml = request.form["amount"]
-    success = app.system.request_watering(amount_ml)
-    return {"success": success}
+    result = app.system.request_watering(amount_ml)
+
+    if result == WateringRequestResult.ACCEPTED:
+        return jsonify({"success": True}), 202
+
+    if result == WateringRequestResult.INVALID_AMOUNT:
+        return jsonify({"success": False, "error": "invalid_amount"}), 400
+
+    if result == WateringRequestResult.NOT_IDLE:
+        return jsonify({"success": False, "error": "not_idle"}), 409
 
 
 @app.get("/api/sensors")
