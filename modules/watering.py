@@ -1,7 +1,8 @@
 import time
-import base64
+import json
+import random  # TODO: デモ用
 import threading
-from pathlib import Path  # デモ用
+from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass, fields
 
@@ -14,7 +15,52 @@ MIN_WATER_AMOUNT_ML = 10  # 1回給水量下限
 MAX_WATER_AMOUNT_ML = 200  # 1回給水量上限
 
 
-# ------------------------------ Value ------------------------------
+class Settings:
+    PATH = Path("config/settings.json")
+
+    DEFAULTS = {
+        "watering_amount_ml": 100,
+        "soil_moisture_dry": 800,
+        "soil_moisture_wet": 200,
+        "pump_flow_ml_per_sec": 20.0,
+    }
+
+    def __init__(self):
+        self.watering_amount_ml = self.DEFAULTS["watering_amount_ml"]
+        self.soil_moisture_dry = self.DEFAULTS["soil_moisture_dry"]
+        self.soil_moisture_wet = self.DEFAULTS["soil_moisture_wet"]
+        self.pump_flow_ml_per_sec = self.DEFAULTS["pump_flow_ml_per_sec"]
+
+    def load(self):
+        if not self.PATH.exists():
+            return
+
+        try:
+            data = json.loads(self.PATH.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return
+
+        for name in self.DEFAULTS:
+            if name in data:
+                setattr(self, name, data[name])
+
+    def save(self):
+        self.PATH.parent.mkdir(parents=True, exist_ok=True)
+
+        data = {name: getattr(self, name) for name in self.DEFAULTS}
+
+        self.PATH.write_text(
+            json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+
+    def update(self, **kwargs):
+        for name, value in kwargs.items():
+            if name not in self.DEFAULTS:
+                raise ValueError(f"Unknown setting: {name}")
+
+            setattr(self, name, value)
+
+        self.save()
 
 
 @dataclass
@@ -67,7 +113,7 @@ class Camera:
         self._lock = threading.Lock()
 
     def capture_image(self) -> Image:
-        path = Path("demo/sample.jpg")  # ここに撮影処理を追加
+        path = Path("demo/sample.jpg")  # TODO: ここに撮影処理を追加
 
         image = Image(data=path.read_bytes(), captured_at=datetime.now())
 
@@ -87,8 +133,21 @@ class Camera:
 
 
 class SoilMoistureSensor:
+    def __init__(self, settings):
+        self.settings = settings
+
     def read(self) -> float:
-        return 50.0
+        raw_value = self._read_raw()
+
+        dry = self.settings.soil_moisture_dry
+        wet = self.settings.soil_moisture_wet
+
+        moisture = (raw_value - dry) / (wet - dry) * 100
+        return max(0.0, min(100.0, moisture))
+
+    def _read_raw(self) -> int:
+        # TODO: MCP3002から取得
+        return random.randint(0, 1023)
 
 
 class TemperatureAndHumiditySensor:
@@ -101,6 +160,9 @@ class TemperatureAndHumiditySensor:
 
 class SystemController:
     def __init__(self):
+        self.settings = Settings()
+        self.settings.load()
+
         self.status = SystemStatus.IDLE
         self._status_lock = threading.Lock()
 
@@ -108,7 +170,7 @@ class SystemController:
 
         self.pump = Pump()
         self.camera = Camera()
-        self.soil_moisture_sensor = SoilMoistureSensor()
+        self.soil_moisture_sensor = SoilMoistureSensor(self.settings)
         self.temperature_and_humidity_sensor = TemperatureAndHumiditySensor()
 
     # ========== 外部から呼び出し ==========
@@ -119,7 +181,7 @@ class SystemController:
         except (TypeError, ValueError):
             return WateringRequestResult.INVALID_AMOUNT
 
-        # さらに水やり条件を追加
+        # TODO: さらに水やり条件を追加
         if not MIN_WATER_AMOUNT_ML <= amount_ml <= MAX_WATER_AMOUNT_ML:
             return WateringRequestResult.INVALID_AMOUNT
 
