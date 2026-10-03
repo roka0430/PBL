@@ -4,7 +4,16 @@ from functools import wraps
 
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
-from flask import Flask, abort, render_template, request, redirect, url_for
+from flask import (
+    Flask,
+    jsonify,
+    abort,
+    render_template,
+    request,
+    Response,
+    redirect,
+    url_for,
+)
 from flask_login import (
     LoginManager,
     UserMixin,
@@ -169,6 +178,17 @@ def watering():
 def get_sensor_values():
     values = app.system.get_sensor_values()
     return values.to_dict()
+
+
+@app.get("/api/image")
+@login_required
+def get_image():
+    image = app.system.get_image()
+
+    response = Response(image.data, mimetype="image/jpeg")
+    response.headers["MizuMori-Captured-At"] = image.captured_at.isoformat()
+
+    return response
 
 
 # ==================================================
