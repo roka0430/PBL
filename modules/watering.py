@@ -150,16 +150,11 @@ class SystemController:
     # ========== メインループ ==========
 
     def mainloop(self):
-        next_sensor_check = time.monotonic() + SENSOR_STARTUP_DELAY_SEC
+        time.sleep(SENSOR_STARTUP_DELAY_SEC)
 
         while True:
-            now = time.monotonic()
-
-            if now >= next_sensor_check:
-                self._check_sensors()
-                next_sensor_check = now + SENSOR_CHECK_INTERVAL_SEC
-
-            time.sleep(1)
+            self._check_sensors()
+            time.sleep(SENSOR_CHECK_INTERVAL_SEC)
 
     # ========== 内部処理 ==========
 
