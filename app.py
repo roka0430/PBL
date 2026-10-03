@@ -6,7 +6,7 @@ from modules.mdns import start_mdns
 from modules.routes import run_server
 from modules.watering import WateringController
 
-# logging.getLogger("werkzeug").setLevel(logging.WARNING)
+logging.getLogger("werkzeug").setLevel(logging.WARNING)
 
 
 def main():
