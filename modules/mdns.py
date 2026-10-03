@@ -1,6 +1,4 @@
 import socket
-import time
-
 from zeroconf import Zeroconf, ServiceInfo
 
 
