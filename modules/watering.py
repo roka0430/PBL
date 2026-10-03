@@ -31,7 +31,7 @@ class SensorValue:
     value: float
     measured_at: datetime
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             "value": self.value,
             "measured_at": self.measured_at.isoformat(),
@@ -44,7 +44,7 @@ class SensorValues:
     temperature: SensorValue | None = None
     humidity: SensorValue | None = None
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         result = {}
 
         for field in fields(self):
@@ -97,14 +97,12 @@ class Camera:
 
 class SoilMoistureSensor:
     def read(self) -> float:
-        """土壌水分量を0～100%で返す"""
         return 50.0
 
 
 class TemperatureAndHumiditySensor:
     def read(self) -> tuple[float, float]:
-        """温度[℃]と湿度[%]を返す"""
-        return 25.0, 60.0
+        return 25.0, 60.0  # 温度, 湿度
 
 
 # ------------------------------ Controller ------------------------------
@@ -113,12 +111,16 @@ class TemperatureAndHumiditySensor:
 class SystemController:
     def __init__(self):
         self.status = SystemStatus.IDLE
+        self._status_lock = threading.Lock()
+
         self.sensor_values = SensorValues()
 
         self.pump = Pump()
         self.camera = Camera()
         self.soil_moisture_sensor = SoilMoistureSensor()
         self.temperature_and_humidity_sensor = TemperatureAndHumiditySensor()
+
+    # ========== 外部から呼び出し ==========
 
     def request_watering(self, amount_ml) -> bool:
         try:
@@ -130,7 +132,12 @@ class SystemController:
         if not MIN_WATER_AMOUNT_ML <= amount_ml <= MAX_WATER_AMOUNT_ML:
             return False
 
-        # ここで水やりスレッド生成 daemon=False
+        with self._status_lock:
+            if self.status != SystemStatus.IDLE:
+                return False
+            self.status = SystemStatus.WATERING
+
+        threading.Thread(target=self._watering, args=(amount_ml,), daemon=False).start()
 
         return True
 
@@ -139,6 +146,8 @@ class SystemController:
 
     def get_image(self) -> Image:
         return self.camera.get_image()
+
+    # ========== メインループ ==========
 
     def mainloop(self):
         next_sensor_check = time.monotonic() + SENSOR_STARTUP_DELAY_SEC
@@ -152,9 +161,21 @@ class SystemController:
 
             time.sleep(1)
 
+    # ========== 内部処理 ==========
+
+    def _watering(self, amount_ml):
+        try:
+            print("watering start")
+            time.sleep(5)
+            print("watering stop")
+        finally:
+            with self._status_lock:
+                self.status = SystemStatus.IDLE
+
     def _check_sensors(self):
-        if self.status == SystemStatus.IDLE:
-            self._check_soil_moisture()
+        with self._status_lock:
+            if self.status == SystemStatus.IDLE:
+                self._check_soil_moisture()
         self._check_temperature_and_humidity()
 
     def _check_soil_moisture(self):
@@ -166,11 +187,12 @@ class SystemController:
 
     def _check_temperature_and_humidity(self):
         temperature, humidity = self.temperature_and_humidity_sensor.read()
+        measured_at = datetime.now()
 
         self.sensor_values.temperature = SensorValue(
-            value=temperature, measured_at=datetime.now()
+            value=temperature, measured_at=measured_at
         )
 
         self.sensor_values.humidity = SensorValue(
-            value=humidity, measured_at=datetime.now()
+            value=humidity, measured_at=measured_at
         )
