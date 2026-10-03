@@ -3,7 +3,9 @@ import queue
 from enum import Enum
 from dataclasses import dataclass
 
-SENSOR_CHECK_INTERVAL_SEC = 10  # 土壌水分量を測定する間隔(秒)
+SENSOR_STARTUP_DELAY_SEC = 10  # センサー起動待ち時間
+SENSOR_CHECK_INTERVAL_SEC = 3  # センシング間隔
+
 MIN_WATER_AMOUNT_ML = 10  # 1回給水量下限
 MAX_WATER_AMOUNT_ML = 200  # 1回給水量上限
 
@@ -11,33 +13,19 @@ MAX_WATER_AMOUNT_ML = 200  # 1回給水量上限
 # ------------------------------ Status ------------------------------
 
 
-class WateringStatus(Enum):
+class SystemStatus(Enum):
     IDLE = "idle"  # 待機中
     WATERING = "watering"  # 給水中
     CALIBRATING = "calibrating"  # 校正中
-    ERROR = "error"  # エラー
-
-
-# ------------------------------ Command ------------------------------
-
-
-class WateringCommandType(Enum):
-    WATERING = "watering"  # 給水命令
-
-
-@dataclass
-class WateringCommand:
-    type: WateringCommandType
-    amount_ml: int
+    ERROR = "error"  # 異常
 
 
 # ------------------------------ Controller ------------------------------
 
 
-class WateringController:
+class SystemController:
     def __init__(self):
-        self.status = WateringStatus.IDLE
-        self.command_queue = queue.Queue()
+        self.status = SystemStatus.IDLE
 
     def request_watering(self, amount_ml):
         try:
@@ -45,41 +33,37 @@ class WateringController:
         except (TypeError, ValueError):
             return False
 
+        # さらに水やり条件を追加
         if not MIN_WATER_AMOUNT_ML <= amount_ml <= MAX_WATER_AMOUNT_ML:
             return False
 
-        self.command_queue.put(
-            WateringCommand(type=WateringCommandType.WATERING, amount_ml=amount_ml)
-        )
+        # ここで水やりスレッド生成 daemon=False
 
         return True
 
     def mainloop(self):
-        next_sensor_check = time.monotonic()
+        next_sensor_check = time.monotonic() + SENSOR_STARTUP_DELAY_SEC
 
         while True:
-            try:
-                command = self.command_queue.get(
-                    timeout=max(0, next_sensor_check - time.monotonic())
-                )
-                self._process_command(command)
+            now = time.monotonic()
 
-            except queue.Empty:
+            if now >= next_sensor_check:
                 self._check_sensor()
-                next_sensor_check = time.monotonic() + SENSOR_CHECK_INTERVAL_SEC
+                next_sensor_check = now + SENSOR_CHECK_INTERVAL_SEC
 
-    # 命令処理
-
-    def _process_command(self, command):
-        print("-----------------------------")
-        print("command:", command.type.value)
-        print("amount:", command.amount_ml)
-        print("-----------------------------")
-
-    # センサー処理
+            time.sleep(1)
 
     def _check_sensor(self):
-        print("check sensor")
+        if self.status == SystemStatus.IDLE:
+            self._check_soil_moisture()
+
+        self._check_temperature_and_humidity()
+
+    def _check_soil_moisture(self):
+        print("[sensor] soil moisture")
+
+    def _check_temperature_and_humidity(self):
+        print("[sensor] temperature and humidity")
 
 
 # ------------------------------ Hardware ------------------------------
