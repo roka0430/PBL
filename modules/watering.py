@@ -101,7 +101,12 @@ class Image:
 
 
 class Pump:
-    pass
+    def run(self, duration_sec):
+        # TODO: ポンプ制御を追加
+        print("pump start")
+        print(f"duration: {duration_sec}s")
+        time.sleep(duration_sec)
+        print("pump stop")
 
 
 class Camera:
@@ -179,20 +184,21 @@ class SystemController:
         try:
             amount_ml = int(amount_ml)
         except (TypeError, ValueError):
-            return WateringRequestResult.INVALID_AMOUNT
+            return WateringRequestResult.INVALID_AMOUNT, None
 
         # TODO: さらに水やり条件を追加
         if not MIN_WATER_AMOUNT_ML <= amount_ml <= MAX_WATER_AMOUNT_ML:
-            return WateringRequestResult.INVALID_AMOUNT
+            return WateringRequestResult.INVALID_AMOUNT, None
 
         with self._status_lock:
             if self.status != SystemStatus.IDLE:
-                return WateringRequestResult.NOT_IDLE
+                return WateringRequestResult.NOT_IDLE, None
             self.status = SystemStatus.WATERING
 
         threading.Thread(target=self._watering, args=(amount_ml,), daemon=False).start()
 
-        return WateringRequestResult.ACCEPTED
+        duration_sec = amount_ml / self.settings.pump_flow_ml_per_sec
+        return WateringRequestResult.ACCEPTED, duration_sec
 
     def get_sensor_values(self) -> SensorValues:
         return self.sensor_values
@@ -213,9 +219,10 @@ class SystemController:
 
     def _watering(self, amount_ml):
         try:
-            print("watering start")
-            time.sleep(5)
-            print("watering stop")
+            flow_rate = self.settings.pump_flow_ml_per_sec
+            duration_sec = amount_ml / flow_rate
+
+            self.pump.run(duration_sec)
         finally:
             with self._status_lock:
                 self.status = SystemStatus.IDLE

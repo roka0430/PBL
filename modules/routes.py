@@ -171,10 +171,10 @@ def admin():
 @admin_api_required
 def watering():
     amount_ml = request.form["amount"]
-    result = app.system.request_watering(amount_ml)
+    result, duration = app.system.request_watering(amount_ml)
 
     if result == WateringRequestResult.ACCEPTED:
-        return jsonify({"success": True}), 202
+        return jsonify({"success": True, "duration": duration}), 202
 
     if result == WateringRequestResult.INVALID_AMOUNT:
         return jsonify({"success": False, "error": "invalid_amount"}), 400
