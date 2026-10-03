@@ -2,6 +2,7 @@ import time
 import logging
 import threading
 
+from modules.mdns import start_mdns
 from modules.routes import run_server
 from modules.watering import WateringController
 
@@ -10,6 +11,12 @@ from modules.watering import WateringController
 
 def main():
     watering = WateringController()
+
+    zeroconf, mdns_info = start_mdns(
+        hostname="mizumori.local.",
+        service_name="MizuMori Web._http._tcp.local.",
+        port=5000,
+    )
 
     server_thread = threading.Thread(
         target=run_server,
@@ -27,9 +34,12 @@ def main():
 
     try:
         while True:
-            time.sleep(10)
+            time.sleep(1)
     except KeyboardInterrupt:
         print("終了します")
+    finally:
+        zeroconf.unregister_service(mdns_info)
+        zeroconf.close()
 
 
 if __name__ == "__main__":
