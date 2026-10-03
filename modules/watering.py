@@ -76,7 +76,7 @@ class Camera:
         self._lock = threading.Lock()
 
     def capture_image(self) -> Image:
-        path = Path("demo/sample.jpg")
+        path = Path("demo/sample.jpg")  # ここに撮影処理を追加
 
         image = Image(data=path.read_bytes(), captured_at=datetime.now())
 
