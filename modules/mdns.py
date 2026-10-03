@@ -26,4 +26,6 @@ def start_mdns(hostname, service_name, port):
     zeroconf = Zeroconf()
     zeroconf.register_service(info)
 
+    print(f"[mDNS] \033[32mhttp://{hostname.rstrip('.')}:{port}\033[0m")
+
     return zeroconf, info
