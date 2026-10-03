@@ -164,6 +164,13 @@ def watering():
     return {"success": success}
 
 
+@app.get("/api/sensors")
+@login_required
+def get_sensor_values():
+    values = app.system.get_sensor_values()
+    return values.to_dict()
+
+
 # ==================================================
 # 起動
 # ==================================================

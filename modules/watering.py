@@ -1,7 +1,7 @@
 import time
 from enum import Enum
 from datetime import datetime
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 
 SENSOR_STARTUP_DELAY_SEC = 0  # センサー起動待ち時間
 SENSOR_CHECK_INTERVAL_SEC = 3  # センシング間隔
@@ -28,12 +28,27 @@ class SensorValue:
     value: float
     measured_at: datetime
 
+    def to_dict(self):
+        return {
+            "value": self.value,
+            "measured_at": self.measured_at.isoformat(),
+        }
+
 
 @dataclass
 class SensorValues:
     soil_moisture: SensorValue | None = None
     temperature: SensorValue | None = None
     humidity: SensorValue | None = None
+
+    def to_dict(self):
+        result = {}
+
+        for field in fields(self):
+            value = getattr(self, field.name)
+            result[field.name] = value.to_dict() if value is not None else None
+
+        return result
 
 
 # ------------------------------ Hardware ------------------------------
@@ -85,6 +100,9 @@ class SystemController:
         # ここで水やりスレッド生成 daemon=False
 
         return True
+
+    def get_sensor_values(self) -> SensorValues:
+        return self.sensor_values
 
     def mainloop(self):
         next_sensor_check = time.monotonic() + SENSOR_STARTUP_DELAY_SEC
