@@ -125,10 +125,14 @@
       <div class="site-role" :class="{ 'is-admin': $store.role.role === 'admin' }" x-text="$store.role.label"></div>
     </header>
     <main class="home__content">
-      <form method="post" action="/api/watering">
+      <!-- <form method="post" action="/api/watering">
         <input type="number" name="amount" required>
         <button type="submit">watering</button>
-      </form>
+      </form> -->
+      <section class="plant-image"></section>
+      <section class="system-status"></section>
+      <section class="sensor-values"></section>
+      <section class="watering-history"></section>
     </main>
   </div>
 
