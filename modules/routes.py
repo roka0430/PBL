@@ -160,7 +160,7 @@ def admin():
 @admin_api_required
 def watering():
     amount_ml = request.form["amount"]
-    success = app.watering.request_watering(amount_ml)
+    success = app.system.request_watering(amount_ml)
     return {"success": success}
 
 
@@ -169,6 +169,6 @@ def watering():
 # ==================================================
 
 
-def run_server(watering):
-    app.watering = watering
+def run_server(system):
+    app.system = system
     app.run(host="0.0.0.0", port=5000, debug=False, use_reloader=False)

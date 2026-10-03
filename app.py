@@ -4,13 +4,13 @@ import threading
 
 from modules.mdns import start_mdns
 from modules.routes import run_server
-from modules.watering import WateringController
+from modules.watering import SystemController
 
 logging.getLogger("werkzeug").setLevel(logging.WARNING)
 
 
 def main():
-    watering = WateringController()
+    system = SystemController()
 
     zeroconf, mdns_info = start_mdns(
         hostname="mizumori.local.",
@@ -20,12 +20,12 @@ def main():
 
     server_thread = threading.Thread(
         target=run_server,
-        args=(watering,),
+        args=(system,),
         daemon=True,
     )
 
     watering_thread = threading.Thread(
-        target=watering.mainloop,
+        target=system.mainloop,
         daemon=True,
     )
 
