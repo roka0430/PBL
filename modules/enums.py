@@ -12,3 +12,4 @@ class WateringRequestResult(Enum):
     ACCEPTED = "accepted"  # 受理
     INVALID_AMOUNT = "invalid_amount"  # 無効な給水量
     NOT_IDLE = "not_idle"  # システムが待機状態でない
+    TOO_SOON = "too_soon"  # システムが待機状態でない

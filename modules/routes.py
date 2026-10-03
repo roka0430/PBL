@@ -179,6 +179,9 @@ def watering():
     if result == WateringRequestResult.INVALID_AMOUNT:
         return jsonify({"success": False, "error": "invalid_amount"}), 400
 
+    if result == WateringRequestResult.TOO_SOON:
+        return jsonify({"success": False, "error": "too_soon"}), 429
+
     if result == WateringRequestResult.NOT_IDLE:
         return jsonify({"success": False, "error": "not_idle"}), 409
 

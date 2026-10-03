@@ -13,6 +13,7 @@ SENSOR_CHECK_INTERVAL_SEC = 3  # センシング間隔
 
 MIN_WATER_AMOUNT_ML = 10  # 1回給水量下限
 MAX_WATER_AMOUNT_ML = 200  # 1回給水量上限
+MIN_WATERING_INTERVAL_SEC = 10  # 給水間隔制限
 
 
 class Settings:
@@ -61,6 +62,27 @@ class Settings:
             setattr(self, name, value)
 
         self.save()
+
+
+class WateringHistory:  # TODO: LiteSQLで保存・読出し
+    def __init__(self):
+        self._history = []
+
+    def add(self, amount_ml, watered_at):
+        self._history.append({"amount_ml": amount_ml, "watered_at": watered_at})
+
+    def get_last(self):
+        if not self._history:
+            return None
+        return self._history[-1]
+
+    def elapsed_sec_since_last(self) -> float | None:
+        last = self.get_last()
+
+        if last is None:
+            return None
+
+        return (datetime.now() - last["watered_at"]).total_seconds()
 
 
 @dataclass
@@ -168,6 +190,8 @@ class SystemController:
         self.settings = Settings()
         self.settings.load()
 
+        self.history = WateringHistory()
+
         self.status = SystemStatus.IDLE
         self._status_lock = threading.Lock()
 
@@ -189,6 +213,10 @@ class SystemController:
         # TODO: さらに水やり条件を追加
         if not MIN_WATER_AMOUNT_ML <= amount_ml <= MAX_WATER_AMOUNT_ML:
             return WateringRequestResult.INVALID_AMOUNT, None
+
+        elapsed = self.history.elapsed_sec_since_last()
+        if elapsed is not None and elapsed < MIN_WATERING_INTERVAL_SEC:
+            return WateringRequestResult.TOO_SOON, None
 
         with self._status_lock:
             if self.status != SystemStatus.IDLE:
@@ -223,6 +251,7 @@ class SystemController:
             duration_sec = amount_ml / flow_rate
 
             self.pump.run(duration_sec)
+            self.history.add(amount_ml, datetime.now())
         finally:
             with self._status_lock:
                 self.status = SystemStatus.IDLE
