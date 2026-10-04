@@ -12,11 +12,11 @@ logging.getLogger("werkzeug").setLevel(logging.WARNING)
 def main():
     system = SystemController()
 
-    zeroconf, mdns_info = start_mdns(
-        hostname="mizumori.local.",
-        service_name="MizuMori Web._http._tcp.local.",
-        port=5000,
-    )
+    # zeroconf, mdns_info = start_mdns(
+    #     hostname="mizumori.local.",
+    #     service_name="MizuMori Web._http._tcp.local.",
+    #     port=5000,
+    # )
 
     server_thread = threading.Thread(
         target=run_server,
@@ -37,9 +37,9 @@ def main():
             time.sleep(1)
     except KeyboardInterrupt:
         print("終了します")
-    finally:
-        zeroconf.unregister_service(mdns_info)
-        zeroconf.close()
+    # finally:
+    #     zeroconf.unregister_service(mdns_info)
+    #     zeroconf.close()
 
 
 if __name__ == "__main__":
