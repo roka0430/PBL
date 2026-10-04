@@ -144,7 +144,31 @@
         </div>
       </section>
       <section class="system-status"></section>
-      <section class="sensor-values"></section>
+      <section class="sensor-values" x-data="sensorValues">
+        <div class="sensor-values__cards">
+          <button class="sensor-card">
+            <span>土壌水分量</span>
+            <span>
+              <span x-text="soilMoisture"></span>
+              %
+            </span>
+          </button>
+          <button class="sensor-card">
+            <span>温度</span>
+            <span>
+              <span x-text="temperature"></span>
+              ℃
+            </span>
+          </button>
+          <button class="sensor-card">
+            <span>湿度</span>
+            <span>
+              <span x-text="humidity"></span>
+              %
+            </span>
+          </button>
+        </div>
+      </section>
       <section class="watering-history"></section>
     </main>
   </div>

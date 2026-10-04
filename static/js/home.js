@@ -16,7 +16,7 @@ document.addEventListener("alpine:init", () => {
   Alpine.data("plantImage", () => ({
     imageUrl: null,
     imageBlob: null,
-    imageCapturedAt: null,
+    capturedAt: null,
 
     init() {
       this.scheduleImageUpdate();
@@ -51,9 +51,9 @@ document.addEventListener("alpine:init", () => {
       const capturedAtIso = res.headers.get("MizuMori-Captured-At");
 
       if (capturedAtIso) {
-        this.imageCapturedAt = new Date(capturedAtIso);
+        this.capturedAt = new Date(capturedAtIso);
 
-        const capturedAtString = this.imageCapturedAt.toLocaleString("ja-JP", {
+        const capturedAtString = this.capturedAt.toLocaleString("ja-JP", {
           year: "numeric",
           month: "2-digit",
           day: "2-digit",
@@ -70,7 +70,7 @@ document.addEventListener("alpine:init", () => {
         return;
       }
 
-      const capturedAtString = this.imageCapturedAt
+      const capturedAtString = this.capturedAt
         .toLocaleString("ja-JP", {
           year: "numeric",
           month: "2-digit",
@@ -90,6 +90,44 @@ document.addEventListener("alpine:init", () => {
       a.remove();
 
       URL.revokeObjectURL(url);
+    },
+  }));
+
+  Alpine.data("sensorValues", () => ({
+    soilMoisture: null,
+    temperature: null,
+    humidity: null,
+    measuredAt: null,
+
+    init() {
+      this.scheduleSensorUpdate();
+    },
+
+    scheduleSensorUpdate() {
+      this.updateSensorValues();
+
+      setTimeout(() => {
+        this.scheduleSensorUpdate();
+      }, 10000);
+    },
+
+    async updateSensorValues() {
+      const res = await fetch("/api/sensors", {
+        cache: "no-store",
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+
+      const sensorValues = await res.json();
+
+      const measuredAts = Object.values(sensorValues).map((value) => value.measured_at);
+      this.measuredAt = new Date(Math.min(...measuredAts.map((date) => new Date(date).getTime())));
+
+      this.soilMoisture = sensorValues.soil_moisture.value.toFixed(1);
+      this.temperature = sensorValues.temperature.value.toFixed(1);
+      this.humidity = sensorValues.humidity.value.toFixed(1);
     },
   }));
 });
