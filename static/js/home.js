@@ -1,8 +1,28 @@
+const DATA_REFRESH_INTERVAL_SEC = 10;
+
 document.addEventListener("alpine:init", () => {
+  Alpine.store("refresh", {
+    revision: 0,
+
+    start() {
+      const refresh = () => {
+        this.revision++;
+        setTimeout(refresh, DATA_REFRESH_INTERVAL_SEC * 1000);
+      };
+
+      refresh();
+    },
+  });
+
   Alpine.data("home", () => ({
     sidebarOpen: false,
 
     init() {
+      this.closeSidebarOnDesktop();
+      this.$store.refresh.start();
+    },
+
+    closeSidebarOnDesktop() {
       const media = window.matchMedia("(min-width: 1025px)");
 
       const handler = (e) => {
@@ -37,15 +57,8 @@ document.addEventListener("alpine:init", () => {
     capturedAt: null,
 
     init() {
-      this.scheduleImageUpdate();
-    },
-
-    scheduleImageUpdate() {
       this.updatePlantImage();
-
-      setTimeout(() => {
-        this.scheduleImageUpdate();
-      }, 10000);
+      this.$watch("$store.refresh.revision", () => this.updatePlantImage());
     },
 
     async updatePlantImage() {
@@ -99,15 +112,8 @@ document.addEventListener("alpine:init", () => {
     selectedSensor: null,
 
     init() {
-      this.scheduleSensorUpdate();
-    },
-
-    scheduleSensorUpdate() {
       this.updateSensorValues();
-
-      setTimeout(() => {
-        this.scheduleSensorUpdate();
-      }, 10000);
+      this.$watch("$store.refresh.revision", () => this.updateSensorValues());
     },
 
     async updateSensorValues() {
