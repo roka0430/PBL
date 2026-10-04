@@ -8,7 +8,7 @@ from dataclasses import dataclass, fields
 
 from .enums import SystemStatus, WateringRequestResult
 
-SENSOR_STARTUP_DELAY_SEC = 0  # センサー起動待ち時間
+SENSOR_STARTUP_DELAY_SEC = 10  # センサー起動待ち時間
 SENSOR_CHECK_INTERVAL_SEC = 3  # センシング間隔
 
 MIN_WATER_AMOUNT_ML = 10  # 1回給水量下限
@@ -103,8 +103,16 @@ class SensorValues:
     temperature: SensorValue | None = None
     humidity: SensorValue | None = None
 
+    @property
+    def ready(self) -> bool:
+        return (
+            self.soil_moisture is not None
+            and self.temperature is not None
+            and self.humidity is not None
+        )
+
     def to_dict(self) -> dict:
-        result = {}
+        result = {"ready": self.ready}
 
         for field in fields(self):
             value = getattr(self, field.name)

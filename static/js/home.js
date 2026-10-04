@@ -122,6 +122,11 @@ document.addEventListener("alpine:init", () => {
 
       const sensorValues = await res.json();
 
+      if (!sensorValues.ready) {
+        console.log("Sensors are not ready yet.");
+        return;
+      }
+
       const measuredAts = Object.values(sensorValues).map((value) => value.measured_at);
       this.measuredAt = new Date(Math.min(...measuredAts.map((date) => new Date(date).getTime())));
 
