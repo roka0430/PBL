@@ -11,6 +11,24 @@ document.addEventListener("alpine:init", () => {
 
       media.addEventListener("change", handler);
     },
+
+    formatDate(date, format = "YYYY-MM-DD") {
+      if (!date) {
+        return "";
+      }
+
+      const values = {
+        YYYY: String(date.getFullYear()).padStart(4, "0"),
+        YY: String(date.getFullYear()).slice(-2),
+        MM: String(date.getMonth() + 1).padStart(2, "0"),
+        DD: String(date.getDate()).padStart(2, "0"),
+        HH: String(date.getHours()).padStart(2, "0"),
+        mm: String(date.getMinutes()).padStart(2, "0"),
+        ss: String(date.getSeconds()).padStart(2, "0"),
+      };
+
+      return format.replace(/YYYY|YY|MM|DD|HH|mm|ss/g, (match) => values[match]);
+    },
   }));
 
   Alpine.data("plantImage", () => ({
@@ -52,16 +70,6 @@ document.addEventListener("alpine:init", () => {
 
       if (capturedAtIso) {
         this.capturedAt = new Date(capturedAtIso);
-
-        const capturedAtString = this.capturedAt.toLocaleString("ja-JP", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-
-        this.$refs.capturedAt.textContent = capturedAtString.replace(/\//g, "-");
       }
     },
 
@@ -70,22 +78,11 @@ document.addEventListener("alpine:init", () => {
         return;
       }
 
-      const capturedAtString = this.capturedAt
-        .toLocaleString("ja-JP", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-        })
-        .replace(/\D/g, "");
-
       const url = URL.createObjectURL(this.imageBlob);
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = `MizuMori_${capturedAtString}.jpg`;
+      a.download = `MizuMori_${this.formatDate(this.capturedAt, "YYYYMMDDHHmmss")}.jpg`;
       a.click();
       a.remove();
 
@@ -127,7 +124,9 @@ document.addEventListener("alpine:init", () => {
         return;
       }
 
-      const measuredAts = Object.values(sensorValues).map((value) => value.measured_at);
+      const measuredAts = Object.values(sensorValues)
+        .map((value) => value.measured_at)
+        .filter(Boolean);
       this.measuredAt = new Date(Math.min(...measuredAts.map((date) => new Date(date).getTime())));
 
       this.soilMoisture = sensorValues.soil_moisture.value.toFixed(1);

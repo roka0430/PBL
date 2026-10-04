@@ -132,7 +132,7 @@
       <section class="plant-image" x-data="plantImage">
         <img src="" alt="植物の様子" class="plant-image__img" x-ref="img">
         <div class="plant-image__menu">
-          <div class="captured_at" x-ref="capturedAt"></div>
+          <div class="captured-at" x-text="formatDate(capturedAt, 'YYYY-MM-DD HH:mm')"></div>
           <button class="save-image" title="画像を保存する" :disabled="!imageBlob" @click="saveImage()">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-download">
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -145,25 +145,33 @@
       </section>
       <section class="system-status">ステータス</section>
       <section class="sensor-values" x-data="sensorValues">
+        <div class="sensor-values__measured-at" x-text="formatDate(measuredAt, 'YYYY-MM-DD HH:mm')"></div>
         <div class="sensor-values__cards">
           <button class="sensor-card">
             <span class="sensor-type">土壌水分量</span>
             <span class="sensor-value">
-              <span x-text="soilMoisture"></span>
+              <span x-text="soilMoisture ?? '--'"></span>
               <span class="unit">%</span>
             </span>
           </button>
           <button class="sensor-card">
             <span class="sensor-type">温度</span>
             <span class="sensor-value">
-              <span x-text="temperature"></span>
+              <span x-text="temperature ?? '--'"></span>
               <span class="unit">℃</span>
             </span>
           </button>
           <button class="sensor-card">
             <span class="sensor-type">湿度</span>
             <span class="sensor-value">
-              <span x-text="humidity"></span>
+              <span x-text="humidity ?? '--'"></span>
+              <span class="unit">%</span>
+            </span>
+          </button>
+          <button class="sensor-card">
+            <span class="sensor-type">湿度</span>
+            <span class="sensor-value">
+              <span x-text="humidity ?? '--'"></span>
               <span class="unit">%</span>
             </span>
           </button>
