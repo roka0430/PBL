@@ -435,6 +435,7 @@
   .system-info__status-value {
     margin: 0;
     padding-top: 1px;
+    font-size: 1rem;
     line-height: 1.2;
   }
 }
