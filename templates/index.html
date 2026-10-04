@@ -145,7 +145,7 @@
       </section>
       <section class="system-status">ステータス</section>
       <section class="sensor-values" x-data="sensorValues">
-        <div class="sensor-values__measured-at" x-text="formatDate(measuredAt, 'YYYY-MM-DD HH:mm') || '...'"></div>
+        <div class="sensor-values__measured-at" x-text="formatDate(measuredAt, 'YYYY-MM-DD HH:mm') || 'センサーを起動しています...'"></div>
         <div class="sensor-values__cards">
           <button class="sensor-card" @click="selectSensor('soil_moisture')">
             <span class="sensor-type">土壌水分量</span>

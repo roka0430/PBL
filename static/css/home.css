@@ -367,7 +367,9 @@
 }
 
 .sensor-values__measured-at {
+  padding-right: 2px;
   margin-bottom: 5px;
+
   color: var(--color-text-muted);
   font-size: 0.7rem;
   text-align: right;
