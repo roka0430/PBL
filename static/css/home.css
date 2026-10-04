@@ -1,6 +1,8 @@
 .home {
-  --home-sidebar-width: 240px;
+  --home-sidebar-width: 300px;
   --home-header-height: 60px;
+  --home-padding-block: 20px;
+  --home-padding-inline: 30px;
 
   display: flex;
 
@@ -279,7 +281,8 @@
   grid-template-columns: 5fr 2fr;
   grid-template-rows: min-content 1fr;
 
-  padding: 20px 30px;
+  padding-block: var(--home-padding-block);
+  padding-inline: var(--home-padding-inline);
 }
 
 @media (max-width: 767px) {
@@ -365,9 +368,9 @@
   flex-direction: column;
 
   position: sticky;
-  top: calc(20px + var(--home-header-height));
+  top: calc(var(--home-padding-block) + var(--home-header-height));
 
-  max-height: calc(100vh - 40px - var(--home-header-height));
+  max-height: calc(100vh - var(--home-padding-block) * 2 - var(--home-header-height));
 }
 
 .system-info__card {
@@ -416,6 +419,8 @@
   .system-info {
     grid-column: 1 / 2;
     grid-row: 2 / 3;
+
+    position: static;
     padding: 15px;
     background: var(--color-surface);
   }
