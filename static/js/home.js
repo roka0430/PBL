@@ -109,8 +109,6 @@ document.addEventListener("alpine:init", () => {
     humidity: null,
     measuredAt: null,
 
-    selectedSensor: null,
-
     init() {
       this.updateSensorValues();
       this.$watch("$store.refresh.revision", () => this.updateSensorValues());
@@ -140,14 +138,6 @@ document.addEventListener("alpine:init", () => {
       this.soilMoisture = sensorValues.soil_moisture.value.toFixed(1);
       this.temperature = sensorValues.temperature.value.toFixed(1);
       this.humidity = sensorValues.humidity.value.toFixed(1);
-    },
-
-    selectSensor(sensor) {
-      if (sensor === this.selectedSensor) {
-        this.selectedSensor = null;
-      } else {
-        this.selectedSensor = sensor;
-      }
     },
   }));
 });

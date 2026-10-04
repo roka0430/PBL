@@ -462,8 +462,6 @@
 
   border: solid 1px var(--color-border);
   border-radius: 5px;
-
-  cursor: pointer;
 }
 
 .sensor-values__cards .sensor-card * {
