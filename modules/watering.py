@@ -21,8 +21,8 @@ class Settings:
 
     DEFAULTS = {
         "watering_amount_ml": 100,
-        "soil_moisture_dry": 800,
-        "soil_moisture_wet": 200,
+        "soil_moisture_dry": 1000,
+        "soil_moisture_wet": 100,
         "pump_flow_ml_per_sec": 20.0,
     }
 
@@ -179,7 +179,7 @@ class SoilMoistureSensor:
 
 class TemperatureAndHumiditySensor:
     def read(self) -> tuple[float, float]:
-        return 25.0, 60.0  # 温度, 湿度
+        return random.randint(100, 400) / 10, random.randint(0, 1000) / 10  # 温度, 湿度
 
 
 # ------------------------------ Controller ------------------------------
