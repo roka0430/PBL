@@ -420,6 +420,10 @@
   font-size: 0.7em;
 }
 
+.sensor-values__detail {
+  border: solid 1px var(--color-border);
+}
+
 /*  */
 
 .watering-history {
