@@ -125,10 +125,6 @@
       <div class="site-role" :class="{ 'is-admin': $store.role.role === 'admin' }" x-text="$store.role.label"></div>
     </header>
     <main class="home__content">
-      <!-- <form method="post" action="/api/watering">
-        <input type="number" name="amount" required>
-        <button type="submit">watering</button>
-      </form> -->
       <section class="plant-image" x-data="plantImage">
         <img src="" alt="植物の様子" class="plant-image__img" x-ref="img">
         <div class="plant-image__menu">
@@ -143,7 +139,16 @@
           </button>
         </div>
       </section>
-      <section class="system-status">ステータス</section>
+      <section class="system-info">
+        <div class="system-info__card system-info__status">
+          <div class="system-info__title">自動給水</div>
+          <div class="system-info__status-value">稼働中</div>
+        </div>
+        <div class="system-info__card system-info__history">
+          <div class="system-info__title">給水履歴</div>
+          <div class="system-info__history-list"></div>
+        </div>
+      </section>
       <section class="sensor-values" x-data="sensorValues">
         <div class="sensor-values__measured-at" x-text="formatDate(measuredAt, 'YYYY-MM-DD HH:mm') || 'センサーを起動しています...'"></div>
         <div class="sensor-values__cards">
@@ -180,7 +185,6 @@
           detail
         </div>
       </section>
-      <section class="watering-history"></section>
     </main>
   </div>
 
