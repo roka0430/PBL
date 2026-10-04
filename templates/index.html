@@ -7,7 +7,7 @@
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}?t={{ cache_buster }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}?t={{ cache_buster }}">
-  <title>PBL6</title>
+  <title>MizuMori</title>
 
   <script>
     window.addEventListener("pageshow", (event) => {
@@ -119,7 +119,7 @@
       </button>
       <a href="/" class="site-title">
         <img src="{{ url_for('static', filename='images/logo.svg') }}" width="24" height="24" alt="logo" class="logo">
-        <h1>PBL6</h1>
+        <h1>MizuMori</h1>
       </a>
       <div class="home__header-spacer"></div>
       <div class="site-role" :class="{ 'is-admin': $store.role.role === 'admin' }" x-text="$store.role.label"></div>
