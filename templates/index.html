@@ -143,28 +143,28 @@
           </button>
         </div>
       </section>
-      <section class="system-status"></section>
+      <section class="system-status">ステータス</section>
       <section class="sensor-values" x-data="sensorValues">
         <div class="sensor-values__cards">
           <button class="sensor-card">
-            <span>土壌水分量</span>
-            <span>
+            <span class="sensor-type">土壌水分量</span>
+            <span class="sensor-value">
               <span x-text="soilMoisture"></span>
-              %
+              <span class="unit">%</span>
             </span>
           </button>
           <button class="sensor-card">
-            <span>温度</span>
-            <span>
+            <span class="sensor-type">温度</span>
+            <span class="sensor-value">
               <span x-text="temperature"></span>
-              ℃
+              <span class="unit">℃</span>
             </span>
           </button>
           <button class="sensor-card">
-            <span>湿度</span>
-            <span>
+            <span class="sensor-type">湿度</span>
+            <span class="sensor-value">
               <span x-text="humidity"></span>
-              %
+              <span class="unit">%</span>
             </span>
           </button>
         </div>
