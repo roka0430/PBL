@@ -294,8 +294,8 @@
 
   display: grid;
   gap: 20px;
-  grid-template-columns: 10fr 4fr;
-  grid-template-rows: repeat(3, min-content);
+  grid-template-columns: 5fr 2fr;
+  grid-template-rows: min-content 1fr;
 
   padding: 20px;
 }
@@ -363,6 +363,11 @@
   display: flex;
   gap: 10px;
   flex-direction: column;
+
+  position: sticky;
+  top: 20px;
+
+  max-height: calc(100vh - 40px);
 }
 
 .system-info__card {
@@ -379,7 +384,7 @@
 .system-info__status-value {
   position: relative;
 
-  margin-block: 15px 10px;
+  margin-block: 13px 8px;
   padding-inline: 30px 10px;
 
   color: var(--color-primary);
@@ -408,9 +413,6 @@
 }
 
 /*  */
-
-.sensor-values {
-}
 
 .sensor-values__measured-at {
   padding-right: 2px;
@@ -469,6 +471,8 @@
 }
 
 .sensor-values__detail {
+  height: 1000px;
+  margin-top: 15px;
   border: solid 1px var(--color-border);
 }
 
@@ -503,6 +507,19 @@
     grid-row: 2 / 3;
     padding: 15px;
     background: var(--color-surface);
+  }
+
+  .system-info__status {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    padding-block: 15px 13px;
+  }
+
+  .system-info__status-value {
+    margin: 0;
+    padding-top: 1px;
+    line-height: 1.2;
   }
 
   .sensor-values {
