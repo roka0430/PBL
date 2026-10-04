@@ -282,10 +282,6 @@
   padding: 20px 30px;
 }
 
-.home__content section {
-  border-radius: 5px;
-}
-
 @media (max-width: 767px) {
   .home__content {
     grid-template-columns: 1fr;
@@ -458,10 +454,10 @@
   flex: 1;
 
   display: flex;
-  gap: 3px;
+  gap: 4px;
   flex-direction: column;
 
-  padding-block: 10px;
+  padding-block: 10px 13px;
   padding-inline: 20px;
 
   border: solid 1px var(--color-border);
