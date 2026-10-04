@@ -129,7 +129,20 @@
         <input type="number" name="amount" required>
         <button type="submit">watering</button>
       </form> -->
-      <section class="plant-image"></section>
+      <section class="plant-image" x-data="plantImage">
+        <img src="" alt="画像を読み込み中" class="plant-image__img" x-ref="img">
+        <div class="plant-image__menu">
+          <div class="captured_at" x-ref="capturedAt"></div>
+          <button class="save-image" title="画像を保存する" :disabled="!imageBlob" @click="saveImage()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-download">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+              <path d="M7 11l5 5l5 -5" />
+              <path d="M12 4l0 12" />
+            </svg>
+          </button>
+        </div>
+      </section>
       <section class="system-status"></section>
       <section class="sensor-values"></section>
       <section class="watering-history"></section>

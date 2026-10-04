@@ -289,12 +289,58 @@
   display: grid;
   gap: 20px;
   grid-template-columns: 5fr 3fr;
+  grid-template-rows: min-content auto auto;
 
-  padding: 30px;
+  padding: 20px;
+}
+
+.home__content section {
+  border-radius: 5px;
+  overflow: hidden;
 }
 
 .plant-image {
-  background: green;
+  position: relative;
+  aspect-ratio: 16 / 9;
+}
+
+.plant-image__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  border-radius: 5px;
+}
+
+.plant-image__menu {
+  display: flex;
+  justify-content: space-between;
+
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  padding-inline: 8px;
+  padding-bottom: 3px;
+
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.plant-image__menu .save-image {
+  aspect-ratio: 1 / 1;
+  cursor: pointer;
+}
+
+.plant-image__menu .save-image svg {
+  stroke: var(--color-text-muted);
+  transition: stroke 0.15s ease;
+  pointer-events: none;
+}
+
+.plant-image__menu .save-image:hover svg {
+  stroke: var(--color-text-white);
 }
 
 .system-status {
@@ -316,6 +362,16 @@
 @media (max-width: 767px) {
   .home__content {
     grid-template-columns: 1fr;
+    padding: 0;
+  }
+
+  .home__content section,
+  .plant-image__img {
+    border-radius: 0;
+  }
+
+  .plant-image__menu {
+    padding-inline: 8px 10px;
   }
 
   .sensor-values {
