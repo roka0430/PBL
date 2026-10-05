@@ -169,23 +169,26 @@ def admin():
 # ==================================================
 
 
-@app.post("/api/watering")
-@admin_api_required
-def watering():
-    amount_ml = request.form["amount"]
-    result, duration = app.system.request_watering(amount_ml)
+@app.get("/api/watering-history")
+@login_required
+def get_watering_history():
+    limit = request.args.get("limit", default=10, type=int)
+    limit = max(1, min(limit, 100))
 
-    if result == WateringRequestResult.ACCEPTED:
-        return jsonify({"success": True, "duration": duration}), 202
+    history = [
+        {"watering_at": "2026-10-06T05:32:10", "amount_ml": 180},
+        {"watering_at": "2026-10-06T05:32:10", "amount_ml": 180},
+        {"watering_at": "2026-10-06T05:32:10", "amount_ml": 180},
+        {"watering_at": "2026-10-06T05:32:10", "amount_ml": 180},
+        {"watering_at": "2026-10-06T05:32:10", "amount_ml": 180},
+        {"watering_at": "2026-10-06T05:32:10", "amount_ml": 180},
+        {"watering_at": "2026-10-06T05:32:10", "amount_ml": 180},
+        {"watering_at": "2026-10-06T05:32:10", "amount_ml": 180},
+        {"watering_at": "2026-10-06T05:32:10", "amount_ml": 180},
+        {"watering_at": "2026-10-06T05:32:10", "amount_ml": 180},
+    ]
 
-    if result == WateringRequestResult.INVALID_AMOUNT:
-        return jsonify({"success": False, "error": "invalid_amount"}), 400
-
-    if result == WateringRequestResult.TOO_SOON:
-        return jsonify({"success": False, "error": "too_soon"}), 429
-
-    if result == WateringRequestResult.NOT_IDLE:
-        return jsonify({"success": False, "error": "not_idle"}), 409
+    return jsonify(history)
 
 
 @app.get("/api/sensors")
@@ -204,6 +207,25 @@ def get_image():
     response.headers["MizuMori-Captured-At"] = image.captured_at.isoformat()
 
     return response
+
+
+@app.post("/api/watering")
+@admin_api_required
+def watering():
+    amount_ml = request.form["amount"]
+    result, duration = app.system.request_watering(amount_ml)
+
+    if result == WateringRequestResult.ACCEPTED:
+        return jsonify({"success": True, "duration": duration}), 202
+
+    if result == WateringRequestResult.INVALID_AMOUNT:
+        return jsonify({"success": False, "error": "invalid_amount"}), 400
+
+    if result == WateringRequestResult.TOO_SOON:
+        return jsonify({"success": False, "error": "too_soon"}), 429
+
+    if result == WateringRequestResult.NOT_IDLE:
+        return jsonify({"success": False, "error": "not_idle"}), 409
 
 
 # ==================================================
