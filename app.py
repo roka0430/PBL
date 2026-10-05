@@ -1,9 +1,10 @@
 import time
+import socket
 import logging
 import threading
 
-from modules.mdns import start_mdns
-from modules.routes import run_server
+from modules.mdns import get_local_ip, start_mdns
+from modules.routes import run_server, PORT
 from modules.watering import SystemController
 
 logging.getLogger("werkzeug").setLevel(logging.WARNING)
@@ -12,10 +13,13 @@ logging.getLogger("werkzeug").setLevel(logging.WARNING)
 def main():
     system = SystemController()
 
+    ip = get_local_ip()
+    print(f"[Server] \033[32mhttp://{ip}:{PORT}\033[0m")
+
     # zeroconf, mdns_info = start_mdns(
     #     hostname="mizumori.local.",
     #     service_name="MizuMori Web._http._tcp.local.",
-    #     port=5000,
+    #     port=PORT,
     # )
 
     server_thread = threading.Thread(

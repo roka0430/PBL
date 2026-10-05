@@ -32,6 +32,8 @@ class User(UserMixin):
         self.role = role
 
 
+PORT = 5000
+
 # ---------- 環境変数 ----------
 load_dotenv()
 SECRET_KEY = os.environ["SECRET_KEY"]
