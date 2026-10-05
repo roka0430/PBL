@@ -16,11 +16,11 @@ def main():
     ip = get_local_ip()
     print(f"[Server] \033[32mhttp://{ip}:{PORT}\033[0m")
 
-    # zeroconf, mdns_info = start_mdns(
-    #     hostname="mizumori.local.",
-    #     service_name="MizuMori Web._http._tcp.local.",
-    #     port=PORT,
-    # )
+    zeroconf, mdns_info = start_mdns(
+        hostname="mizumori.local.",
+        service_name="MizuMori Web._http._tcp.local.",
+        port=PORT,
+    )
 
     server_thread = threading.Thread(
         target=run_server,
@@ -41,9 +41,9 @@ def main():
             time.sleep(1)
     except KeyboardInterrupt:
         print("終了します")
-    # finally:
-    #     zeroconf.unregister_service(mdns_info)
-    #     zeroconf.close()
+    finally:
+        zeroconf.unregister_service(mdns_info)
+        zeroconf.close()
 
 
 if __name__ == "__main__":

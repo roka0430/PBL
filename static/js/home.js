@@ -156,6 +156,11 @@ document.addEventListener("alpine:init", () => {
   Alpine.data("systemStatus", () => ({}));
 
   Alpine.data("systemHistory", () => ({
+    WATERING_TYPE: {
+      auto: "自動",
+      manual: "手動",
+    },
+
     histories: [],
     total: 0,
     limit: 10,
