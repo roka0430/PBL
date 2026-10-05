@@ -148,9 +148,9 @@
           <div class="system-info__title">給水履歴</div>
           <div class="system-info__history-list">
             <template x-for="history in histories">
-              <div>
-                <div x-text="history.watering_at"></div>
-                <div x-text="history.amount_ml"></div>
+              <div class="system-info__history-item">
+                <div class="watering-at" x-text="formatDate(history.watering_at, 'YYYY-MM-DD HH:mm:ss')"></div>
+                <div class="amount-ml" x-text="history.amount_ml"></div>
               </div>
             </template>
           </div>

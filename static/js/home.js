@@ -32,11 +32,7 @@ document.addEventListener("alpine:init", () => {
       media.addEventListener("change", handler);
     },
 
-    formatDate(date, format = "YYYY-MM-DD") {
-      if (!date) {
-        return "";
-      }
-
+    formatDateObject(date, format) {
       const values = {
         YYYY: String(date.getFullYear()).padStart(4, "0"),
         YY: String(date.getFullYear()).slice(-2),
@@ -48,6 +44,22 @@ document.addEventListener("alpine:init", () => {
       };
 
       return format.replace(/YYYY|YY|MM|DD|HH|mm|ss/g, (match) => values[match]);
+    },
+
+    formatDate(date, format = "YYYY-MM-DD") {
+      if (!date) {
+        return "";
+      }
+
+      if (date instanceof Date) {
+        return this.formatDateObject(date, format);
+      }
+
+      if (typeof date === "string") {
+        return this.formatDateObject(new Date(date), format);
+      }
+
+      throw new TypeError("date must be a Date or ISO date string");
     },
   }));
 
@@ -159,7 +171,6 @@ document.addEventListener("alpine:init", () => {
       }
 
       this.histories = await res.json();
-      console.log(this.histories);
     },
   }));
 });
