@@ -140,4 +140,26 @@ document.addEventListener("alpine:init", () => {
       this.humidity = sensorValues.humidity.value.toFixed(1);
     },
   }));
+
+  Alpine.data("systemStatus", () => ({}));
+
+  Alpine.data("systemHistory", () => ({
+    histories: [],
+
+    async init() {
+      this.getWateringHistory();
+      this.$watch("$store.refresh.revision", () => this.getWateringHistory());
+    },
+
+    async getWateringHistory() {
+      const res = await fetch("/api/watering-history?limit=5");
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+
+      this.histories = await res.json();
+      console.log(this.histories);
+    },
+  }));
 });

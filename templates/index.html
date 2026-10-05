@@ -140,13 +140,20 @@
         </div>
       </section>
       <section class="system-info">
-        <div class="system-info__card system-info__status">
+        <div class="system-info__card system-info__status" x-data="systemStatus">
           <div class="system-info__title">自動給水</div>
           <div class="system-info__status-value">稼働中</div>
         </div>
-        <div class="system-info__card system-info__history">
+        <div class="system-info__card system-info__history" x-data="systemHistory">
           <div class="system-info__title">給水履歴</div>
-          <div class="system-info__history-list"></div>
+          <div class="system-info__history-list">
+            <template x-for="history in histories">
+              <div>
+                <div x-text="history.watering_at"></div>
+                <div x-text="history.amount_ml"></div>
+              </div>
+            </template>
+          </div>
         </div>
       </section>
       <section class="sensor-values" x-data="sensorValues">
