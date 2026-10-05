@@ -157,20 +157,30 @@ document.addEventListener("alpine:init", () => {
 
   Alpine.data("systemHistory", () => ({
     histories: [],
+    total: 0,
+    limit: 10,
 
     async init() {
-      this.getWateringHistory();
-      this.$watch("$store.refresh.revision", () => this.getWateringHistory());
+      this.getWateringHistory(this.limit);
+      this.$watch("$store.refresh.revision", () => this.getWateringHistory(this.limit));
     },
 
-    async getWateringHistory() {
-      const res = await fetch("/api/watering-history?limit=5");
+    async getWateringHistory(limit) {
+      const res = await fetch(`/api/watering-history?limit=${limit}`);
 
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);
       }
 
-      this.histories = await res.json();
+      const { history, total_count } = await res.json();
+
+      this.histories = history;
+      this.total = total_count;
+    },
+
+    showMoreHistory() {
+      this.limit += 10;
+      this.getWateringHistory(this.limit);
     },
   }));
 });

@@ -278,7 +278,7 @@
 
   display: grid;
   gap: 20px;
-  grid-template-columns: 5fr 2fr;
+  grid-template-columns: 1fr 300px;
   grid-template-rows: min-content 1fr;
 
   padding-block: var(--home-padding-block);
@@ -456,13 +456,15 @@
   color: var(--color-text-muted);
   font-size: 0.9rem;
 
-  margin-top: 10px;
-
   cursor: pointer;
 }
 
 .system-info__history-more:hover {
   text-decoration: underline;
+}
+
+.system-info__history-more:disabled {
+  pointer-events: none;
 }
 
 @media (max-width: 767px) {

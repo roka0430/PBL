@@ -156,7 +156,14 @@
                 </div>
               </div>
             </template>
-            <button class="system-info__history-more">さらに表示</button>
+            <button class="system-info__history-more" @click="showMoreHistory()" :disabled="histories.length >= total">
+              <template x-if=" histories.length < total">
+                <span>さらに表示</span>
+              </template>
+              <template x-if=" histories.length >= total">
+                <span>全履歴を表示しました</span>
+              </template>
+            </button>
           </div>
         </div>
       </section>
