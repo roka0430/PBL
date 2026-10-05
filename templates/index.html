@@ -149,10 +149,14 @@
           <div class="system-info__history-list">
             <template x-for="history in histories">
               <div class="system-info__history-item">
-                <div class="watering-at" x-text="formatDate(history.watering_at, 'YYYY-MM-DD HH:mm:ss')"></div>
-                <div class="amount-ml" x-text="history.amount_ml"></div>
+                <div class="watering-at" x-text="formatDate(history.watering_at, 'MM/DD HH:mm')"></div>
+                <div class="amount-ml">
+                  <span x-text="history.amount_ml"></span>
+                  <span>ml</span>
+                </div>
               </div>
             </template>
+            <button class="system-info__history-more">さらに表示</button>
           </div>
         </div>
       </section>

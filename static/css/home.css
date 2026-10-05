@@ -413,6 +413,56 @@
 
 .system-info__history {
   flex: 1;
+
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+
+  min-height: 0;
+}
+
+.system-info__history-list {
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+
+  padding-inline: 12px;
+
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.system-info__history-item {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+
+  font-size: 0.9rem;
+}
+
+.system-info__history-item .watering-at {
+  width: 6rem;
+}
+
+.system-info__history-item .amount-ml {
+  display: flex;
+  gap: 3px;
+  justify-content: flex-end;
+
+  min-width: 4rem;
+}
+
+.system-info__history-more {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+
+  margin-top: 10px;
+
+  cursor: pointer;
+}
+
+.system-info__history-more:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 767px) {
