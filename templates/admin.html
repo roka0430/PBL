@@ -28,6 +28,11 @@
     <button type="submit">ログアウト</button>
   </form>
 
+  <form action="/api/watering" method="post">
+    <input type="number" name="amount">
+    <button type="submit">submit</button>
+  </form>
+
   <script src="{{ url_for('static', filename='js/common.js') }}?t={{ cache_buster }}" type="module" defer></script>
   <script src="{{ url_for('static', filename='js/admin.js') }}?t={{ cache_buster }}" type="module" defer></script>
   <script src="{{ url_for('static', filename='js/alpine.js') }}" defer></script>
