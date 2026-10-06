@@ -59,13 +59,15 @@ class SystemController:
 
         self.watering_stop_event.clear()
 
+        duration_sec = amount_ml / self.settings.get("pump_flow_ml_per_sec")
+
         threading.Thread(
-            target=self._watering, args=(WateringType.MANUAL, amount_ml), daemon=False
+            target=self._watering,
+            args=(WateringType.MANUAL, amount_ml, duration_sec),
+            daemon=False,
         ).start()
 
-        duration_sec = amount_ml / self.settings.get("pump_flow_ml_per_sec")
         return (ManualWateringResult.ACCEPTED, duration_sec)
-        # TODO 後で何とかもっときれいに給水時間を返せるように
 
     def stop_watering(self):
         self.watering_stop_event.set()
@@ -94,11 +96,8 @@ class SystemController:
 
     # ========== 内部処理 ==========
 
-    def _watering(self, watering_type, amount_ml):
+    def _watering(self, watering_type, amount_ml, duration_sec):
         try:
-            flow_rate = self.settings.get("pump_flow_ml_per_sec")
-            duration_sec = amount_ml / flow_rate
-
             self.pump.start()
 
             stopped = self.watering_stop_event.wait(duration_sec)
