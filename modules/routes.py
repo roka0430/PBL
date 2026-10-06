@@ -23,7 +23,7 @@ from flask_login import (
     login_required,
 )
 
-from .enums import SystemStatus, WateringRequestResult
+from .enums import ManualWateringResult
 
 
 class User(UserMixin):
@@ -608,18 +608,18 @@ def get_image():
 @admin_api_required
 def watering():
     amount_ml = request.form["amount"]
-    result, duration = app.system.request_watering(amount_ml)
+    result, duration = app.system.manual_watering(amount_ml)
 
-    if result == WateringRequestResult.ACCEPTED:
+    if result == ManualWateringResult.ACCEPTED:
         return jsonify({"success": True, "duration": duration}), 202
 
-    if result == WateringRequestResult.INVALID_AMOUNT:
+    if result == ManualWateringResult.INVALID_AMOUNT:
         return jsonify({"success": False, "error": "invalid_amount"}), 400
 
-    if result == WateringRequestResult.TOO_SOON:
+    if result == ManualWateringResult.TOO_SOON:
         return jsonify({"success": False, "error": "too_soon"}), 429
 
-    if result == WateringRequestResult.NOT_IDLE:
+    if result == ManualWateringResult.NOT_IDLE:
         return jsonify({"success": False, "error": "not_idle"}), 409
 
 
