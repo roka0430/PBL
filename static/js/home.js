@@ -1,19 +1,4 @@
-const DATA_REFRESH_INTERVAL_SEC = 10;
-
 document.addEventListener("alpine:init", () => {
-  Alpine.store("refresh", {
-    revision: 0,
-
-    start() {
-      const refresh = () => {
-        this.revision++;
-        setTimeout(refresh, DATA_REFRESH_INTERVAL_SEC * 1000);
-      };
-
-      refresh();
-    },
-  });
-
   Alpine.data("home", () => ({
     sidebarOpen: false,
 

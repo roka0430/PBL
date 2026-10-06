@@ -1,5 +1,7 @@
 import theme from "./modules/theme.js";
 
+const DATA_REFRESH_INTERVAL_SEC = 10;
+
 document.addEventListener("alpine:init", () => {
   Alpine.store("role", {
     role: "",
@@ -15,6 +17,34 @@ document.addEventListener("alpine:init", () => {
 
     init() {
       this.role = document.body?.dataset.userRole ?? "";
+    },
+  });
+
+  Alpine.store("refresh", {
+    revision: 0,
+    connected: false,
+
+    start() {
+      const refresh = () => {
+        this.revision++;
+        this.checkHealth();
+
+        setTimeout(refresh, DATA_REFRESH_INTERVAL_SEC * 1000);
+      };
+
+      refresh();
+    },
+
+    async checkHealth() {
+      try {
+        const res = await fetch("/api/health", {
+          cache: "no-store",
+        });
+
+        this.connected = res.ok;
+      } catch {
+        this.connected = false;
+      }
     },
   });
 
