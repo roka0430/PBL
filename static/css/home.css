@@ -323,7 +323,7 @@
   height: 100%;
   object-fit: contain;
 
-  border-radius: 5px;
+  border-radius: 6px;
   font-size: 0.8rem;
 }
 
@@ -565,6 +565,10 @@ input:checked + .system-info__header .history-list-opener svg {
     line-height: 1.2;
   }
 
+  .system-info__status-value::before {
+    top: 50%;
+  }
+
   .system-info__history::after {
     display: none;
   }
@@ -653,9 +657,14 @@ input:checked + .system-info__header .history-list-opener svg {
 }
 
 .sensor-values__detail {
-  height: 1000px;
+  height: 300px;
+
   margin-top: 15px;
+  padding-block: 10px;
+  padding-inline: 12px;
+
   border: solid 1px var(--color-border);
+  border-radius: 5px;
 }
 
 @media (max-width: 767px) {
