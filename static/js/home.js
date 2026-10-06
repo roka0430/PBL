@@ -163,7 +163,7 @@ document.addEventListener("alpine:init", () => {
 
     histories: [],
     total: 0,
-    limit: 10,
+    showCount: 10,
 
     init() {
       this.initHistoryList();
@@ -175,28 +175,32 @@ document.addEventListener("alpine:init", () => {
       const itemHeight = parseFloat(getComputedStyle(historyList).getPropertyValue("--history-item-height"));
       const gap = parseFloat(getComputedStyle(historyList).rowGap) || 0;
 
-      this.limit = Math.max(6, parseInt(listHeight / (gap + itemHeight)) + 1);
+      this.showCount = Math.max(6, parseInt(listHeight / (gap + itemHeight)) + 1);
 
-      this.getWateringHistory(this.limit);
-      this.$watch("$store.refresh.revision", () => this.getWateringHistory(this.limit));
+      this.getWateringHistory();
+      this.$watch("$store.refresh.revision", () => this.getWateringHistory());
     },
 
-    async getWateringHistory(limit) {
-      const res = await fetch(`/api/watering-history?limit=${limit}`);
+    async getWateringHistory() {
+      const min_id = Math.min(...this.histories.map((history) => history.id));
+      const before_id = this.histories.length > 0 ? min_id : null;
+      const limit = this.showCount - this.histories.length;
+
+      const res = await fetch(`/api/watering-history?before_id=${before_id}&limit=${limit}`);
 
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);
       }
 
-      const { history, total_count } = await res.json();
+      const { histories, total_count } = await res.json();
 
-      this.histories = history;
+      this.histories.push(...histories);
       this.total = total_count;
     },
 
     showMoreHistory() {
-      this.limit += 10;
-      this.getWateringHistory(this.limit);
+      this.showCount += 10;
+      this.getWateringHistory();
     },
   }));
 });

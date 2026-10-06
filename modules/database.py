@@ -36,30 +36,41 @@ class WateringDatabase:
                 (watered_at_str, watering_type.value, amount_ml),
             )
 
-    def get(self, start_id, limit) -> list[dict]:
+    def get(self, before_id, limit) -> list[dict]:
         with sqlite3.connect(DATABASE_PATH) as con:
             con.row_factory = sqlite3.Row
 
-            rows = con.execute(
-                """
-                SELECT id, watered_at, watering_type, amount_ml
-                FROM watering_history
-                WHERE id >= ?
-                ORDER BY id DESC
-                LIMIT ?
-                """,
-                (start_id, limit),
-            ).fetchall()
+            if before_id is None:
+                rows = con.execute(
+                    """
+                    SELECT id, watered_at, watering_type, amount_ml
+                    FROM watering_history
+                    ORDER BY id DESC
+                    LIMIT ?
+                    """,
+                    (limit,),
+                ).fetchall()
+            else:
+                rows = con.execute(
+                    """
+                    SELECT id, watered_at, watering_type, amount_ml
+                    FROM watering_history
+                    WHERE id < ?
+                    ORDER BY id DESC
+                    LIMIT ?
+                    """,
+                    (before_id, limit),
+                ).fetchall()
 
-        return [
-            {
-                "id": row["id"],
-                "watered_at": datetime.fromisoformat(row["watered_at"]),
-                "watering_type": WateringType(row["watering_type"]),
-                "amount_ml": row["amount_ml"],
-            }
-            for row in rows
-        ]
+            return [
+                {
+                    "id": row["id"],
+                    "watered_at": datetime.fromisoformat(row["watered_at"]),
+                    "watering_type": WateringType(row["watering_type"]),
+                    "amount_ml": row["amount_ml"],
+                }
+                for row in rows
+            ]
 
     def get_all(self) -> list[dict]:
         with sqlite3.connect(DATABASE_PATH) as con:
@@ -80,6 +91,12 @@ class WateringDatabase:
                 }
                 for row in rows
             ]
+
+    def get_count(self) -> int:
+        with sqlite3.connect(DATABASE_PATH) as con:
+            row = con.execute("SELECT COUNT(*) FROM watering_history").fetchone()
+
+        return row[0]
 
     def get_last_watered_at(self) -> datetime | None:
         with sqlite3.connect(DATABASE_PATH) as con:

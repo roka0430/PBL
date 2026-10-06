@@ -172,10 +172,13 @@ def admin():
 @app.get("/api/watering-history")
 @login_required
 def get_watering_history():
+    before_id = request.args.get("before_id", default=None, type=int)
+    before_id = None if before_id == None else max(1, before_id)
+
     limit = request.args.get("limit", default=10, type=int)
     limit = max(1, min(limit, 100))
 
-    histories = app.system.get_watering_history()
+    histories = app.system.get_watering_history(before_id, limit)
 
     for history in histories:
         history["watered_at"] = history["watered_at"].isoformat()
@@ -183,8 +186,8 @@ def get_watering_history():
 
     return jsonify(
         {
-            "history": histories[0:limit],
-            "total_count": len(histories),
+            "histories": histories,
+            "total_count": app.system.get_history_count(),
         }
     )
 
