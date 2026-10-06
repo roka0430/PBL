@@ -36,18 +36,44 @@ class WateringDatabase:
                 (watered_at_str, watering_type.value, amount_ml),
             )
 
+    def get(self, start_id, limit) -> list[dict]:
+        with sqlite3.connect(DATABASE_PATH) as con:
+            con.row_factory = sqlite3.Row
+
+            rows = con.execute(
+                """
+                SELECT id, watered_at, watering_type, amount_ml
+                FROM watering_history
+                WHERE id <= ?
+                ORDER BY id DESC
+                LIMIT ?
+                """,
+                (start_id, limit),
+            ).fetchall()
+
+        return [
+            {
+                "id": row["id"],
+                "watered_at": datetime.fromisoformat(row["watered_at"]),
+                "watering_type": WateringType(row["watering_type"]),
+                "amount_ml": row["amount_ml"],
+            }
+            for row in rows
+        ]
+
     def get_all(self) -> list[dict]:
         with sqlite3.connect(DATABASE_PATH) as con:
             con.row_factory = sqlite3.Row
 
             rows = con.execute(f"""
-                SELECT watered_at, watering_type, amount_ml
+                SELECT id, watered_at, watering_type, amount_ml
                 FROM {self.WATERING_HISTORY_TABLE}
                 ORDER BY watered_at DESC
                 """).fetchall()
 
             return [
                 {
+                    "id": row["id"],
                     "watered_at": datetime.fromisoformat(row["watered_at"]),
                     "watering_type": WateringType(row["watering_type"]),
                     "amount_ml": row["amount_ml"],
