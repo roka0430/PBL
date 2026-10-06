@@ -114,6 +114,11 @@ class SystemController:
         return (ManualWateringResult.ACCEPTED, duration_sec)
         # TODO 後で何とかもっときれいに給水時間を返せるように
 
+    def stop_watering(self):
+        print("ok")
+        self.watering_stop_event.set()
+        self.pump.stop()
+
     def get_sensor_values(self) -> SensorValues:
         return self.sensor_values
 

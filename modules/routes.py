@@ -229,6 +229,13 @@ def watering():
         return jsonify({"success": False, "error": "not_idle"}), 409
 
 
+@app.post("/api/watering/stop")
+@admin_api_required
+def stop_watering():
+    app.system.stop_watering()
+    return {"status": "accepted"}
+
+
 # ==================================================
 # 起動
 # ==================================================
