@@ -9,7 +9,6 @@ class Settings:
 
         if SETTINGS_PATH.exists():
             self._settings = self._load(SETTINGS_PATH)
-            print(self._settings)
         else:
             self._settings = {
                 key: value["default"] for key, value in self._default_settings.items()
@@ -26,3 +25,6 @@ class Settings:
 
     def get(self, key):
         return self._settings[key]
+
+    def get_all(self):
+        return self._settings

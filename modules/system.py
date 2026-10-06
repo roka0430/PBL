@@ -79,6 +79,9 @@ class SystemController:
     def get_image(self) -> Image:
         return self.camera.get_image()
 
+    def get_settings(self) -> list[dict]:
+        return self.settings.get_all()
+
     def get_history_count(self) -> int:
         return self.watering_database.get_count()
 

@@ -175,6 +175,12 @@ def get_health():
     return {"status": "ok"}
 
 
+@app.get("/api/settings")
+@login_required
+def get_settings():
+    return jsonify(app.system.get_settings())
+
+
 @app.get("/api/watering-history")
 @login_required
 def get_watering_history():
