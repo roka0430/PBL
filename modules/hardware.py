@@ -8,11 +8,10 @@ from .dataclasses import Image
 
 
 class Pump:
-    def run(self, duration_sec):
-        # TODO: ポンプ制御を追加
+    def start(self):
         print("pump start")
-        print(f"duration: {duration_sec}s")
-        time.sleep(duration_sec)
+
+    def stop(self):
         print("pump stop")
 
 

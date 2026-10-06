@@ -75,6 +75,8 @@ class SystemController:
 
         self.sensor_values = SensorValues()
 
+        self.watering_stop_event = threading.Event()
+
         self.pump = Pump()
         self.camera = Camera()
         self.soil_moisture_sensor = SoilMoistureSensor(self.settings)
@@ -101,6 +103,8 @@ class SystemController:
             if self.status != SystemStatus.IDLE:
                 return ManualWateringResult.NOT_IDLE, None
             self.status = SystemStatus.WATERING
+
+        self.watering_stop_event.clear()
 
         threading.Thread(
             target=self._watering, args=(WateringType.MANUAL, amount_ml), daemon=False
@@ -138,14 +142,23 @@ class SystemController:
             flow_rate = self.settings.pump_flow_ml_per_sec
             duration_sec = amount_ml / flow_rate
 
-            self.pump.run(duration_sec)
+            self.pump.start()
 
-            self.watering_database.add(
-                watered_at=datetime.now(),
-                watering_type=watering_type,
-                amount_ml=amount_ml,
-            )
+            stopped = self.watering_stop_event.wait(duration_sec)
+
+            self.pump.stop()
+
+            if stopped:
+                return
+
+            # self.watering_database.add(
+            #     watered_at=datetime.now(),
+            #     watering_type=watering_type,
+            #     amount_ml=amount_ml,
+            # )
         finally:
+            self.pump.stop()
+
             with self._status_lock:
                 self.status = SystemStatus.IDLE
 
