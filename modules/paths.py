@@ -1,6 +1,6 @@
 from pathlib import Path
 
-ROOT_DIR = Path(__file__).resolve().parent
+ROOT_DIR = Path(__file__).resolve().parent.parent
 
 CONFIG_DIR = ROOT_DIR / "config"
 INSTANCE_DIR = ROOT_DIR / "instance"
