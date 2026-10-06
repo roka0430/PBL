@@ -146,7 +146,7 @@
         </div>
         <div class="system-info__card system-info__history" x-data="systemHistory">
           <div class="system-info__title">給水履歴</div>
-          <div class="system-info__history-list">
+          <div class="system-info__history-list" x-ref="historyList">
             <template x-for="history in histories">
               <div class="system-info__history-item">
                 <div class="watering-at" x-text="formatDate(history.watering_at, 'MM/DD HH:mm')"></div>
@@ -157,7 +157,7 @@
                 </div>
               </div>
             </template>
-            <button class="system-info__history-more" @click="showMoreHistory()" :disabled="histories.length >= total">
+            <button class="system-info__history-more" @click="showMoreHistory()" :disabled="histories.length >= total" x-ref="historyItem">
               <template x-if=" histories.length < total">
                 <span>さらに表示</span>
               </template>
