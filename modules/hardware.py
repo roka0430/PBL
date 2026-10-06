@@ -8,6 +8,7 @@ from .dataclasses import Image
 
 
 class Pump:
+    # TODO ポンプ制御を追加
     def start(self):
         print("pump start")
 
