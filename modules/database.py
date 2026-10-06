@@ -44,7 +44,7 @@ class WateringDatabase:
                 """
                 SELECT id, watered_at, watering_type, amount_ml
                 FROM watering_history
-                WHERE id <= ?
+                WHERE id >= ?
                 ORDER BY id DESC
                 LIMIT ?
                 """,
