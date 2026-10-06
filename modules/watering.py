@@ -92,11 +92,6 @@ class WateringHistory:  # TODO: LiteSQLで保存・読出し
         return (datetime.now() - last["watered_at"]).total_seconds()
 
 
-# ------------------------------ Hardware ------------------------------
-
-# ------------------------------ Controller ------------------------------
-
-
 class SystemController:
     def __init__(self):
         self.settings = Settings()
