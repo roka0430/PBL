@@ -278,7 +278,7 @@
 
   display: grid;
   gap: 20px;
-  grid-template-columns: 1fr 240px;
+  grid-template-columns: 1fr minmax(240px, 255px);
   grid-template-rows: min-content 1fr;
 
   padding-block: var(--home-padding-block);
@@ -457,6 +457,7 @@
 .system-info__history-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
   min-height: var(--history-item-height);
 
@@ -464,7 +465,7 @@
 }
 
 .system-info__history-item .watering-at {
-  width: 7rem;
+  width: 7.2rem;
 }
 
 .system-info__history-item .amount-ml {
@@ -472,7 +473,7 @@
   gap: 3px;
   justify-content: flex-end;
 
-  min-width: 3.5rem;
+  min-width: 3.6rem;
 }
 
 .system-info__history-more {
