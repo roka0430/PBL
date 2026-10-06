@@ -115,7 +115,6 @@ class SystemController:
         # TODO 後で何とかもっときれいに給水時間を返せるように
 
     def stop_watering(self):
-        print("ok")
         self.watering_stop_event.set()
         self.pump.stop()
 
@@ -156,6 +155,7 @@ class SystemController:
             if stopped:
                 return
 
+            # TODO デモのため記録停止中
             # self.watering_database.add(
             #     watered_at=datetime.now(),
             #     watering_type=watering_type,
