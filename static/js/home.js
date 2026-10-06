@@ -4,7 +4,7 @@ document.addEventListener("alpine:init", () => {
 
     init() {
       this.closeSidebarOnDesktop();
-      this.$store.refresh.start();
+      this.$store.health.start();
     },
 
     closeSidebarOnDesktop() {
@@ -54,8 +54,7 @@ document.addEventListener("alpine:init", () => {
     capturedAt: null,
 
     init() {
-      this.updatePlantImage();
-      this.$watch("$store.refresh.revision", () => this.updatePlantImage());
+      this.$watch("$store.health.revision", () => this.updatePlantImage());
     },
 
     async updatePlantImage() {
@@ -107,8 +106,7 @@ document.addEventListener("alpine:init", () => {
     measuredAt: null,
 
     init() {
-      this.updateSensorValues();
-      this.$watch("$store.refresh.revision", () => this.updateSensorValues());
+      this.$watch("$store.health.revision", () => this.updateSensorValues());
     },
 
     async updateSensorValues() {
@@ -162,8 +160,7 @@ document.addEventListener("alpine:init", () => {
 
       this.showCount = Math.max(6, parseInt(listHeight / (gap + itemHeight)) + 1);
 
-      this.getWateringHistory();
-      this.$watch("$store.refresh.revision", () => this.getWateringHistory());
+      this.$watch("$store.health.revision", () => this.getWateringHistory());
     },
 
     async getWateringHistory() {

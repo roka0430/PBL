@@ -19,14 +19,15 @@ document.addEventListener("alpine:init", () => {
     },
   });
 
-  Alpine.store("refresh", {
+  Alpine.store("health", {
     revision: 0,
     connected: false,
 
     start() {
-      const refresh = () => {
-        this.revision++;
-        this.checkHealth();
+      const refresh = async () => {
+        if (await this.check()) {
+          this.revision++;
+        }
 
         setTimeout(refresh, DATA_REFRESH_INTERVAL_SEC * 1000);
       };
@@ -34,16 +35,22 @@ document.addEventListener("alpine:init", () => {
       refresh();
     },
 
-    async checkHealth() {
+    async check() {
       try {
         const res = await fetch("/api/health", {
           cache: "no-store",
         });
 
-        this.connected = res.ok;
+        if (!res.ok) {
+          throw new Error();
+        }
+
+        this.connected = true;
       } catch {
         this.connected = false;
       }
+
+      return this.connected;
     },
   });
 
