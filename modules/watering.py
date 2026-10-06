@@ -116,6 +116,9 @@ class SystemController:
     def get_image(self) -> Image:
         return self.camera.get_image()
 
+    def get_watering_history(self) -> list[dict]:
+        return self.watering_database.get_all()
+
     # ========== メインループ ==========
 
     def mainloop(self):
