@@ -175,7 +175,7 @@ document.addEventListener("alpine:init", () => {
       const itemHeight = parseFloat(getComputedStyle(historyList).getPropertyValue("--history-item-height"));
       const gap = parseFloat(getComputedStyle(historyList).rowGap) || 0;
 
-      this.limit = Math.max(5, parseInt(listHeight / (gap + itemHeight)) + 1);
+      this.limit = Math.max(6, parseInt(listHeight / (gap + itemHeight)) + 1);
 
       this.getWateringHistory(this.limit);
       this.$watch("$store.refresh.revision", () => this.getWateringHistory(this.limit));

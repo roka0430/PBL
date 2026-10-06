@@ -141,12 +141,18 @@
       </section>
       <section class="system-info">
         <div class="system-info__card system-info__status" x-data="systemStatus">
-          <div class="system-info__title">自動給水</div>
+          <div class="system-info__header">
+            <div class="system-info__title">自動給水</div>
+          </div>
           <div class="system-info__status-value">稼働中</div>
         </div>
         <div class="system-info__card system-info__history" x-data="systemHistory">
-          <div class="system-info__title">給水履歴</div>
-          <div class="system-info__history-list" x-ref="historyList">
+          <div class="system-info__header">
+            <div class="system-info__title">給水履歴</div>
+            <label for="historyOpener" class="history-list-opener">open</label>
+          </div>
+          <input class="hide" type="checkbox" id="historyOpener">
+          <div class=" system-info__history-list" x-ref="historyList">
             <template x-for="history in histories">
               <div class="system-info__history-item">
                 <div class="watering-at" x-text="formatDate(history.watering_at, 'MM/DD HH:mm')"></div>
