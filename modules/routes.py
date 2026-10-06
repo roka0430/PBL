@@ -13,6 +13,7 @@ from flask import (
     Response,
     redirect,
     url_for,
+    send_from_directory,
 )
 from flask_login import (
     LoginManager,
@@ -167,6 +168,13 @@ def admin():
 # ==================================================
 # API
 # ==================================================
+
+
+@app.get("/favicon.ico")
+def get_favicon():
+    return send_from_directory(
+        app.static_folder, "images/favicon.png", mimetype="image/png"
+    )
 
 
 @app.get("/api/health")
