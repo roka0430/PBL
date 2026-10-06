@@ -8,7 +8,7 @@ class SystemStatus(Enum):
     ERROR = "error"  # 異常
 
 
-class WateringRequestResult(Enum):
+class ManualWateringResult(Enum):
     ACCEPTED = "accepted"  # 受理
     INVALID_AMOUNT = "invalid_amount"  # 無効な給水量
     NOT_IDLE = "not_idle"  # システムが待機状態でない
