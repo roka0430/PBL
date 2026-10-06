@@ -6,8 +6,9 @@ from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass, fields
 
-from paths import SETTINGS_PATH
+from .paths import SETTINGS_PATH
 from .enums import SystemStatus, WateringRequestResult
+from .database import WateringDatabase
 
 SENSOR_STARTUP_DELAY_SEC = 10  # センサー起動待ち時間
 SENSOR_CHECK_INTERVAL_SEC = 3  # センシング間隔
@@ -65,10 +66,18 @@ class Settings:
 
 class WateringHistory:  # TODO: LiteSQLで保存・読出し
     def __init__(self):
+        self._watering_database = WateringDatabase()
         self._history = []
 
-    def add(self, amount_ml, watered_at):
-        self._history.append({"amount_ml": amount_ml, "watered_at": watered_at})
+    def add(self, watered_at, watering_type, amount_ml):
+        self._history.append(
+            {
+                "watered_at": watered_at,
+                "watering_type": watering_type,
+                "amount_ml": amount_ml,
+            }
+        )
+        self._watering_database.add(watered_at, watering_type, amount_ml)
 
     def get_last(self):
         if not self._history:
@@ -230,7 +239,9 @@ class SystemController:
                 return WateringRequestResult.NOT_IDLE, None
             self.status = SystemStatus.WATERING
 
-        threading.Thread(target=self._watering, args=(amount_ml,), daemon=False).start()
+        threading.Thread(
+            target=self._watering, args=("manual", amount_ml), daemon=False
+        ).start()  # TODO manualを定数化
 
         duration_sec = amount_ml / self.settings.pump_flow_ml_per_sec
         return WateringRequestResult.ACCEPTED, duration_sec
@@ -252,13 +263,13 @@ class SystemController:
 
     # ========== 内部処理 ==========
 
-    def _watering(self, amount_ml):
+    def _watering(self, watering_type, amount_ml):
         try:
             flow_rate = self.settings.pump_flow_ml_per_sec
             duration_sec = amount_ml / flow_rate
 
             self.pump.run(duration_sec)
-            self.history.add(amount_ml, datetime.now())
+            self.history.add(datetime.now(), watering_type, amount_ml)
         finally:
             with self._status_lock:
                 self.status = SystemStatus.IDLE
