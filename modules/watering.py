@@ -1,14 +1,13 @@
 import time
 import json
-import random  # TODO: デモ用
 import threading
-from pathlib import Path
 from datetime import datetime
-from dataclasses import dataclass, fields
 
 from .paths import SETTINGS_PATH
 from .enums import SystemStatus, WateringRequestResult
+from .dataclasses import SensorValue, SensorValues, Image
 from .database import WateringDatabase
+from .hardware import Pump, Camera, SoilMoistureSensor, TemperatureAndHumiditySensor
 
 SENSOR_STARTUP_DELAY_SEC = 10  # センサー起動待ち時間
 SENSOR_CHECK_INTERVAL_SEC = 3  # センシング間隔
@@ -93,110 +92,7 @@ class WateringHistory:  # TODO: LiteSQLで保存・読出し
         return (datetime.now() - last["watered_at"]).total_seconds()
 
 
-@dataclass
-class SensorValue:
-    value: float
-    measured_at: datetime
-
-    def to_dict(self) -> dict:
-        return {
-            "value": self.value,
-            "measured_at": self.measured_at.isoformat(),
-        }
-
-
-@dataclass
-class SensorValues:
-    soil_moisture: SensorValue | None = None
-    temperature: SensorValue | None = None
-    humidity: SensorValue | None = None
-
-    @property
-    def ready(self) -> bool:
-        return (
-            self.soil_moisture is not None
-            and self.temperature is not None
-            and self.humidity is not None
-        )
-
-    def to_dict(self) -> dict:
-        result = {"ready": self.ready}
-
-        for field in fields(self):
-            value = getattr(self, field.name)
-            result[field.name] = value.to_dict() if value is not None else None
-
-        return result
-
-
-@dataclass
-class Image:
-    data: bytes
-    captured_at: datetime
-
-
 # ------------------------------ Hardware ------------------------------
-
-
-class Pump:
-    def run(self, duration_sec):
-        # TODO: ポンプ制御を追加
-        print("pump start")
-        print(f"duration: {duration_sec}s")
-        time.sleep(duration_sec)
-        print("pump stop")
-
-
-class Camera:
-    CACHE_SECONDS = 10
-
-    def __init__(self):
-        self._image: Image | None = None
-        self._captured_at = 0.0
-        self._lock = threading.Lock()
-
-    def capture_image(self) -> Image:
-        path = Path("demo/sample.jpg")  # TODO: ここに撮影処理を追加
-
-        image = Image(data=path.read_bytes(), captured_at=datetime.now())
-
-        self._image = image
-        self._captured_at = time.monotonic()
-
-        return image
-
-    def get_image(self) -> Image:
-        with self._lock:
-            if (
-                self._image is None
-                or time.monotonic() - self._captured_at >= self.CACHE_SECONDS
-            ):
-                return self.capture_image()
-            return self._image
-
-
-class SoilMoistureSensor:
-    def __init__(self, settings):
-        self.settings = settings
-
-    def read(self) -> float:
-        raw_value = self._read_raw()
-
-        dry = self.settings.soil_moisture_dry
-        wet = self.settings.soil_moisture_wet
-
-        moisture = (raw_value - dry) / (wet - dry) * 100
-        return max(0.0, min(100.0, moisture))
-
-    def _read_raw(self) -> int:
-        # TODO: MCP3002から取得
-        return random.randint(0, 1023)
-
-
-class TemperatureAndHumiditySensor:
-    def read(self) -> tuple[float, float]:
-        return random.randint(100, 400) / 10, random.randint(0, 1000) / 10  # 温度, 湿度
-
 
 # ------------------------------ Controller ------------------------------
 
