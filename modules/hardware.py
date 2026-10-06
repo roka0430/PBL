@@ -51,8 +51,8 @@ class SoilMoistureSensor:
     def read(self) -> float:
         raw_value = self._read_raw()
 
-        dry = self.settings.soil_moisture_dry
-        wet = self.settings.soil_moisture_wet
+        dry = self.settings.get("soil_moisture_dry")
+        wet = self.settings.get("soil_moisture_wet")
 
         moisture = (raw_value - dry) / (wet - dry) * 100
         return max(0.0, min(100.0, moisture))

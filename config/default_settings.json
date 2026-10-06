@@ -1,0 +1,22 @@
+{
+  "watering_amount_ml": {
+    "default": 100,
+    "min": 0,
+    "max": 0
+  },
+  "soil_moisture_dry": {
+    "default": 1000,
+    "min": 0,
+    "max": 0
+  },
+  "soil_moisture_wet": {
+    "default": 100,
+    "min": 0,
+    "max": 0
+  },
+  "pump_flow_ml_per_sec": {
+    "default": 20.0,
+    "min": 0,
+    "max": 0
+  }
+}

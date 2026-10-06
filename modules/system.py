@@ -3,9 +3,9 @@ import json
 import threading
 from datetime import datetime
 
-from .paths import SETTINGS_PATH
 from .enums import SystemStatus, ManualWateringResult, WateringType
 from .dataclasses import SensorValue, SensorValues, Image
+from .settings import Settings
 from .database import WateringDatabase
 from .hardware import Pump, Camera, SoilMoistureSensor, TemperatureAndHumiditySensor
 
@@ -17,56 +17,9 @@ MAX_WATER_AMOUNT_ML = 200  # 1回給水量上限
 MIN_WATERING_INTERVAL_SEC = 10  # 給水間隔制限
 
 
-class Settings:
-    DEFAULTS = {
-        "watering_amount_ml": 100,
-        "soil_moisture_dry": 1000,
-        "soil_moisture_wet": 100,
-        "pump_flow_ml_per_sec": 20.0,
-    }
-
-    def __init__(self):
-        self.watering_amount_ml = self.DEFAULTS["watering_amount_ml"]
-        self.soil_moisture_dry = self.DEFAULTS["soil_moisture_dry"]
-        self.soil_moisture_wet = self.DEFAULTS["soil_moisture_wet"]
-        self.pump_flow_ml_per_sec = self.DEFAULTS["pump_flow_ml_per_sec"]
-
-    def load(self):
-        if not SETTINGS_PATH.exists():
-            return
-
-        try:
-            data = json.loads(SETTINGS_PATH.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError):
-            return
-
-        for name in self.DEFAULTS:
-            if name in data:
-                setattr(self, name, data[name])
-
-    def save(self):
-        SETTINGS_PATH.parent.mkdir(parents=True, exist_ok=True)
-
-        data = {name: getattr(self, name) for name in self.DEFAULTS}
-
-        SETTINGS_PATH.write_text(
-            json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8"
-        )
-
-    def update(self, **kwargs):
-        for name, value in kwargs.items():
-            if name not in self.DEFAULTS:
-                raise ValueError(f"Unknown setting: {name}")
-
-            setattr(self, name, value)
-
-        self.save()
-
-
 class SystemController:
     def __init__(self):
         self.settings = Settings()
-        self.settings.load()
 
         self.status = SystemStatus.IDLE
         self._status_lock = threading.Lock()
@@ -110,7 +63,7 @@ class SystemController:
             target=self._watering, args=(WateringType.MANUAL, amount_ml), daemon=False
         ).start()
 
-        duration_sec = amount_ml / self.settings.pump_flow_ml_per_sec
+        duration_sec = amount_ml / self.settings.get("pump_flow_ml_per_sec")
         return (ManualWateringResult.ACCEPTED, duration_sec)
         # TODO 後で何とかもっときれいに給水時間を返せるように
 
@@ -143,7 +96,7 @@ class SystemController:
 
     def _watering(self, watering_type, amount_ml):
         try:
-            flow_rate = self.settings.pump_flow_ml_per_sec
+            flow_rate = self.settings.get("pump_flow_ml_per_sec")
             duration_sec = amount_ml / flow_rate
 
             self.pump.start()
