@@ -512,7 +512,7 @@ input:checked + .system-info__header .history-list-opener svg {
   font-size: 0.9rem;
 }
 
-.system-info__history-item .watering-at {
+.system-info__history-item .watered-at {
   width: 7.2rem;
 }
 

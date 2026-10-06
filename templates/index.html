@@ -163,7 +163,7 @@
           <div class=" system-info__history-list" x-ref="historyList">
             <template x-for="history in histories">
               <div class="system-info__history-item">
-                <div class="watering-at" x-text="formatDate(history.watering_at, 'MM/DD HH:mm')"></div>
+                <div class="watered-at" x-text="formatDate(history.watered_at, 'MM/DD HH:mm')"></div>
                 <div class="watering-type" x-text="WATERING_TYPE[history.watering_type]"></div>
                 <div class="amount-ml">
                   <span x-text="history.amount_ml"></span>
