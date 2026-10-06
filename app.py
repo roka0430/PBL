@@ -5,7 +5,7 @@ import threading
 
 from modules.mdns import get_local_ip, start_mdns
 from modules.routes import run_server, PORT
-from modules.watering import SystemController
+from modules.system import SystemController
 
 logging.getLogger("werkzeug").setLevel(logging.WARNING)
 
