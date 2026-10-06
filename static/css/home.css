@@ -443,6 +443,36 @@
 
 .system-info__history .system-info__header .history-list-opener {
   display: none;
+
+  position: relative;
+
+  width: 20px;
+  height: 20px;
+
+  cursor: pointer;
+}
+
+.system-info__history .system-info__header .history-list-opener svg {
+  stroke: var(--color-text-muted);
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: 0 0;
+  transition:
+    stroke 0.15s,
+    rotate 0.15s;
+
+  margin-top: 1px;
+}
+
+.system-info__history .system-info__header .history-list-opener:hover svg {
+  stroke: var(--color-text);
+}
+
+input:checked + .system-info__header .history-list-opener svg {
+  rotate: 180deg;
 }
 
 .system-info__history-list {
@@ -537,6 +567,7 @@
 
   .system-info__history .system-info__header {
     display: flex;
+    align-items: center;
     justify-content: space-between;
   }
 
@@ -544,7 +575,7 @@
     display: block;
   }
 
-  input:checked + .system-info__history-list {
+  input:checked ~ .system-info__history-list {
     display: flex;
   }
 

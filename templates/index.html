@@ -147,11 +147,17 @@
           <div class="system-info__status-value">稼働中</div>
         </div>
         <div class="system-info__card system-info__history" x-data="systemHistory">
+          <input class="hide" type="checkbox" id="historyOpener">
           <div class="system-info__header">
             <div class="system-info__title">給水履歴</div>
-            <label for="historyOpener" class="history-list-opener">open</label>
+            <label for="historyOpener" class="history-list-opener">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-square-chevron-down">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M15 11l-3 3l-3 -3" />
+                <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14" />
+              </svg>
+            </label>
           </div>
-          <input class="hide" type="checkbox" id="historyOpener">
           <div class=" system-info__history-list" x-ref="historyList">
             <template x-for="history in histories">
               <div class="system-info__history-item">
