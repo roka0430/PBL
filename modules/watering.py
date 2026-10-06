@@ -6,6 +6,7 @@ from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass, fields
 
+from paths import SETTINGS_PATH
 from .enums import SystemStatus, WateringRequestResult
 
 SENSOR_STARTUP_DELAY_SEC = 10  # センサー起動待ち時間
@@ -17,8 +18,6 @@ MIN_WATERING_INTERVAL_SEC = 10  # 給水間隔制限
 
 
 class Settings:
-    PATH = Path("config/settings.json")
-
     DEFAULTS = {
         "watering_amount_ml": 100,
         "soil_moisture_dry": 1000,
@@ -33,11 +32,11 @@ class Settings:
         self.pump_flow_ml_per_sec = self.DEFAULTS["pump_flow_ml_per_sec"]
 
     def load(self):
-        if not self.PATH.exists():
+        if not SETTINGS_PATH.exists():
             return
 
         try:
-            data = json.loads(self.PATH.read_text(encoding="utf-8"))
+            data = json.loads(SETTINGS_PATH.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             return
 
@@ -46,11 +45,11 @@ class Settings:
                 setattr(self, name, data[name])
 
     def save(self):
-        self.PATH.parent.mkdir(parents=True, exist_ok=True)
+        SETTINGS_PATH.parent.mkdir(parents=True, exist_ok=True)
 
         data = {name: getattr(self, name) for name in self.DEFAULTS}
 
-        self.PATH.write_text(
+        SETTINGS_PATH.write_text(
             json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8"
         )
 
