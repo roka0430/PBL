@@ -1,40 +1,4 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("home", () => ({
-    init() {
-      this.$store.health.start();
-    },
-
-    formatDateObject(date, format) {
-      const values = {
-        YYYY: String(date.getFullYear()).padStart(4, "0"),
-        YY: String(date.getFullYear()).slice(-2),
-        MM: String(date.getMonth() + 1).padStart(2, "0"),
-        DD: String(date.getDate()).padStart(2, "0"),
-        HH: String(date.getHours()).padStart(2, "0"),
-        mm: String(date.getMinutes()).padStart(2, "0"),
-        ss: String(date.getSeconds()).padStart(2, "0"),
-      };
-
-      return format.replace(/YYYY|YY|MM|DD|HH|mm|ss/g, (match) => values[match]);
-    },
-
-    formatDate(date, format = "YYYY-MM-DD") {
-      if (!date) {
-        return "";
-      }
-
-      if (date instanceof Date) {
-        return this.formatDateObject(date, format);
-      }
-
-      if (typeof date === "string") {
-        return this.formatDateObject(new Date(date), format);
-      }
-
-      throw new TypeError("date must be a Date or ISO date string");
-    },
-  }));
-
   Alpine.data("plantImage", () => ({
     imageUrl: null,
     imageBlob: null,
