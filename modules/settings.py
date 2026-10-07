@@ -52,3 +52,14 @@ class Settings:
 
     def get_all(self):
         return self._settings
+
+    def get_defaults(self):
+        return self._default_settings
+
+    def update(self, settings):
+        for key, value in settings.items():
+            if key not in self._default_settings:
+                raise KeyError(key)
+
+            self._settings[key] = self._clamp(key, value)
+        self._save()
