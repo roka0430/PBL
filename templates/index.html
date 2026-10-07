@@ -8,22 +8,8 @@
 MizuMori
 {% endblock %}
 
-{% block startup_script %}
-<script>
-  window.addEventListener("pageshow", (event) => {
-    if (event.persisted) {
-      window.location.reload();
-    }
-    document.getElementById("authCover").remove();
-  });
-</script>
-{% endblock %}
-
 {% block content %}
-<div class="auth-cover" id="authCover">
-  <div class="auth-cover__spinner">読み込み中</div>
-</div>
-
+{% include "components/auth-cover.html" %}
 {% include "components/navigation.html" %}
 
 <div class="home">

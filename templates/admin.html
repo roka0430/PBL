@@ -9,26 +9,31 @@ MizuMori | Admin
 {% endblock %}
 
 {% block content %}
-<h1>MizuMori | Admin</h1>
+{% include "components/auth-cover.html" %}
+{% include "components/navigation.html" %}
 
-<div x-data="common_theme">
-  <button @click="setSystemTheme()">user system settings</button>
-  <button @click="setLightTheme()">light</button>
-  <button @click="setDarkTheme()">dark</button>
+<div class="admin">
+  <div class="admin__content">
+    <div x-data="common_theme">
+      <button @click="setSystemTheme()">user system settings</button>
+      <button @click="setLightTheme()">light</button>
+      <button @click="setDarkTheme()">dark</button>
+    </div>
+
+    <form action="{{ url_for('logout') }}" method="post">
+      <button type="submit">ログアウト</button>
+    </form>
+
+    <form action="/api/watering" method="post">
+      <input type="number" name="amount">
+      <button type="submit">submit</button>
+    </form>
+
+    <form action="/api/watering/stop" method="post">
+      <button type="submit">submit</button>
+    </form>
+  </div>
 </div>
-
-<form action="{{ url_for('logout') }}" method="post">
-  <button type="submit">ログアウト</button>
-</form>
-
-<form action="/api/watering" method="post">
-  <input type="number" name="amount">
-  <button type="submit">submit</button>
-</form>
-
-<form action="/api/watering/stop" method="post">
-  <button type="submit">submit</button>
-</form>
 {% endblock %}
 
 {% block script %}

@@ -1,0 +1,18 @@
+.admin {
+  --admin-padding-block: 20px;
+  --admin-padding-inline: 30px;
+
+  display: flex;
+
+  min-height: 100dvh;
+  padding-top: var(--site-header-height);
+
+  background: var(--color-surface);
+}
+
+.admin__content {
+  flex: 1;
+
+  padding-block: var(--admin-padding-block);
+  padding-inline: var(--admin-padding-inline);
+}
