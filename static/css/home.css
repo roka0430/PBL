@@ -34,6 +34,39 @@
   font-size: 1rem;
 }
 
+.site-health {
+  position: relative;
+
+  margin-right: 15px;
+  padding-block: 2px 1px;
+  padding-left: 12px;
+
+  color: var(--color-error);
+  font-size: 0.75rem;
+}
+
+.site-health::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+
+  width: 7px;
+  height: 7px;
+
+  background-color: var(--color-error);
+  border-radius: 50%;
+}
+
+.site-health.connected {
+  color: var(--color-primary);
+}
+
+.site-health.connected::before {
+  background: var(--color-primary);
+}
+
 .site-role {
   height: fit-content;
 
