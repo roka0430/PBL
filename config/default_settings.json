@@ -1,4 +1,14 @@
 {
+  "sensor_startup_delay_sec": {
+    "default": 10,
+    "min": 0,
+    "max": null
+  },
+  "sensor_check_interval_sec": {
+    "default": 5,
+    "min": 1,
+    "max": null
+  },
   "watering_amount_ml": {
     "default": 100,
     "min": 0,

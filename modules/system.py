@@ -9,11 +9,9 @@ from .settings import Settings
 from .database import WateringDatabase
 from .hardware import Pump, Camera, SoilMoistureSensor, TemperatureAndHumiditySensor
 
-SENSOR_STARTUP_DELAY_SEC = 10  # センサー起動待ち時間
-SENSOR_CHECK_INTERVAL_SEC = 3  # センシング間隔
-
 MIN_WATER_AMOUNT_ML = 10  # 1回給水量下限
 MAX_WATER_AMOUNT_ML = 200  # 1回給水量上限
+
 MIN_WATERING_INTERVAL_SEC = 10  # 給水間隔制限
 
 
@@ -93,11 +91,11 @@ class SystemController:
     # ========== メインループ ==========
 
     def mainloop(self):
-        time.sleep(SENSOR_STARTUP_DELAY_SEC)
+        time.sleep(self.settings.get("sensor_startup_delay_sec"))
 
         while True:
             self._check_sensors()
-            time.sleep(SENSOR_CHECK_INTERVAL_SEC)
+            time.sleep(self.settings.get("sensor_check_interval_sec"))
 
     # ========== 内部処理 ==========
 

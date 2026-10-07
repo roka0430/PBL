@@ -25,6 +25,7 @@ class Settings:
 
     def get(self, key):
         return self._settings[key]
+        # TODO 設定値取得時に下限上限保証
 
     def get_all(self):
         return self._settings
