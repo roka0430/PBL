@@ -33,9 +33,22 @@ class Settings:
         with open(SETTINGS_PATH, "w", encoding="utf-8") as f:
             json.dump(self._settings, f, indent=2)
 
+    def _clamp(self, key, value):
+        settings = self._default_settings[key]
+
+        min_value = settings["min"]
+        max_value = settings["max"]
+
+        if min_value is not None and value < min_value:
+            return min_value
+
+        if max_value is not None and value > max_value:
+            return max_value
+
+        return value
+
     def get(self, key):
-        return self._settings[key]
-        # TODO 設定値取得時に下限上限保証
+        return self._clamp(key, self._settings[key])
 
     def get_all(self):
         return self._settings
