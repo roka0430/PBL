@@ -36,11 +36,11 @@ class WateringDatabase:
                 (watered_at_str, watering_type.value, amount_ml),
             )
 
-    def get(self, before_id, limit) -> list[dict]:
+    def get(self, before_id, after_id, limit) -> list[dict]:
         with sqlite3.connect(DATABASE_PATH) as con:
             con.row_factory = sqlite3.Row
 
-            if before_id is None:
+            if before_id is None and after_id is None:
                 rows = con.execute(
                     """
                     SELECT id, watered_at, watering_type, amount_ml
@@ -50,7 +50,7 @@ class WateringDatabase:
                     """,
                     (limit,),
                 ).fetchall()
-            else:
+            elif before_id is not None:
                 rows = con.execute(
                     """
                     SELECT id, watered_at, watering_type, amount_ml
@@ -60,6 +60,17 @@ class WateringDatabase:
                     LIMIT ?
                     """,
                     (before_id, limit),
+                ).fetchall()
+            else:
+                rows = con.execute(
+                    """
+                    SELECT id, watered_at, watering_type, amount_ml
+                    FROM watering_history
+                    WHERE id > ?
+                    ORDER BY id ASC
+                    LIMIT ?
+                    """,
+                    (after_id, limit),
                 ).fetchall()
 
             return [

@@ -149,10 +149,6 @@ document.addEventListener("alpine:init", () => {
     showCount: 10,
 
     init() {
-      this.initHistoryList();
-    },
-
-    initHistoryList() {
       const historyList = this.$refs.historyList;
       const listHeight = historyList.clientHeight;
       const itemHeight = parseFloat(getComputedStyle(historyList).getPropertyValue("--history-item-height"));
@@ -160,13 +156,22 @@ document.addEventListener("alpine:init", () => {
 
       this.showCount = Math.max(6, parseInt(listHeight / (gap + itemHeight)) + 1);
 
-      this.$watch("$store.health.revision", () => this.getWateringHistory());
+      this.$watch("$store.health.revision", () => {
+        if (this.histories.length === 0) {
+          this.getWateringHistory();
+        } else {
+          this.getNewWateringHistory();
+        }
+      });
     },
 
     async getWateringHistory() {
-      const min_id = Math.min(...this.histories.map((history) => history.id));
-      const before_id = this.histories.length > 0 ? min_id : null;
+      const before_id = this.histories.length > 0 ? Math.min(...this.histories.map((history) => history.id)) : null;
       const limit = this.showCount - this.histories.length;
+
+      if (limit <= 0) {
+        return;
+      }
 
       const res = await fetch(`/api/watering-history?before_id=${before_id}&limit=${limit}`);
 
@@ -177,6 +182,26 @@ document.addEventListener("alpine:init", () => {
       const { histories, total_count } = await res.json();
 
       this.histories.push(...histories);
+      this.total = total_count;
+    },
+
+    async getNewWateringHistory() {
+      const max_id = this.histories.length > 0 ? Math.max(...this.histories.map((history) => history.id)) : null;
+
+      if (max_id === null) {
+        return;
+      }
+
+      const res = await fetch(`/api/watering-history?after_id=${max_id}`);
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+
+      const { histories, total_count } = await res.json();
+
+      this.histories.unshift(...histories);
+      this.showCount += histories.length;
       this.total = total_count;
     },
 

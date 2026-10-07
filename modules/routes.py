@@ -195,10 +195,13 @@ def get_watering_history():
     before_id = request.args.get("before_id", default=None, type=int)
     before_id = None if before_id == None else max(1, before_id)
 
+    after_id = request.args.get("after_id", default=None, type=int)
+    after_id = None if after_id == None else max(1, after_id)
+
     limit = request.args.get("limit", default=10, type=int)
     limit = max(1, min(limit, 100))
 
-    histories = app.system.get_watering_history(before_id, limit)
+    histories = app.system.get_watering_history(before_id, after_id, limit)
 
     for history in histories:
         history["watered_at"] = history["watered_at"].isoformat()
