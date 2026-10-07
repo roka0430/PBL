@@ -7,12 +7,22 @@ class Settings:
     def __init__(self):
         self._default_settings = self._load(DEFAULT_SETTINGS_PATH)
 
+        self._settings = {
+            key: value["default"] for key, value in self._default_settings.items()
+        }
+
+        need_save = False
+
         if SETTINGS_PATH.exists():
-            self._settings = self._load(SETTINGS_PATH)
+            settings = self._load(SETTINGS_PATH)
+            for key, value in settings.items():
+                if key in self._settings:
+                    self._settings[key] = value
+                    need_save = True
         else:
-            self._settings = {
-                key: value["default"] for key, value in self._default_settings.items()
-            }
+            need_save = True
+
+        if need_save:
             self._save()
 
     def _load(self, path):
