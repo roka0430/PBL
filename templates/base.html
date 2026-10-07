@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}?t={{ cache_buster }}">
+  {% block style %}{% endblock %}
+  <title>{% block title %}MizuMori{% endblock %}</title>
+
+  {% block startup_script %}{% endblock %}
+  <script>
+    const theme = localStorage.getItem("PBL:theme");
+    document.documentElement.dataset.theme = theme;
+  </script>
+</head>
+
+<body data-user-role="{{ current_user.role }}">
+  {% block content %}{% endblock %}
+
+  <script src="{{ url_for('static', filename='js/common.js') }}?t={{ cache_buster }}" type="module" defer></script>
+  {% block script %}{% endblock %}
+  <script src="{{ url_for('static', filename='js/alpine.js') }}" defer></script>
+</body>
+
+</html>

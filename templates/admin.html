@@ -1,45 +1,36 @@
-<!DOCTYPE html>
-<html lang="ja">
+{% extends "base.html" %}
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}?t={{ cache_buster }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}?t={{ cache_buster }}">
-  <title>MizuMori | Admin</title>
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}?t={{ cache_buster }}">
+{% endblock %}
 
-  <script>
-    const theme = localStorage.getItem("PBL:theme");
-    document.documentElement.dataset.theme = theme;
-  </script>
-</head>
+{% block title %}
+MizuMori | Admin
+{% endblock %}
 
-<body>
-  <h1>MizuMori | Admin</h1>
+{% block content %}
+<h1>MizuMori | Admin</h1>
 
-  <div x-data="common_theme">
-    <button @click="setSystemTheme()">user system settings</button>
-    <button @click="setLightTheme()">light</button>
-    <button @click="setDarkTheme()">dark</button>
-  </div>
+<div x-data="common_theme">
+  <button @click="setSystemTheme()">user system settings</button>
+  <button @click="setLightTheme()">light</button>
+  <button @click="setDarkTheme()">dark</button>
+</div>
 
-  <form action="{{ url_for('logout') }}" method="post">
-    <button type="submit">ログアウト</button>
-  </form>
+<form action="{{ url_for('logout') }}" method="post">
+  <button type="submit">ログアウト</button>
+</form>
 
-  <form action="/api/watering" method="post">
-    <input type="number" name="amount">
-    <button type="submit">submit</button>
-  </form>
+<form action="/api/watering" method="post">
+  <input type="number" name="amount">
+  <button type="submit">submit</button>
+</form>
 
-  <form action="/api/watering/stop" method="post">
-    <button type="submit">submit</button>
-  </form>
+<form action="/api/watering/stop" method="post">
+  <button type="submit">submit</button>
+</form>
+{% endblock %}
 
-  <script src="{{ url_for('static', filename='js/common.js') }}?t={{ cache_buster }}" type="module" defer></script>
-  <script src="{{ url_for('static', filename='js/admin.js') }}?t={{ cache_buster }}" type="module" defer></script>
-  <script src="{{ url_for('static', filename='js/alpine.js') }}" defer></script>
-</body>
-
-</html>
+{% block script %}
+<script src="{{ url_for('static', filename='js/admin.js') }}?t={{ cache_buster }}" type="module" defer></script>
+{% endblock %}
