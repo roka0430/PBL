@@ -148,7 +148,9 @@ def logout():
 @app.get("/")
 @login_required
 def home():
-    return render_template("index.html", cache_buster=time.time())
+    return render_template(
+        "index.html", page_class="page-home", cache_buster=time.time()
+    )
 
 
 @app.get("/login")
@@ -156,13 +158,17 @@ def login_get():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
 
-    return render_template("login.html", cache_buster=time.time())
+    return render_template(
+        "login.html", page_class="page-login", cache_buster=time.time()
+    )
 
 
 @app.get("/admin")
 @admin_required
 def admin():
-    return render_template("admin.html", cache_buster=time.time())
+    return render_template(
+        "admin.html", page_class="page-admin", cache_buster=time.time()
+    )
 
 
 # ==================================================

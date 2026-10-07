@@ -15,7 +15,7 @@
   </script>
 </head>
 
-<body data-user-role="{{ current_user.role }}" x-data="body">
+<body class="{{ page_class }}" data-user-role="{{ current_user.role }}" x-data="body">
   {% block content %}{% endblock %}
 
   <script src="{{ url_for('static', filename='js/common.js') }}?t={{ cache_buster }}" type="module" defer></script>
