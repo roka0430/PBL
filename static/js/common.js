@@ -25,7 +25,9 @@ document.addEventListener("alpine:init", () => {
 
     start() {
       const refresh = async () => {
-        if (await this.check()) {
+        await this.check();
+
+        if (this.connected) {
           this.revision++;
         }
 
@@ -36,9 +38,13 @@ document.addEventListener("alpine:init", () => {
     },
 
     async check() {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 3000);
+
       try {
         const res = await fetch("/api/health", {
           cache: "no-store",
+          signal: controller.signal,
         });
 
         if (!res.ok) {
@@ -48,9 +54,9 @@ document.addEventListener("alpine:init", () => {
         this.connected = true;
       } catch {
         this.connected = false;
+      } finally {
+        clearTimeout(timeout);
       }
-
-      return this.connected;
     },
   });
 
