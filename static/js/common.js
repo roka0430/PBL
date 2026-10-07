@@ -60,6 +60,24 @@ document.addEventListener("alpine:init", () => {
     },
   });
 
+  Alpine.data("navigation", () => ({
+    sidebarOpen: false,
+
+    init() {
+      this.closeSidebarOnDesktop();
+    },
+
+    closeSidebarOnDesktop() {
+      const media = window.matchMedia("(min-width: 1025px)");
+
+      const handler = (e) => {
+        if (e.matches) this.sidebarOpen = false;
+      };
+
+      media.addEventListener("change", handler);
+    },
+  }));
+
   Alpine.data("common_theme", () => ({
     theme: localStorage.getItem(THEME_STORAGE_KEY) ?? "system",
 
