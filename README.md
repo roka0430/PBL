@@ -75,7 +75,7 @@ ls
 ### Python仮想環境の作成・有効化
 
 ```bash
-python3 -m venv .venv
+python3 -m venv .venv --system-site-packages
 source .venv/bin/activate
 ```
 
