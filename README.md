@@ -85,10 +85,11 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Pi用ライブラリは個別インストール：
+Pi用ライブラリが不足していたらインストール：
 
 ```bash
-pip install gpiozero spidev
+sudo apt update
+sudo apt install -y python3-gpiozero python3-spidev python3-picamera2
 ```
 
 ### `.env`の生成
