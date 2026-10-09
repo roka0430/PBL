@@ -44,7 +44,7 @@ document.addEventListener("alpine:init", () => {
     timeout: null,
 
     async startWatering() {
-      // TODO ポップアップを作成
+      // TODO ポップアップで確認
       if (!confirm("給水しますか？")) {
         return;
       }
@@ -65,6 +65,8 @@ document.addEventListener("alpine:init", () => {
       if (result.success) {
         this.watering = true;
         this.watchSystem();
+      } else {
+        // TODO 失敗ならエラーメッセージをポップアップ表示
       }
     },
 
