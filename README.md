@@ -1,89 +1,55 @@
 # PBL6 自動水やり機
 
-## SSH接続
+## 下準備
+
+### SSH接続
 
 ```bash
 ssh pi@<IP Address>
 ```
 
-## プロキシの適用
+### プロキシの適用
 
 ```bash
 export http_proxy="http://proxy.example.com:PORT/";
 export https_proxy="http://proxy.example.com:PORT/";
 ```
 
-## パッケージのupdate/upgrade
+## Python関連
+
+### パッケージのupdate/upgrade
 
 ```bash
 sudo apt update
 sudo apt upgrade -y
 ```
 
-## リポジトリのclone
+### リポジトリのclone
 
 ```bash
 git clone https://github.com/roka0430/PBL.git
 ```
 
-## リポジトリの強制上書き
+### リポジトリの強制上書き
 
 ```bash
 git fetch origin
 git reset --hard origin/main
 ```
 
-## Python仮想環境の有効化
+### Python仮想環境の有効化
 
 ```bash
 source .venv/bin/activate
 ```
 
-## Pythonライブラリのインストール
+### Pythonライブラリのインストール
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## .envの生成
-
-```bash
-python3 tools/setup_env.py
-```
-
----
-
-## SPI/I2C有効化
-
-```bash
-sudo raspi-config
-```
-
-SPI：
-
-```
-1. Interface Optionsを選択
-2. SPIを選択
-3. Enableを選択
-```
-
-I2C：
-
-```
-1. Interface Optionsを選択
-2. I2Cを選択
-3. Enableを選択
-```
-
-再起動
-
-```bash
-sudo reboot
-```
-
----
-
-## DHT20用ライブラリのインストール
+### DHT20用ライブラリのインストール
 
 ```bash
 pip install adafruit-circuitpython-ahtx0
@@ -96,9 +62,49 @@ import board
 import adafruit_ahtx0
 ```
 
----
+### .envの生成
 
-## systemdサービスの作成
+```bash
+python3 tools/setup_env.py
+```
+
+## SPI/I2C有効化
+
+### SPI
+
+```bash
+sudo raspi-config
+```
+
+```
+1. Interface Optionsを選択
+2. SPIを選択
+3. Enableを選択
+```
+
+```bash
+sudo reboot
+```
+
+### I2C
+
+```bash
+sudo raspi-config
+```
+
+```
+1. Interface Optionsを選択
+2. I2Cを選択
+3. Enableを選択
+```
+
+```bash
+sudo reboot
+```
+
+## 自動起動
+
+### systemdサービスの作成
 
 ```bash
 sudo nano /etc/systemd/system/pbl.service
@@ -122,13 +128,13 @@ RestartSec=5
 WantedBy=multi-user.target
 ```
 
-## systemdの再読み込み
+### systemdの再読み込み
 
 ```bash
 sudo systemctl daemon-reload
 ```
 
-## アプリケーションの起動確認
+### アプリケーションの起動確認
 
 ```bash
 sudo systemctl start pbl.service
@@ -141,7 +147,7 @@ sudo systemctl status pbl.service
 Active: active (running)
 ```
 
-## ログの確認
+### ログの確認
 
 ```bash
 sudo journalctl -u pbl.service
@@ -153,7 +159,7 @@ sudo journalctl -u pbl.service
 sudo journalctl -u pbl.service -f
 ```
 
-## 自動起動の有効化
+### 自動起動の有効化
 
 ```bash
 sudo systemctl enable pbl.service
@@ -171,7 +177,7 @@ systemctl is-enabled pbl.service
 sudo systemctl disable pbl.service
 ```
 
-## アプリケーションの再起動
+### アプリケーションの再起動
 
 ```bash
 sudo systemctl restart pbl.service
