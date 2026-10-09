@@ -1,7 +1,4 @@
 .admin {
-  --admin-padding-block: 20px;
-  --admin-padding-inline: 30px;
-
   display: flex;
 
   min-height: 100dvh;
@@ -15,16 +12,32 @@
 
   display: grid;
   gap: 15px;
-  grid-template-rows: min-content;
-  grid-template-columns: 500px 1fr;
+  grid-auto-rows: min-content;
+  grid-template-columns: 1fr 1fr;
 
-  padding-block: var(--admin-padding-block);
-  padding-inline: var(--admin-padding-inline);
+  padding-block: 20px;
+  padding-inline: 30px;
+}
+
+@media (max-width: 767px) {
+  .admin__content {
+    grid-template-columns: 1fr;
+
+    padding: 12px;
+  }
 }
 
 /* status */
 
 .system-status {
+  grid-row: 1 / 2;
+
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+}
+
+.system-status__cards {
   display: grid;
   gap: 10px;
   grid-template-rows: 1fr 1fr;
@@ -50,10 +63,20 @@
   font-weight: bold;
 }
 
-/* settings */
+.system-status__measured-at {
+  grid-column: 1 / 3;
 
-.system-settings {
-  grid-row: 2 / 3;
+  padding-right: 2px;
+
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+  text-align: right;
+}
+
+@media (max-width: 767px) {
+  .system-status {
+    grid-row: auto / auto;
+  }
 }
 
 /* controls */
@@ -83,4 +106,22 @@
 }
 .system-controls__panel span {
   padding-top: 1px;
+}
+
+@media (max-width: 767px) {
+  .system-controls {
+    grid-row: auto / auto;
+  }
+}
+
+/* settings */
+
+.system-settings {
+  grid-row: 2 / 3;
+}
+
+@media (max-width: 767px) {
+  .system-settings {
+    grid-row: auto / auto;
+  }
 }
