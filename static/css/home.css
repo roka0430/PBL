@@ -7,13 +7,7 @@
   min-height: 100dvh;
   padding-top: var(--site-header-height);
 
-  background: var(--color-surface);
-}
-
-@media (max-width: 767px) {
-  .home {
-    background: var(--color-background);
-  }
+  background: var(--color-background);
 }
 
 .home__content {
@@ -50,6 +44,8 @@
   height: 100%;
   max-height: 565px;
   aspect-ratio: 16 / 9;
+
+  background: var(--color-surface);
 }
 
 .plant-image__frame {
@@ -129,7 +125,6 @@
 
 .system-info__card {
   padding: 10px 12px;
-  border: solid 1px var(--color-border);
   border-radius: 5px;
 }
 
@@ -139,6 +134,10 @@
 
 .system-info__title {
   font-weight: bold;
+}
+
+.system-info__status {
+  background: var(--color-surface);
 }
 
 .system-info__status-value {
@@ -177,6 +176,8 @@
 
   position: relative;
   min-height: 0;
+
+  background: var(--color-surface);
 
   overflow: hidden;
 }
@@ -294,6 +295,10 @@ input:checked + .system-info__header .history-list-opener svg {
     background: var(--color-surface);
   }
 
+  .system-info__card {
+    border: solid 1px var(--color-border);
+  }
+
   .system-info__status {
     display: flex;
     gap: 20px;
@@ -369,7 +374,7 @@ input:checked + .system-info__header .history-list-opener svg {
   padding-block: 10px 13px;
   padding-inline: 20px;
 
-  border: solid 1px var(--color-border);
+  background: var(--color-surface);
   border-radius: 5px;
 }
 
@@ -406,7 +411,7 @@ input:checked + .system-info__header .history-list-opener svg {
   padding-block: 10px;
   padding-inline: 12px;
 
-  border: solid 1px var(--color-border);
+  background: var(--color-surface);
   border-radius: 5px;
 }
 
@@ -431,5 +436,13 @@ input:checked + .system-info__header .history-list-opener svg {
 
   .sensor-values__cards .sensor-value {
     font-size: clamp(1rem, 8vw, 2rem);
+  }
+
+  .sensor-values__cards .sensor-card {
+    border: solid 1px var(--color-border);
+  }
+
+  .sensor-values__detail {
+    border: solid 1px var(--color-border);
   }
 }

@@ -7,7 +7,7 @@
   min-height: 100dvh;
   padding-top: var(--site-header-height);
 
-  background: var(--color-surface);
+  background: var(--color-background);
 }
 
 .admin__content {
@@ -34,7 +34,7 @@
 .system-status__card {
   padding: 12px 14px;
 
-  border: solid 1px var(--color-border);
+  background: var(--color-surface);
   border-radius: 5px;
 }
 
