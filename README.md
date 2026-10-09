@@ -11,8 +11,8 @@ ssh pi@<IP Address>
 ### プロキシの適用
 
 ```bash
-export http_proxy="http://proxy.example.com:PORT/";
-export https_proxy="http://proxy.example.com:PORT/";
+export http_proxy="http://proxy.example.com:PORT"
+export https_proxy="http://proxy.example.com:PORT"
 ```
 
 ## Python関連
