@@ -27,7 +27,7 @@
   }
 }
 
-/* status */
+/* sensor-values */
 
 .sensor-values {
   grid-row: 1 / 2;
@@ -102,8 +102,8 @@
 }
 
 .system-controls__panel {
-  padding-block: 12px;
-  padding-inline: 14px;
+  padding-block: 16px;
+  padding-inline: 20px;
 
   background: var(--color-surface);
   border-radius: 5px;
@@ -114,10 +114,89 @@
   gap: 5px;
   align-items: center;
 
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: solid 1px var(--color-border);
+
   font-size: 0.9rem;
 }
 .system-controls__panel span {
   padding-top: 1px;
+}
+
+/*  */
+
+.manual-watering__amount {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr min-content;
+}
+
+.manual-watering__amount .label {
+  margin-bottom: 3px;
+  font-size: 0.9rem;
+}
+
+.manual-watering__amount .input {
+  grid-row: 2 / 3;
+
+  width: 100%;
+
+  padding-block: 5px;
+  padding-inline: 16px;
+
+  border: solid 1px var(--color-border);
+  border-radius: 50px;
+
+  font-size: 0.9rem;
+}
+
+.manual-watering__amount .unit {
+  grid-row: 2 / 3;
+  padding-left: 8px;
+  font-size: 0.85rem;
+}
+
+.manual-watering__presets {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+
+  margin-top: 8px;
+}
+
+.manual-watering__presets span {
+  padding-inline: 8px;
+  border: solid 1px var(--color-border);
+  border-radius: 50px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.manual-watering__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  width: 100%;
+  margin-top: 20px;
+  padding-block: 5px;
+
+  border-radius: 50px;
+
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.manual-watering__button--start {
+  background: var(--color-primary);
+  color: var(--color-text-white);
+}
+
+.manual-watering__button--stop {
+  border: solid 1px var(--color-error);
+  color: var(--color-error);
 }
 
 @media (max-width: 767px) {
