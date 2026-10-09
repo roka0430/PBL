@@ -1,120 +1,104 @@
 # PBL6 自動水やり機
 
-## Pi↔PC SSH接続
-
-事前にRaspberry PiのSSH機能を有効化しておく。
+## SSH接続
 
 ```bash
-ssh user@ip
-```
-または
-```bash
-ssh user@host.local
+ssh pi@<IP Address>
 ```
 
-成功するとパスワードが要求される。
-PC側ターミナルからPiを操作できる。
-
-
-
-
-## セットアップ
-
-### プロキシの設定
+## プロキシの適用
 
 ```bash
-sudo nano /etc/apt/apt.conf
-```
-または
-```bash
-sudo nano /etc/apt/apt.conf.d/80proxy
+export http_proxy="http://proxy.example.com:PORT/";
+export https_proxy="http://proxy.example.com:PORT/";
 ```
 
-```
-Acquire::http::Proxy "http://example.com:PORT/";
-Acquire::https::Proxy "http://example.com:PORT/";
-```
-
-### パッケージ情報の更新
+## パッケージのupdate/upgrade
 
 ```bash
 sudo apt update
-```
-
-### パッケージのアップグレード
-
-```bash
 sudo apt upgrade -y
 ```
 
-### 必要なパッケージのインストール
-
-```bash
-sudo apt install -y git python3 python3-pip python3-venv
-```
-
-### インストールの確認
-
-```bash
-git --version
-python3 --version
-pip3 --version
-```
-
-### リポジトリの取得
+## リポジトリのclone
 
 ```bash
 git clone https://github.com/roka0430/PBL.git
 ```
 
+## リポジトリの強制上書き
+
 ```bash
-cd PBL
-ls
+git fetch origin
+git reset --hard origin/main
 ```
 
-### Python仮想環境の作成・有効化
+## Python仮想環境の有効化
 
 ```bash
-python3 -m venv .venv --system-site-packages
 source .venv/bin/activate
 ```
 
-### Pythonライブラリのインストール
+## Pythonライブラリのインストール
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Pi用ライブラリが不足していたらインストール：
-
-```bash
-sudo apt update
-sudo apt install -y python3-gpiozero python3-spidev python3-picamera2
-```
-
-### `.env`の生成
+## .envの生成
 
 ```bash
 python3 tools/setup_env.py
 ```
 
-## ターミナルからの実行
+---
 
-### Python仮想環境を有効化
-
-```bash
-source .venv/bin/activate
-```
-
-### 実行
+## SPI/I2C有効化
 
 ```bash
-python3 app.py
+sudo raspi-config
 ```
 
-## 自動起動の設定
+SPI：
 
-### systemdサービスの作成
+```
+1. Interface Optionsを選択
+2. SPIを選択
+3. Enableを選択
+```
+
+I2C：
+
+```
+1. Interface Optionsを選択
+2. I2Cを選択
+3. Enableを選択
+```
+
+再起動
+
+```bash
+sudo reboot
+```
+
+---
+
+## DHT20用ライブラリのインストール
+
+```bash
+pip install adafruit-circuitpython-ahtx0
+```
+
+以下が使えるようになる
+
+```python
+import board
+import adafruit_ahtx0
+```
+
+---
+
+## systemdサービスの作成
 
 ```bash
 sudo nano /etc/systemd/system/pbl.service
@@ -138,13 +122,13 @@ RestartSec=5
 WantedBy=multi-user.target
 ```
 
-### systemdの再読み込み
+## systemdの再読み込み
 
 ```bash
 sudo systemctl daemon-reload
 ```
 
-### アプリケーションの起動確認
+## アプリケーションの起動確認
 
 ```bash
 sudo systemctl start pbl.service
@@ -157,7 +141,7 @@ sudo systemctl status pbl.service
 Active: active (running)
 ```
 
-### ログの確認
+## ログの確認
 
 ```bash
 sudo journalctl -u pbl.service
@@ -169,7 +153,7 @@ sudo journalctl -u pbl.service
 sudo journalctl -u pbl.service -f
 ```
 
-### 自動起動の有効化
+## 自動起動の有効化
 
 ```bash
 sudo systemctl enable pbl.service
@@ -187,7 +171,7 @@ systemctl is-enabled pbl.service
 sudo systemctl disable pbl.service
 ```
 
-### アプリケーションの再起動
+## アプリケーションの再起動
 
 ```bash
 sudo systemctl restart pbl.service
