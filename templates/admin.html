@@ -14,37 +14,37 @@ MizuMori | Admin
 
 <div class="admin">
   <div class="admin__content">
-    <section class="system-status">
-      <div class="system-status__cards">
-        <div class="system-status__card">
-          <div class="system-status__label">土壌水分量</div>
-          <div class="system-status__value">
-            <span>100.0</span>
+    <section class="sensor-values" x-data="sensorValues">
+      <div class="sensor-values__cards">
+        <div class="sensor-values__card">
+          <div class="sensor-values__label">土壌水分量</div>
+          <div class="sensor-values__value">
+            <span x-text="soilMoisture ?? '--'">100.0</span>
             <span class="unit">%</span>
           </div>
         </div>
-        <div class="system-status__card">
-          <div class="system-status__label">土壌水分センサ値</div>
-          <div class="system-status__value">
-            <span>690</span>
+        <div class="sensor-values__card">
+          <div class="sensor-values__label">土壌水分センサ値</div>
+          <div class="sensor-values__value">
+            <span x-text="soilMoistureRaw ?? '--'">690</span>
           </div>
         </div>
-        <div class="system-status__card">
-          <div class="system-status__label">温度</div>
-          <div class="system-status__value">
-            <span>50.0</span>
+        <div class="sensor-values__card">
+          <div class="sensor-values__label">温度</div>
+          <div class="sensor-values__value">
+            <span x-text="temperature ?? '--'">50.0</span>
             <span class="unit">℃</span>
           </div>
         </div>
-        <div class="system-status__card">
-          <div class="system-status__label">湿度</div>
-          <div class="system-status__value">
-            <span>100.0</span>
+        <div class="sensor-values__card">
+          <div class="sensor-values__label">湿度</div>
+          <div class="sensor-values__value">
+            <span x-text="humidity ?? '--'">100.0</span>
             <span class="unit">%</span>
           </div>
         </div>
       </div>
-      <div class="system-status__measured-at">2026/10/10 10:10:10</div>
+      <div class="sensor-values__measured-at" x-text="formatDate(measuredAt, 'YYYY-MM-DD HH:mm') || 'センサーを起動しています...'"></div>
     </section>
     <section class="system-controls">
       <div class="system-controls__panel">
