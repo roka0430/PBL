@@ -3,6 +3,7 @@ import threading
 from datetime import datetime
 from pathlib import Path
 
+import cv2
 from gpiozero import PWMOutputDevice
 
 from .dataclasses import Image
@@ -31,6 +32,8 @@ class Pump:
 
 class Camera:
     CACHE_SECONDS = 10
+    IMAGE_WIDTH = 1280
+    IMAGE_HEIGHT = 720
 
     def __init__(self):
         self._image: Image | None = None
@@ -38,14 +41,35 @@ class Camera:
         self._lock = threading.Lock()
 
     def capture_image(self) -> Image:
-        path = Path("demo/sample.jpg")  # TODO: ここに撮影処理を追加
+        camera = cv2.VideoCapture(0, cv2.CAP_V4L2)
 
-        image = Image(data=path.read_bytes(), captured_at=datetime.now())
+        try:
+            if not camera.isOpened():
+                raise RuntimeError("Failed to open USB camera")
 
-        self._image = image
-        self._captured_at = time.monotonic()
+            camera.set(cv2.CAP_PROP_FRAME_WIDTH, self.IMAGE_WIDTH)
+            camera.set(cv2.CAP_PROP_FRAME_HEIGHT, self.IMAGE_HEIGHT)
 
-        return image
+            success, frame = camera.read()
+            if not success:
+                raise RuntimeError("Failed to capture image")
+
+            success, encoded = cv2.imencode(".jpg", frame)
+            if not success:
+                raise RuntimeError("Failed to encode image to JPEG")
+
+            image = Image(
+                data=encoded.tobytes(),
+                captured_at=datetime.now(),
+            )
+
+            self._image = image
+            self._captured_at = time.monotonic()
+
+            return image
+
+        finally:
+            camera.release()
 
     def get_image(self) -> Image:
         with self._lock:
