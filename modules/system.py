@@ -110,12 +110,11 @@ class SystemController:
             if stopped:
                 return
 
-            # TODO デモのため記録停止中
-            # self.watering_database.add(
-            #     watered_at=datetime.now(),
-            #     watering_type=watering_type,
-            #     amount_ml=amount_ml,
-            # )
+            self.watering_database.add(
+                watered_at=datetime.now(),
+                watering_type=watering_type,
+                amount_ml=amount_ml,
+            )
         finally:
             self.pump.stop()
 

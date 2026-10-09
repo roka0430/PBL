@@ -25,16 +25,17 @@ class WateringDatabase:
 
     def add(self, watered_at, watering_type, amount_ml):
         watered_at_str = watered_at.isoformat(timespec="seconds")
+        print(watered_at_str, watering_type, amount_ml)
 
-        with sqlite3.connect(DATABASE_PATH) as con:
-            con.execute(
-                f"""
-                INSERT INTO {self.WATERING_HISTORY_TABLE}
-                    (watered_at, watering_type, amount_ml)
-                VALUES (?, ?, ?)
-                """,
-                (watered_at_str, watering_type.value, amount_ml),
-            )
+        # with sqlite3.connect(DATABASE_PATH) as con:
+        #     con.execute(
+        #         f"""
+        #         INSERT INTO {self.WATERING_HISTORY_TABLE}
+        #             (watered_at, watering_type, amount_ml)
+        #         VALUES (?, ?, ?)
+        #         """,
+        #         (watered_at_str, watering_type.value, amount_ml),
+        #     )
 
     def get(self, before_id, after_id, limit) -> list[dict]:
         with sqlite3.connect(DATABASE_PATH) as con:
