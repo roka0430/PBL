@@ -14,24 +14,35 @@ MizuMori | Admin
 
 <div class="admin">
   <div class="admin__content">
-    <div x-data="common_theme">
-      <button @click="setSystemTheme()">user system settings</button>
-      <button @click="setLightTheme()">light</button>
-      <button @click="setDarkTheme()">dark</button>
-    </div>
+    <section class="system-status">
+      <div class="system-status__card">
+        <div class="system-status__label">土壌水分量</div>
+        <div class="system-status__value">100.0%</div>
+      </div>
+      <div class="system-status__card">
+        <div class="system-status__label">土壌水分量</div>
+        <div class="system-status__value">100.0%</div>
+      </div>
+      <div class="system-status__card">
+        <div class="system-status__label">温度</div>
+        <div class="system-status__value">50.0℃</div>
+      </div>
+      <div class="system-status__card">
+        <div class="system-status__label">湿度</div>
+        <div class="system-status__value">100.0%</div>
+      </div>
+    </section>
+    <section class="system-settings">settings</section>
+    <section class="system-controls">controls</section>
 
-    <form action="{{ url_for('logout') }}" method="post">
-      <button type="submit">ログアウト</button>
-    </form>
-
-    <form action="/api/watering" method="post">
+    <!-- <form action="/api/watering" method="post">
       <input type="number" name="amount">
       <button type="submit">submit</button>
     </form>
 
     <form action="/api/watering/stop" method="post">
       <button type="submit">submit</button>
-    </form>
+    </form> -->
   </div>
 </div>
 {% endblock %}
