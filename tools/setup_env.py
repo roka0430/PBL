@@ -31,7 +31,8 @@ secret_key = secrets.token_hex(32)
 admin_password_hash = generate_password_hash(admin_password)
 viewer_password_hash = generate_password_hash(viewer_password)
 
-env_content = f"""SECRET_KEY={secret_key}
+env_content = f"""HARDWARE_MODE=mock
+SECRET_KEY={secret_key}
 ADMIN_PASSWORD_HASH={admin_password_hash}
 VIEWER_PASSWORD_HASH={viewer_password_hash}
 """

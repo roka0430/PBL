@@ -2,7 +2,6 @@ import os
 import time
 from functools import wraps
 
-from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
 from flask import (
     Flask,
@@ -36,7 +35,6 @@ class User(UserMixin):
 PORT = 5000
 
 # ---------- 環境変数 ----------
-load_dotenv()
 SECRET_KEY = os.environ["SECRET_KEY"]
 ADMIN_PASSWORD_HASH = os.environ["ADMIN_PASSWORD_HASH"]
 VIEWER_PASSWORD_HASH = os.environ["VIEWER_PASSWORD_HASH"]

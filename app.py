@@ -1,7 +1,10 @@
 import time
-import socket
 import logging
 import threading
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from modules.mdns import get_local_ip, start_mdns
 from modules.routes import run_server, PORT

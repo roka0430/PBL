@@ -1,5 +1,5 @@
+import os
 import time
-import json
 import threading
 from datetime import datetime
 
@@ -7,7 +7,24 @@ from .enums import SystemStatus, ManualWateringResult, WateringType
 from .dataclasses import SensorValue, SensorValues, Image
 from .settings import Settings
 from .database import WateringDatabase
-from .hardware import Pump, Camera, SoilMoistureSensor, TemperatureAndHumiditySensor
+
+hardware_mode = os.environ["HARDWARE_MODE"]
+
+if hardware_mode == "real":
+    from .hardware import (
+        Pump,
+        Camera,
+        SoilMoistureSensor,
+        TemperatureAndHumiditySensor,
+    )
+elif hardware_mode == "mock":
+    from .hardware_mock import (
+        Pump,
+        Camera,
+        SoilMoistureSensor,
+        TemperatureAndHumiditySensor,
+    )
+
 
 MIN_WATER_AMOUNT_ML = 10  # 1回給水量下限
 MAX_WATER_AMOUNT_ML = 200  # 1回給水量上限

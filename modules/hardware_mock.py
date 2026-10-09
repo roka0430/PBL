@@ -4,21 +4,10 @@ import threading
 from datetime import datetime
 from pathlib import Path
 
-from gpiozero import PWMOutputDevice
-
 from .dataclasses import Image
 
 
 class Pump:
-    MOTOR_PIN = 26
-    PWM_FREQUENCY = 500
-    DUTY_CYCLE = 0.6
-
-    def __init__(self):
-        self._motor = PWMOutputDevice(
-            self.MOTOR_PIN, frequency=self.PWM_FREQUENCY, initial_value=0
-        )
-
     def start(self):
         print("pump start")
 
