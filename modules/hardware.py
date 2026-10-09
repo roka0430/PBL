@@ -55,7 +55,7 @@ class SoilMoistureSensor:
         wet = self.settings.get("soil_moisture_wet")
 
         moisture = (raw_value - dry) / (wet - dry) * 100
-        return max(0.0, min(100.0, moisture))
+        return max(0.0, min(100.0, moisture)), raw_value
 
     def _read_raw(self) -> int:
         # TODO: MCP3002から取得

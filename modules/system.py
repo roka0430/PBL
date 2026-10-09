@@ -128,10 +128,15 @@ class SystemController:
         self._check_temperature_and_humidity()
 
     def _check_soil_moisture(self):
-        soil_moisture = self.soil_moisture_sensor.read()
+        soil_moisture, soil_moisture_raw = self.soil_moisture_sensor.read()
+        measured_at = datetime.now()
 
         self.sensor_values.soil_moisture = SensorValue(
-            value=soil_moisture, measured_at=datetime.now()
+            value=soil_moisture, measured_at=measured_at
+        )
+
+        self.sensor_values.soil_moisture_raw = SensorValue(
+            value=soil_moisture_raw, measured_at=measured_at
         )
 
     def _check_temperature_and_humidity(self):

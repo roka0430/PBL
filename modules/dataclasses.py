@@ -17,6 +17,7 @@ class SensorValue:
 @dataclass
 class SensorValues:
     soil_moisture: SensorValue | None = None
+    soil_moisture_raw: SensorValue | None = None
     temperature: SensorValue | None = None
     humidity: SensorValue | None = None
 
@@ -24,6 +25,7 @@ class SensorValues:
     def ready(self) -> bool:
         return (
             self.soil_moisture is not None
+            and self.soil_moisture_raw is not None
             and self.temperature is not None
             and self.humidity is not None
         )
