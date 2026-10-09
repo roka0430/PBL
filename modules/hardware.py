@@ -4,6 +4,9 @@ from datetime import datetime
 from pathlib import Path
 
 import cv2
+import board
+import adafruit_ahtx0
+import spidev
 from gpiozero import PWMOutputDevice
 
 from .dataclasses import Image
@@ -85,6 +88,11 @@ class SoilMoistureSensor:
     def __init__(self, settings):
         self.settings = settings
 
+        self._spi = spidev.SpiDev()
+        self._spi.open(0, 0)
+        self._spi.max_speed_hz = 1_000_000
+        self._spi.mode = 0
+
     def read(self) -> float:
         raw_value = self._read_raw()
 
@@ -95,11 +103,19 @@ class SoilMoistureSensor:
         return max(0.0, min(100.0, moisture)), raw_value
 
     def _read_raw(self) -> int:
-        # TODO: MCP3002から取得
-        return 1000
+        response = self._spi.xfer2([0x68, 0x00])  # TODO CH0でなければ修正
+        return ((response[0] & 0x03) << 8) | response[1]
+
+    def close(self):
+        self._spi.close()
 
 
 class TemperatureAndHumiditySensor:
+    def __init__(self):
+        self._sensor = adafruit_ahtx0.AHTx0(board.I2C())
+
     def read(self) -> tuple[float, float]:
-        # TODO DHT20から取得
-        return 20, 30
+        temperature = self._sensor.temperature
+        humidity = self._sensor.relative_humidity
+
+        return temperature, humidity

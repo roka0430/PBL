@@ -110,6 +110,7 @@ class SystemController:
 
     def close(self):
         self.pump.close()
+        self.soil_moisture_sensor.close()
 
     # ========== メインループ ==========
 
