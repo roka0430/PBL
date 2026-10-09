@@ -108,6 +108,9 @@ class SystemController:
             before_id=before_id, after_id=after_id, limit=limit
         )
 
+    def close(self):
+        self.pump.close()
+
     # ========== メインループ ==========
 
     def mainloop(self):

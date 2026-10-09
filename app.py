@@ -47,6 +47,7 @@ def main():
     finally:
         zeroconf.unregister_service(mdns_info)
         zeroconf.close()
+        system.close()
 
 
 if __name__ == "__main__":

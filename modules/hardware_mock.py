@@ -14,6 +14,9 @@ class Pump:
     def stop(self):
         print("pump stop")
 
+    def close(self):
+        print("pump close")
+
 
 class Camera:
     CACHE_SECONDS = 10

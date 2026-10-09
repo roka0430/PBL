@@ -1,5 +1,4 @@
 import time
-import random  # TODO: デモ用
 import threading
 from datetime import datetime
 from pathlib import Path
@@ -20,10 +19,14 @@ class Pump:
         )
 
     def start(self):
-        print("pump start")
+        self._motor.value = self.DUTY_CYCLE
 
     def stop(self):
-        print("pump stop")
+        self._motor.off()
+
+    def close(self):
+        self._motor.off()
+        self._motor.close()
 
 
 class Camera:
@@ -69,9 +72,10 @@ class SoilMoistureSensor:
 
     def _read_raw(self) -> int:
         # TODO: MCP3002から取得
-        return random.randint(0, 1023)
+        return 1000
 
 
 class TemperatureAndHumiditySensor:
     def read(self) -> tuple[float, float]:
-        return random.randint(100, 400) / 10, random.randint(0, 1000) / 10  # 温度, 湿度
+        # TODO DHT20から取得
+        return 20, 30
