@@ -12,7 +12,7 @@
 
   display: grid;
   gap: 15px;
-  grid-auto-rows: min-content;
+  grid-template-rows: min-content 1fr;
   grid-template-columns: 1fr 1fr;
 
   padding-block: 20px;
@@ -21,6 +21,7 @@
 
 @media (max-width: 767px) {
   .admin__content {
+    grid-auto-columns: min-content;
     grid-template-columns: 1fr;
 
     padding: 12px;
@@ -35,6 +36,8 @@
   display: flex;
   gap: 5px;
   flex-direction: column;
+
+  height: fit-content;
 }
 
 .sensor-values__cards {
