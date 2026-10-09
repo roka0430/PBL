@@ -58,7 +58,7 @@ MizuMori | Admin
         </h2>
         <div class="system-controls__panel-content">content</div>
       </div>
-      <div class="system-controls__panel">
+      <div class="system-controls__panel" x-data="manualWatering">
         <h2>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-drop-circle">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -70,24 +70,24 @@ MizuMori | Admin
         <div class="system-controls__panel-content">
           <label class="manual-watering__amount">
             <span class="label">給水量</span>
-            <input type="number" class="input">
+            <input type="number" class="input" x-model="amount">
             <span class="unit">mL</span>
           </label>
           <div class="manual-watering__presets">
-            <span>10mL</span>
-            <span>25mL</span>
-            <span>50mL</span>
-            <span>100mL</span>
-            <span>200mL</span>
+            <span @click="amount = 10">10mL</span>
+            <span @click="amount = 25">25mL</span>
+            <span @click="amount = 50">50mL</span>
+            <span @click="amount = 100">100mL</span>
+            <span @click="amount = 200">200mL</span>
           </div>
-          <button class="manual-watering__button manual-watering__button--start">
+          <button class="manual-watering__button manual-watering__button--start" :disabled="watering" @click="startWatering()">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-player-play">
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
               <path d="M7 4v16l13 -8l-13 -8" />
             </svg>
             <span>給水を開始</span>
           </button>
-          <button class="manual-watering__button manual-watering__button--stop">
+          <button class="manual-watering__button manual-watering__button--stop" :disabled="!watering" @click="stopWatering()">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-hand-stop">
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
               <path d="M8 13v-7.5a1.5 1.5 0 0 1 3 0v6.5" />
