@@ -189,6 +189,12 @@ def get_health():
     return {"status": "ok"}
 
 
+@app.get("/api/status")
+@login_required
+def get_status():
+    return {"status": app.system.get_status().value}
+
+
 @app.get("/api/settings")
 @login_required
 def get_settings():

@@ -77,6 +77,9 @@ class SystemController:
     def get_image(self) -> Image:
         return self.camera.get_image()
 
+    def get_status(self) -> SystemStatus:
+        return self.status
+
     def get_settings(self) -> list[dict]:
         return self.settings.get_all()
 
