@@ -132,6 +132,7 @@
 
 .manual-watering__amount {
   display: grid;
+  gap: 2px 0;
   align-items: center;
   grid-template-columns: 1fr min-content;
 }
@@ -148,20 +149,19 @@
 
   width: 100%;
 
-  padding-block: 5px;
+  padding-block: 6px 4px;
   padding-inline: 16px;
 
   border: solid 1px var(--color-border);
   border-radius: 50px;
 
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .manual-watering__amount .unit {
   grid-column: 2 / 3;
 
-  padding-left: 8px;
-  font-size: 0.85rem;
+  padding-inline: 8px 5px;
 }
 
 .manual-watering__presets {
@@ -169,14 +169,17 @@
   gap: 5px;
   flex-wrap: wrap;
 
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 .manual-watering__presets span {
-  padding-inline: 8px;
+  padding-block: 3px 2px;
+  padding-inline: 10px;
+
   border: solid 1px var(--color-border);
   border-radius: 50px;
-  font-size: 0.85rem;
+
+  font-size: 0.9rem;
   cursor: pointer;
 }
 
@@ -193,6 +196,10 @@
 
   font-size: 0.9rem;
   cursor: pointer;
+}
+
+.manual-watering__button span {
+  transform: translateY(1px);
 }
 
 .manual-watering__button--start {
