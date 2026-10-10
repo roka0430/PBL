@@ -66,6 +66,10 @@
   flex-direction: column;
 }
 
+.admin__layout-item--settings {
+  height: fit-content;
+}
+
 @media (max-width: 767px) {
   .admin__content {
     grid-auto-columns: min-content;
