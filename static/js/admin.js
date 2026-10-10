@@ -66,6 +66,7 @@ document.addEventListener("alpine:init", () => {
         this.watering = true;
         this.watchSystem();
       } else {
+        console.log(result);
         // TODO 失敗ならエラーメッセージをポップアップ表示
       }
     },
