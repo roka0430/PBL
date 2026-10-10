@@ -40,8 +40,12 @@ document.addEventListener("alpine:init", () => {
 
   Alpine.data("manualWatering", () => ({
     amount: 10,
-    watering: false,
+    watering: true,
     timeout: null,
+
+    init() {
+      this.watchSystem();
+    },
 
     async startWatering() {
       // TODO ポップアップで確認
