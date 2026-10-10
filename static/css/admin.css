@@ -13,7 +13,7 @@
   display: grid;
   gap: 15px;
   grid-template-rows: min-content 1fr;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 5fr 3fr;
 
   padding-block: 20px;
   padding-inline: 30px;
@@ -27,20 +27,31 @@
   border-radius: 5px;
 }
 
-.admin__section-title {
+.admin__section-header {
   display: flex;
-  gap: 5px;
   align-items: center;
 
   margin-bottom: 12px;
   padding-bottom: 12px;
+  padding-right: 5px;
+
   border-bottom: solid 1px var(--color-border);
+}
+
+.admin__section-header .heading {
+  display: flex;
+  gap: 5px;
+  align-items: center;
 
   font-size: 0.9rem;
 }
 
-.admin__section-title span {
+.admin__section-header .heading span {
   transform: translateY(1px);
+}
+
+.admin__section-header .spacer {
+  flex: 1;
 }
 
 .admin__layout-item--sensors {
@@ -79,11 +90,23 @@
 
 /* sensors */
 
+.sensors__measured-at {
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+}
+
 .sensors__cards {
   display: grid;
   gap: 15px;
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 1fr;
+}
+
+@media (max-width: 1023px) {
+  .sensors__cards {
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .sensors__card {
@@ -117,18 +140,19 @@
   font-size: 0.7em;
 }
 
-.sensors__measured-at {
-  margin-top: 4px;
-  padding-right: 2px;
-
-  color: var(--color-text-muted);
-  font-size: 0.7rem;
-  text-align: right;
-}
-
 /* auto-watering */
 
 /* manual-watering */
+
+.manual-watering__status {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+.manual-watering__status.watering {
+  color: var(--color-primary);
+  font-weight: bold;
+}
 
 .manual-watering__amount {
   display: grid;
@@ -150,10 +174,10 @@
   width: 100%;
 
   padding-block: 6px 4px;
-  padding-inline: 16px;
+  padding-inline: 12px;
 
   border: solid 1px var(--color-border);
-  border-radius: 50px;
+  border-radius: 5px;
 
   font-size: 1rem;
 }
@@ -180,10 +204,10 @@
 
 .manual-watering__presets span {
   padding-block: 3px 2px;
-  padding-inline: 10px;
+  padding-inline: 8px;
 
   border: solid 1px var(--color-border);
-  border-radius: 50px;
+  border-radius: 5px;
 
   font-size: 0.9rem;
   cursor: pointer;
@@ -197,7 +221,7 @@
 
   width: 100%;
 
-  margin-top: 20px;
+  margin-block: 20px 2px;
   padding-block: 5px;
 
   border-radius: 50px;
