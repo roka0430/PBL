@@ -63,6 +63,9 @@ class SoilMoistureSensor:
         # TODO: MCP3002から取得
         return random.randint(0, 1023)
 
+    def close(self):
+        print("soil moisture sensor close")
+
 
 class TemperatureAndHumiditySensor:
     def read(self) -> tuple[float, float]:
