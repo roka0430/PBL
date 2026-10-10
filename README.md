@@ -1,6 +1,6 @@
-# PBL6 自動水やり機
+# 自動水やり機「MizuMori」
 
-## 下準備
+## Raspberry Pi
 
 ### SSH接続
 
@@ -8,14 +8,15 @@
 ssh pi@<IP Address>
 ```
 
+
+## 実行環境
+
 ### プロキシの適用
 
 ```bash
 export http_proxy="http://proxy.example.com:PORT"
 export https_proxy="http://proxy.example.com:PORT"
 ```
-
-## Python関連
 
 ### パッケージのupdate/upgrade
 
