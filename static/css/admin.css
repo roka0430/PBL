@@ -19,6 +19,15 @@
   padding-inline: 30px;
 }
 
+.admin-section__title {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
 @media (max-width: 767px) {
   .admin__content {
     grid-auto-columns: min-content;
@@ -123,6 +132,7 @@
 
   font-size: 0.9rem;
 }
+
 .system-controls__panel span {
   padding-top: 1px;
 }
