@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("sensorValues", () => ({
+  Alpine.data("sensors", () => ({
     soilMoisture: null,
     soilMoistureRaw: null,
     temperature: null,

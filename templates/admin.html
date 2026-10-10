@@ -14,8 +14,8 @@ MizuMori | Admin
 
 <div class="admin">
   <div class="admin__content">
-    <section class="admin-section sensor-values" x-data="sensorValues">
-      <h2 class="admin-section__title">
+    <section class="admin__layout-item admin__layout-item--sensors admin__section" x-data="sensors">
+      <h2 class="admin__section-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-graph">
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
           <path d="M4 18v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2" />
@@ -23,40 +23,40 @@ MizuMori | Admin
         </svg>
         <span>環境</span>
       </h2>
-      <div class="sensor-values__cards">
-        <div class="sensor-values__card">
-          <div class="sensor-values__label">土壌水分量</div>
-          <div class="sensor-values__value">
+      <div class="sensors__cards">
+        <div class="sensors__card">
+          <div class="sensors__label">土壌水分量</div>
+          <div class="sensors__value">
             <span class="value" x-text="soilMoisture ?? '--'">100.0</span>
             <span class="unit">%</span>
           </div>
         </div>
-        <div class="sensor-values__card">
-          <div class="sensor-values__label">土壌水分センサ値</div>
-          <div class="sensor-values__value">
+        <div class="sensors__card">
+          <div class="sensors__label">土壌水分センサ値</div>
+          <div class="sensors__value">
             <span x-text="soilMoistureRaw ?? '--'">690</span>
           </div>
         </div>
-        <div class="sensor-values__card">
-          <div class="sensor-values__label">温度</div>
-          <div class="sensor-values__value">
+        <div class="sensors__card">
+          <div class="sensors__label">温度</div>
+          <div class="sensors__value">
             <span class="value" x-text="temperature ?? '--'">50.0</span>
             <span class="unit">℃</span>
           </div>
         </div>
-        <div class="sensor-values__card">
-          <div class="sensor-values__label">湿度</div>
-          <div class="sensor-values__value">
+        <div class="sensors__card">
+          <div class="sensors__label">湿度</div>
+          <div class="sensors__value">
             <span class="value" x-text="humidity ?? '--'">100.0</span>
             <span class="unit">%</span>
           </div>
         </div>
       </div>
-      <div class="sensor-values__measured-at" x-text="formatDate(measuredAt, 'YYYY-MM-DD HH:mm') || 'センサーを起動しています...'"></div>
+      <div class="sensors__measured-at" x-text="formatDate(measuredAt, 'YYYY-MM-DD HH:mm') || 'センサーを起動しています...'"></div>
     </section>
-    <section class="admin-section system-controls">
-      <div class="system-controls__panel">
-        <h2>
+    <div class="admin__layout-item admin__layout-item--controls">
+      <section class="admin__section">
+        <h2 class="admin__section-title">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-bucket-droplet">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M5 16l1.465 1.638a2 2 0 1 1 -3.015 .099l1.55 -1.737" />
@@ -65,10 +65,10 @@ MizuMori | Admin
           </svg>
           <span>自動給水</span>
         </h2>
-        <div class="system-controls__panel-content">content</div>
-      </div>
-      <div class="system-controls__panel" x-data="manualWatering">
-        <h2>
+        <div>content</div>
+      </section>
+      <section class="admin__section" x-data="manualWatering">
+        <h2 class="admin__section-title">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-hand-stop">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M8 13v-7.5a1.5 1.5 0 0 1 3 0v6.5" />
@@ -78,10 +78,10 @@ MizuMori | Admin
           </svg>
           <span>手動給水</span>
         </h2>
-        <div class="system-controls__panel-content">
+        <div>
           <label class="manual-watering__amount">
             <span class="label">給水量</span>
-            <input class="value" type="number" class="input" x-model="amount">
+            <input class="value" type="number" x-model="amount">
             <span class="unit">mL</span>
           </label>
           <div class="manual-watering__presets">
@@ -106,28 +106,10 @@ MizuMori | Admin
             <span>給水を中断</span>
           </button>
         </div>
-      </div>
-      <!-- <div class="system-controls__panel">
-        <h2>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-adjustments-horizontal">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M12 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-            <path d="M4 6l8 0" />
-            <path d="M16 6l4 0" />
-            <path d="M6 12a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-            <path d="M4 12l2 0" />
-            <path d="M10 12l10 0" />
-            <path d="M15 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-            <path d="M4 18l11 0" />
-            <path d="M19 18l1 0" />
-          </svg>
-          <span>校正・メンテナンス</span>
-        </h2>
-        <div class="system-controls__panel-content">content</div>
-      </div> -->
-    </section>
-    <section class="admin-section system-settings">
-      <h2 class="admin-section__title">
+      </section>
+    </div>
+    <section class="admin__layout-item admin__layout-item--settings admin__section">
+      <h2 class="admin__section-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-adjustments-horizontal">
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
           <path d="M12 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
@@ -142,44 +124,44 @@ MizuMori | Admin
         </svg>
         <span>設定</span>
       </h2>
-      <div class="system-settings__content">
-        <h3 class="system-settings__heading">給水判定</h3>
-        <div class="system-settings__item">
-          <div class="system-settings__name">給水開始しきい値</div>
-          <div class="system-settings__detail">設定値の詳細</div>
-          <div class="system-settings__value">
+      <div class="settings__content">
+        <h3 class="settings__heading">給水判定</h3>
+        <div class="settings__item">
+          <div class="settings__name">給水開始しきい値</div>
+          <div class="settings__detail">設定値の詳細</div>
+          <div class="settings__value">
             <span class="value">30</span>
             <span class="unit">%</span>
           </div>
-          <div class="system-settings__action">編集</div>
+          <div class="settings__action">編集</div>
         </div>
-        <div class="system-settings__item">
-          <div class="system-settings__name">給水終了しきい値</div>
-          <div class="system-settings__detail">設定値の詳細</div>
-          <div class="system-settings__value">
+        <div class="settings__item">
+          <div class="settings__name">給水終了しきい値</div>
+          <div class="settings__detail">設定値の詳細</div>
+          <div class="settings__value">
             <span class="value">60</span>
             <span class="unit">%</span>
           </div>
-          <div class="system-settings__action">編集</div>
+          <div class="settings__action">編集</div>
         </div>
-        <div class="system-settings__item">
-          <div class="system-settings__name">給水判定間隔</div>
-          <div class="system-settings__detail">設定値の詳細</div>
-          <div class="system-settings__value">
+        <div class="settings__item">
+          <div class="settings__name">給水判定間隔</div>
+          <div class="settings__detail">設定値の詳細</div>
+          <div class="settings__value">
             <span class="value">10</span>
             <span class="unit">分</span>
           </div>
-          <div class="system-settings__action">編集</div>
+          <div class="settings__action">編集</div>
         </div>
-        <h3 class="system-settings__heading">センサ設定</h3>
-        <div class="system-settings__item">
-          <div class="system-settings__name">センシング間隔</div>
-          <div class="system-settings__detail">設定値の詳細</div>
-          <div class="system-settings__value">
+        <h3 class="settings__heading">センサ設定</h3>
+        <div class="settings__item">
+          <div class="settings__name">センシング間隔</div>
+          <div class="settings__detail">設定値の詳細</div>
+          <div class="settings__value">
             <span class="value">10</span>
             <span class="unit">秒</span>
           </div>
-          <div class="system-settings__action">編集</div>
+          <div class="settings__action">編集</div>
         </div>
       </div>
     </section>
