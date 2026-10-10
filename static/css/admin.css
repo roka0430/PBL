@@ -24,8 +24,15 @@
   gap: 5px;
   align-items: center;
 
-  margin-bottom: 5px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: solid 1px var(--color-border);
+
   font-size: 0.9rem;
+}
+
+.admin-section__title span {
+  padding-top: 1px;
 }
 
 @media (max-width: 767px) {
@@ -47,11 +54,17 @@
   flex-direction: column;
 
   height: fit-content;
+
+  padding-block: 16px;
+  padding-inline: 20px;
+
+  background: var(--color-surface);
+  border-radius: 5px;
 }
 
 .sensor-values__cards {
   display: grid;
-  gap: 10px;
+  gap: 15px;
   grid-template-rows: 1fr 1fr;
   grid-template-columns: 1fr 1fr;
 }
@@ -60,7 +73,7 @@
   padding-block: 12px 10px;
   padding-inline: 15px;
 
-  background: var(--color-surface);
+  border: solid 1px var(--color-border);
   border-radius: 5px;
 }
 
@@ -231,6 +244,18 @@
 
 .system-settings {
   grid-row: 2 / 3;
+
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+
+  height: fit-content;
+
+  padding-block: 16px;
+  padding-inline: 20px;
+
+  background: var(--color-surface);
+  border-radius: 5px;
 }
 
 @media (max-width: 767px) {
