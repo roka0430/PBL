@@ -27,7 +27,7 @@ MizuMori | Admin
         <div class="sensor-values__card">
           <div class="sensor-values__label">土壌水分量</div>
           <div class="sensor-values__value">
-            <span x-text="soilMoisture ?? '--'">100.0</span>
+            <span class="value" x-text="soilMoisture ?? '--'">100.0</span>
             <span class="unit">%</span>
           </div>
         </div>
@@ -40,14 +40,14 @@ MizuMori | Admin
         <div class="sensor-values__card">
           <div class="sensor-values__label">温度</div>
           <div class="sensor-values__value">
-            <span x-text="temperature ?? '--'">50.0</span>
+            <span class="value" x-text="temperature ?? '--'">50.0</span>
             <span class="unit">℃</span>
           </div>
         </div>
         <div class="sensor-values__card">
           <div class="sensor-values__label">湿度</div>
           <div class="sensor-values__value">
-            <span x-text="humidity ?? '--'">100.0</span>
+            <span class="value" x-text="humidity ?? '--'">100.0</span>
             <span class="unit">%</span>
           </div>
         </div>
@@ -81,7 +81,7 @@ MizuMori | Admin
         <div class="system-controls__panel-content">
           <label class="manual-watering__amount">
             <span class="label">給水量</span>
-            <input type="number" class="input" x-model="amount">
+            <input class="value" type="number" class="input" x-model="amount">
             <span class="unit">mL</span>
           </label>
           <div class="manual-watering__presets">
@@ -142,6 +142,46 @@ MizuMori | Admin
         </svg>
         <span>設定</span>
       </h2>
+      <div class="system-settings__content">
+        <h3 class="system-settings__heading">給水判定</h3>
+        <div class="system-settings__item">
+          <div class="system-settings__name">給水開始しきい値</div>
+          <div class="system-settings__detail">設定値の詳細</div>
+          <div class="system-settings__value">
+            <span class="value">30</span>
+            <span class="unit">%</span>
+          </div>
+          <div class="system-settings__action">編集</div>
+        </div>
+        <div class="system-settings__item">
+          <div class="system-settings__name">給水終了しきい値</div>
+          <div class="system-settings__detail">設定値の詳細</div>
+          <div class="system-settings__value">
+            <span class="value">60</span>
+            <span class="unit">%</span>
+          </div>
+          <div class="system-settings__action">編集</div>
+        </div>
+        <div class="system-settings__item">
+          <div class="system-settings__name">給水判定間隔</div>
+          <div class="system-settings__detail">設定値の詳細</div>
+          <div class="system-settings__value">
+            <span class="value">10</span>
+            <span class="unit">分</span>
+          </div>
+          <div class="system-settings__action">編集</div>
+        </div>
+        <h3 class="system-settings__heading">センサ設定</h3>
+        <div class="system-settings__item">
+          <div class="system-settings__name">センシング間隔</div>
+          <div class="system-settings__detail">設定値の詳細</div>
+          <div class="system-settings__value">
+            <span class="value">10</span>
+            <span class="unit">秒</span>
+          </div>
+          <div class="system-settings__action">編集</div>
+        </div>
+      </div>
     </section>
   </div>
 </div>
