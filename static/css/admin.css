@@ -40,7 +40,7 @@
 }
 
 .admin__section-title span {
-  padding-top: 1px;
+  transform: translateY(1px);
 }
 
 .admin__layout-item--sensors {
@@ -60,7 +60,12 @@
     grid-auto-columns: min-content;
     grid-template-columns: 1fr;
 
-    padding-inline: 20px;
+    padding-inline: 0;
+  }
+
+  .admin__section {
+    padding-inline: 16px;
+    border-radius: 0;
   }
 
   .admin__layout-item--sensors {
@@ -260,7 +265,10 @@
   gap: 4px;
   align-items: end;
 
+  transform: translateY(1px);
   height: fit-content;
+
+  font-weight: bold;
   line-height: 1;
 }
 
