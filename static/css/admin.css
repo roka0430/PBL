@@ -158,6 +158,12 @@
   font-size: 1rem;
 }
 
+.manual-watering__amount .value::-webkit-inner-spin-button,
+.manual-watering__amount .value::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .manual-watering__amount .unit {
   grid-column: 2 / 3;
 
@@ -190,6 +196,8 @@
   gap: 6px;
 
   width: 100%;
+
+  margin-top: 20px;
   padding-block: 5px;
 
   border-radius: 50px;
@@ -203,23 +211,13 @@
 }
 
 .manual-watering__button--start {
-  margin-top: 20px;
   background: var(--color-primary);
   color: var(--color-text-white);
 }
 
 .manual-watering__button--stop {
-  margin-top: 10px;
   border: solid 1px var(--color-error);
   color: var(--color-error);
-  transition: all 0.15s ease;
-}
-
-.manual-watering__button:disabled {
-  opacity: 0.5;
-  border-color: var(--color-text-muted);
-  color: var(--color-text-muted);
-  cursor: not-allowed;
 }
 
 /* settings */
