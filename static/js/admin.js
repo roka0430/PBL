@@ -96,4 +96,55 @@ document.addEventListener("alpine:init", () => {
       this.timeout = setTimeout(() => this.watchSystem(), 1000);
     },
   }));
+
+  Alpine.data("settings", () => ({
+    settings: {},
+    settingsLayout: [],
+
+    SETTINGS_GROUPS: [
+      {
+        title: "センサ",
+        keys: ["sensor_check_interval_sec", "sensor_startup_delay_sec", "soil_moisture_dry", "soil_moisture_wet"],
+      },
+      {
+        title: "ポンプ",
+        keys: ["watering_amount_ml", "pump_flow_ml_per_sec"],
+      },
+    ],
+
+    async init() {
+      this.settings = await this.loadSettings();
+      this.setSettingsLayout();
+    },
+
+    async setSettingsLayout() {
+      this.settingsLayout.splice(0);
+
+      for (const { title, keys } of this.SETTINGS_GROUPS) {
+        this.settingsLayout.push({
+          type: "heading",
+          label: title,
+        });
+
+        for (const key of keys) {
+          this.settingsLayout.push({
+            type: "setting",
+            ...this.settings[key],
+          });
+        }
+      }
+
+      console.log(this.settingsLayout);
+    },
+
+    async loadSettings() {
+      const res = await fetch("/api/settings/schema");
+
+      if (!res.ok) {
+        throw new Error("Failed to load settings");
+      }
+
+      return await res.json();
+    },
+  }));
 });

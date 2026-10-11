@@ -115,7 +115,7 @@ MizuMori | Admin
         </div>
       </section>
     </div>
-    <section class="admin__layout-item admin__layout-item--settings admin__section">
+    <section class="admin__layout-item admin__layout-item--settings admin__section" x-data="settings">
       <div class="admin__section-header">
         <h2 class="heading">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-adjustments-horizontal">
@@ -134,7 +134,34 @@ MizuMori | Admin
         </h2>
       </div>
       <div class="settings__content">
-        <h3 class="settings__heading">給水判定</h3>
+        <template x-for="item in settingsLayout">
+          <div>
+            <!-- TODO WRAPがあってもCSSが適用されるように修正 -->
+            <template x-if="item.type === 'heading'">
+              <h3 class="settings__heading" x-text="item.label"></h3>
+            </template>
+            <template x-if="item.type === 'setting'">
+              <div class="settings__item">
+                <div class="settings__name" x-text="item.label">給水開始しきい値</div>
+                <div class="settings__detail">設定値の詳細</div>
+                <div class="settings__value">
+                  <span class="value" x-text="item.value">30</span>
+                  <span class="unit" x-text="item.unit">%</span>
+                </div>
+                <div class="settings__actions">
+                  <button class="settings__action settings__action--edit" title="編集">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                      <path d="M13.5 6.5l4 4" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </template>
+          </div>
+        </template>
+        <!-- <h3 class="settings__heading">給水判定</h3>
         <div class="settings__item">
           <div class="settings__name">給水開始しきい値</div>
           <div class="settings__detail">設定値の詳細</div>
@@ -213,7 +240,7 @@ MizuMori | Admin
               </svg>
             </button>
           </div>
-        </div>
+        </div> -->
       </div>
     </section>
   </div>
