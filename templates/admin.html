@@ -61,11 +61,10 @@ MizuMori | Admin
       <section class="admin__section">
         <div class="admin__section-header">
           <h2 class="heading">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-bucket-droplet">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-settings-automation">
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M5 16l1.465 1.638a2 2 0 1 1 -3.015 .099l1.55 -1.737" />
-              <path d="M13.737 9.737c2.299 -2.3 3.23 -5.095 2.081 -6.245c-1.15 -1.15 -3.945 -.217 -6.244 2.082c-2.3 2.299 -3.231 5.095 -2.082 6.244c1.15 1.15 3.946 .218 6.245 -2.081" />
-              <path d="M7.492 11.818c.362 .362 .768 .676 1.208 .934l6.895 4.047c1.078 .557 2.255 -.075 3.692 -1.512c1.437 -1.437 2.07 -2.614 1.512 -3.692c-.372 -.718 -1.72 -3.017 -4.047 -6.895a6.015 6.015 0 0 0 -.934 -1.208" />
+              <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065" />
+              <path d="M10 9v6l5 -3l-5 -3" />
             </svg>
             <span>自動給水</span>
           </h2>
@@ -75,12 +74,11 @@ MizuMori | Admin
       <section class="admin__section" x-data="manualWatering">
         <div class="admin__section-header">
           <h2 class="heading">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-hand-stop">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-bucket-droplet">
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M8 13v-7.5a1.5 1.5 0 0 1 3 0v6.5" />
-              <path d="M11 5.5v-2a1.5 1.5 0 1 1 3 0v8.5" />
-              <path d="M14 5.5a1.5 1.5 0 0 1 3 0v6.5" />
-              <path d="M17 7.5a1.5 1.5 0 0 1 3 0v8.5a6 6 0 0 1 -6 6h-2h.208a6 6 0 0 1 -5.012 -2.7a69.74 69.74 0 0 1 -.196 -.3c-.312 -.479 -1.407 -2.388 -3.286 -5.728a1.5 1.5 0 0 1 .536 -2.022a1.867 1.867 0 0 1 2.28 .28l1.47 1.47" />
+              <path d="M5 16l1.465 1.638a2 2 0 1 1 -3.015 .099l1.55 -1.737" />
+              <path d="M13.737 9.737c2.299 -2.3 3.23 -5.095 2.081 -6.245c-1.15 -1.15 -3.945 -.217 -6.244 2.082c-2.3 2.299 -3.231 5.095 -2.082 6.244c1.15 1.15 3.946 .218 6.245 -2.081" />
+              <path d="M7.492 11.818c.362 .362 .768 .676 1.208 .934l6.895 4.047c1.078 .557 2.255 -.075 3.692 -1.512c1.437 -1.437 2.07 -2.614 1.512 -3.692c-.372 -.718 -1.72 -3.017 -4.047 -6.895a6.015 6.015 0 0 0 -.934 -1.208" />
             </svg>
             <span>手動給水</span>
           </h2>
@@ -90,7 +88,7 @@ MizuMori | Admin
         <div>
           <label class="manual-watering__amount">
             <span class="label">給水量</span>
-            <input class="value" type="number" x-model="amount" :disable="watering">
+            <input class="value" type="number" x-model="amount" :disable="watering" @focus="$el.select()">
             <span class="unit">mL</span>
           </label>
           <div class="manual-watering__presets">
@@ -144,7 +142,15 @@ MizuMori | Admin
             <span class="value">30</span>
             <span class="unit">%</span>
           </div>
-          <div class="settings__action">編集</div>
+          <div class="settings__actions">
+            <button class="settings__action settings__action--edit" title="編集">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                <path d="M13.5 6.5l4 4" />
+              </svg>
+            </button>
+          </div>
         </div>
         <div class="settings__item">
           <div class="settings__name">給水終了しきい値</div>
@@ -153,7 +159,15 @@ MizuMori | Admin
             <span class="value">60</span>
             <span class="unit">%</span>
           </div>
-          <div class="settings__action">編集</div>
+          <div class="settings__actions">
+            <button class="settings__action settings__action--edit" title="編集">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                <path d="M13.5 6.5l4 4" />
+              </svg>
+            </button>
+          </div>
         </div>
         <div class="settings__item">
           <div class="settings__name">給水判定間隔</div>
@@ -162,7 +176,15 @@ MizuMori | Admin
             <span class="value">10</span>
             <span class="unit">分</span>
           </div>
-          <div class="settings__action">編集</div>
+          <div class="settings__actions">
+            <button class="settings__action settings__action--edit" title="編集">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                <path d="M13.5 6.5l4 4" />
+              </svg>
+            </button>
+          </div>
         </div>
         <h3 class="settings__heading">センサ設定</h3>
         <div class="settings__item">
@@ -172,7 +194,25 @@ MizuMori | Admin
             <span class="value">10</span>
             <span class="unit">秒</span>
           </div>
-          <div class="settings__action">編集</div>
+          <div class="settings__actions">
+            <button class="settings__action settings__action--cal" title="校正">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-ruler-2">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M17 3l4 4l-14 14l-4 -4l14 -14" />
+                <path d="M16 7l-1.5 -1.5" />
+                <path d="M13 10l-1.5 -1.5" />
+                <path d="M10 13l-1.5 -1.5" />
+                <path d="M7 16l-1.5 -1.5" />
+              </svg>
+            </button>
+            <button class="settings__action settings__action--edit" title="編集">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                <path d="M13.5 6.5l4 4" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </section>
