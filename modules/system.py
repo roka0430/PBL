@@ -100,6 +100,9 @@ class SystemController:
     def get_settings(self) -> list[dict]:
         return self.settings.get_all()
 
+    def get_settings_schema(self) -> list[dict]:
+        return self.settings.get_schema()
+
     def get_history_count(self) -> int:
         return self.watering_database.get_count()
 

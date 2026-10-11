@@ -53,8 +53,11 @@ class Settings:
     def get_all(self):
         return self._settings
 
-    def get_defaults(self):
-        return self._default_settings
+    def get_schema(self):
+        return {
+            key: {**config, "value": self._settings.get(key, config["default"])}
+            for key, config in self._default_settings.items()
+        }
 
     def update(self, settings):
         for key, value in settings.items():
