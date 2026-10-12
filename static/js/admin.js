@@ -104,7 +104,7 @@ document.addEventListener("alpine:init", () => {
     SETTINGS_GROUPS: [
       {
         title: "センサ",
-        keys: ["sensor_check_interval_sec", "sensor_startup_delay_sec", "soil_moisture_dry", "soil_moisture_wet"],
+        keys: ["sensor_check_interval_sec", "startup_delay_sec", "soil_moisture_dry", "soil_moisture_wet"],
       },
       {
         title: "ポンプ",
