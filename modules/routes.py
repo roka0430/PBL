@@ -199,10 +199,10 @@ def get_settings():
     return jsonify(app.system.get_settings())
 
 
-@app.get("/api/settings/schema")
+@app.get("/api/settings/definition")
 @login_required
-def get_settings_schema():
-    return jsonify(app.system.get_settings_schema())
+def get_setting_definitions():
+    return jsonify(app.system.get_setting_definitions())
 
 
 @app.get("/api/watering-history")

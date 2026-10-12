@@ -138,7 +138,7 @@ document.addEventListener("alpine:init", () => {
     },
 
     async loadSettings() {
-      const res = await fetch("/api/settings/schema");
+      const res = await fetch("/api/settings/definition");
 
       if (!res.ok) {
         throw new Error("Failed to load settings");

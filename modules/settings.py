@@ -1,14 +1,14 @@
 import json
 
-from .paths import SETTINGS_PATH, DEFAULT_SETTINGS_PATH
+from .paths import SETTINGS_PATH, SETTING_DEFINITIONS_PATH
 
 
 class Settings:
     def __init__(self):
-        self._default_settings = self._load(DEFAULT_SETTINGS_PATH)
+        self._setting_definitions = self._load(SETTING_DEFINITIONS_PATH)
 
         self._settings = {
-            key: value["default"] for key, value in self._default_settings.items()
+            key: value["default"] for key, value in self._setting_definitions.items()
         }
 
         need_save = False
@@ -34,7 +34,7 @@ class Settings:
             json.dump(self._settings, f, indent=2)
 
     def _clamp(self, key, value):
-        settings = self._default_settings[key]
+        settings = self._setting_definitions[key]
 
         min_value = settings["min"]
         max_value = settings["max"]
@@ -53,15 +53,15 @@ class Settings:
     def get_all(self):
         return self._settings
 
-    def get_schema(self):
+    def get_definitions(self):
         return {
             key: {**config, "value": self._settings.get(key, config["default"])}
-            for key, config in self._default_settings.items()
+            for key, config in self._setting_definitions.items()
         }
 
     def update(self, settings):
         for key, value in settings.items():
-            if key not in self._default_settings:
+            if key not in self._setting_definitions:
                 raise KeyError(key)
 
             self._settings[key] = self._clamp(key, value)
