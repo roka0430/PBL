@@ -39,7 +39,7 @@ class SystemController:
         self.status = SystemStatus.IDLE
         self._status_lock = threading.Lock()
 
-        self.auto_watering_mode = AutoWateringMode.FIXED_AMOUNT  # TODO OFFにする
+        self.auto_watering_mode = AutoWateringMode.THRESHOLD_CONTROL  # TODO OFFにする
 
         self.watering_database = WateringDatabase()
 
@@ -170,15 +170,6 @@ class SystemController:
             with self._status_lock:
                 self.status = SystemStatus.IDLE
 
-    def _run_watering_loop(self, watering_type):  # TODO 自動水やり作る
-        amount_ml = 50
-
-        try:
-            self._watering(watering_type, amount_ml)
-        finally:
-            with self._status_lock:
-                self.status = SystemStatus.IDLE
-
     def _start_watering_once(self, watering_type, amount_ml) -> WateringResult:
         with self._status_lock:
             if self.status != SystemStatus.IDLE:
@@ -191,6 +182,46 @@ class SystemController:
             thread = threading.Thread(
                 target=self._run_watering_once,
                 args=(watering_type, amount_ml),
+                daemon=False,
+            )
+            thread.start()
+        except Exception:
+            with self._status_lock:
+                self.status = SystemStatus.IDLE
+
+            return WateringResult.THREAD_START_FAILED
+
+        return WateringResult.ACCEPTED
+
+    def _run_watering_loop(self, watering_type):  # TODO 自動水やり作る
+        try:
+            while not self.watering_stop_event.is_set():
+                amount_ml = 50
+                self._watering(watering_type, amount_ml)
+
+                if self.watering_stop_event.wait(2):
+                    break
+
+                self._check_soil_moisture()
+
+                if self._is_soil_wet():
+                    break
+        finally:
+            with self._status_lock:
+                self.status = SystemStatus.IDLE
+
+    def _start_watering_loop(self, watering_type) -> WateringResult:
+        with self._status_lock:
+            if self.status != SystemStatus.IDLE:
+                return WateringResult.NOT_IDLE
+            self.status = SystemStatus.WATERING
+
+        self.watering_stop_event.clear()
+
+        try:
+            thread = threading.Thread(
+                target=self._run_watering_loop,
+                args=(watering_type,),
                 daemon=False,
             )
             thread.start()
@@ -246,8 +277,10 @@ class SystemController:
             self._process_scheduled()
 
     def _process_threshold_control(self):
-        if not self._is_soil_dry():
+        if self._is_soil_dry() is not True:
             return
+
+        self._start_watering_loop(WateringType.AUTO)
 
     def _process_fixed_amount(self):
         if self._is_soil_dry() is not True:
