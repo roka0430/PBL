@@ -77,18 +77,7 @@ class SystemController:
             if elapsed < MIN_WATERING_INTERVAL_SEC:
                 return ManualWateringResult.TOO_SOON
 
-        with self._status_lock:
-            if self.status != SystemStatus.IDLE:
-                return ManualWateringResult.NOT_IDLE
-            self.status = SystemStatus.WATERING
-
-        self.watering_stop_event.clear()
-
-        threading.Thread(  # TODO スレッド生成に失敗したときidleに戻す
-            target=self._run_watering_once,
-            args=(WateringType.MANUAL, amount_ml),
-            daemon=False,
-        ).start()
+        self._start_watering_once(WateringType.MANUAL, amount_ml)
 
         return ManualWateringResult.ACCEPTED
 
@@ -129,13 +118,11 @@ class SystemController:
         time.sleep(self.settings.get("startup_delay_sec"))
 
         now = time.monotonic()
-
         for task in self._tasks:
             task.next_run = now
 
         while True:
             now = time.monotonic()
-
             due_tasks = [task for task in self._tasks if task.next_run <= now]
 
             if due_tasks:
@@ -185,7 +172,7 @@ class SystemController:
             with self._status_lock:
                 self.status = SystemStatus.IDLE
 
-    def _run_watering_loop(self, watering_type):
+    def _run_watering_loop(self, watering_type):  # TODO 自動水やり作る
         amount_ml = 50
 
         try:
@@ -194,8 +181,19 @@ class SystemController:
             with self._status_lock:
                 self.status = SystemStatus.IDLE
 
-    def _thread_watering_once(self, watering_type, amount_ml):
-        pass
+    def _start_watering_once(self, watering_type, amount_ml):
+        with self._status_lock:
+            if self.status != SystemStatus.IDLE:
+                return ManualWateringResult.NOT_IDLE
+            self.status = SystemStatus.WATERING
+
+        self.watering_stop_event.clear()
+
+        threading.Thread(  # TODO スレッド生成に失敗したときidleに戻す
+            target=self._run_watering_once,
+            args=(watering_type, amount_ml),
+            daemon=False,
+        ).start()
 
     def _check_sensors(self):
         with self._status_lock:
@@ -248,17 +246,12 @@ class SystemController:
         if self._is_soil_dry() is not True:
             return
 
-        with self._status_lock:
-            if self.status != SystemStatus.IDLE:
-                return
-            self.status = SystemStatus.WATERING
-
         amount_ml = self.settings.get("watering_amount_ml")
-
-        self._run_watering_once(WateringType.AUTO, amount_ml)
+        self._start_watering_once(WateringType.AUTO, amount_ml)
 
     def _process_scheduled(self):
-        pass
+        amount_ml = self.settings.get("watering_amount_ml")
+        self._start_watering_once(WateringType.AUTO, amount_ml)
 
     def _is_soil_dry(self) -> bool | None:
         value = self._get_valid_soil_moisture()
