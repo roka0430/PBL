@@ -135,15 +135,14 @@ MizuMori | Admin
       </div>
       <div class="settings__content">
         <template x-for="item in settingsLayout">
-          <div>
-            <!-- TODO WRAPがあってもCSSが適用されるように修正 -->
+          <div class="settings__item">
             <template x-if="item.type === 'heading'">
               <h3 class="settings__heading" x-text="item.label"></h3>
             </template>
             <template x-if="item.type === 'setting'">
-              <div class="settings__item">
+              <div class="settings__entry">
                 <div class="settings__name" x-text="item.label">給水開始しきい値</div>
-                <div class="settings__detail">設定値の詳細</div>
+                <div class="settings__description" x-text="item.description">設定値の詳細</div>
                 <div class="settings__value">
                   <span class="value" x-text="item.value">30</span>
                   <span class="unit" x-text="item.unit">%</span>

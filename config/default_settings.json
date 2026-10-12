@@ -1,6 +1,7 @@
 {
   "sensor_startup_delay_sec": {
     "label": "センサ起動待機時間",
+    "description": "description",
     "unit": "秒",
     "default": 10,
     "min": 0,
@@ -8,6 +9,7 @@
   },
   "sensor_check_interval_sec": {
     "label": "センシング間隔",
+    "description": "description",
     "unit": "秒",
     "default": 5,
     "min": 1,
@@ -15,6 +17,7 @@
   },
   "watering_amount_ml": {
     "label": "自動給水量",
+    "description": "description",
     "unit": "mL",
     "default": 100,
     "min": 10,
@@ -22,6 +25,7 @@
   },
   "soil_moisture_dry": {
     "label": "乾燥時の土壌水分センサ値",
+    "description": "description",
     "unit": "",
     "default": 1000,
     "min": 0,
@@ -29,6 +33,7 @@
   },
   "soil_moisture_wet": {
     "label": "湿潤時の土壌水分センサ値",
+    "description": "description",
     "unit": "",
     "default": 100,
     "min": 0,
@@ -36,6 +41,7 @@
   },
   "pump_flow_ml_per_sec": {
     "label": "ポンプ流量",
+    "description": "description",
     "unit": "mL/s",
     "default": 20.0,
     "min": 0,
