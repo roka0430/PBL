@@ -142,6 +142,13 @@ class SystemController:
 
     # ========== 内部処理 ==========
 
+    def _record_watering_history(self, watering_type, amount_ml):
+        self.watering_database.add(
+            watered_at=datetime.now(),
+            watering_type=watering_type,
+            amount_ml=amount_ml,
+        )
+
     def _watering(self, watering_type, amount_ml):
         try:
             duration_sec = amount_ml / self.settings.get("pump_flow_ml_per_sec")
@@ -155,11 +162,6 @@ class SystemController:
             if stopped:
                 return
 
-            self.watering_database.add(
-                watered_at=datetime.now(),
-                watering_type=watering_type,
-                amount_ml=amount_ml,
-            )
         finally:
             self.pump.stop()
 
@@ -169,6 +171,8 @@ class SystemController:
         finally:
             with self._status_lock:
                 self.status = SystemStatus.IDLE
+
+            self._record_watering_history(watering_type, amount_ml)
 
     def _start_watering_once(self, watering_type, amount_ml) -> WateringResult:
         with self._status_lock:
@@ -194,10 +198,13 @@ class SystemController:
         return WateringResult.ACCEPTED
 
     def _run_watering_loop(self, watering_type):  # TODO 自動水やり作る
+        total_amount_ml = 0
+
         try:
             while not self.watering_stop_event.is_set():
                 amount_ml = 50
                 self._watering(watering_type, amount_ml)
+                total_amount_ml += amount_ml
 
                 if self.watering_stop_event.wait(2):
                     break
@@ -209,6 +216,8 @@ class SystemController:
         finally:
             with self._status_lock:
                 self.status = SystemStatus.IDLE
+
+            self._record_watering_history(watering_type, total_amount_ml)
 
     def _start_watering_loop(self, watering_type) -> WateringResult:
         with self._status_lock:
