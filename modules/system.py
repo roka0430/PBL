@@ -119,7 +119,7 @@ class SystemController:
         for task in self._tasks:
             task.next_run = now
 
-        while True:
+        while True:  # TODO system stop eventを導入
             now = time.monotonic()
             due_tasks = [task for task in self._tasks if task.next_run <= now]
 
