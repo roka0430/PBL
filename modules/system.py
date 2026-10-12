@@ -126,7 +126,7 @@ class SystemController:
     # ========== メインループ ==========
 
     def mainloop(self):
-        time.sleep(self.settings.get("senso_startup_delay_sec"))
+        time.sleep(self.settings.get("startup_delay_sec"))
 
         now = time.monotonic()
 

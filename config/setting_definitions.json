@@ -1,6 +1,6 @@
 {
-  "sensor_startup_delay_sec": {
-    "label": "センサ起動待機時間",
+  "startup_delay_sec": {
+    "label": "システム起動待機時間",
     "description": "description",
     "unit": "秒",
     "default": 10,
