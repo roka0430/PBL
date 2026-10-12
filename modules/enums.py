@@ -16,11 +16,13 @@ class AutoWateringMode(Enum):
     SCHEDULED = "scheduled"
 
 
-class ManualWateringResult(Enum):
-    ACCEPTED = "accepted"  # 受理
-    INVALID_AMOUNT = "invalid_amount"  # 無効な給水量
-    NOT_IDLE = "not_idle"  # システムが待機状態でない
-    TOO_SOON = "too_soon"  # システムが待機状態でない
+class WateringResult(Enum):
+    ACCEPTED = "accepted"
+    INVALID_AMOUNT = "invalid_amount"
+    NOT_IDLE = "not_idle"
+    TOO_SOON = "too_soon"
+    THREAD_START_FAILED = "thread_start_failed"
+    EXECUTION_FAILED = "execution_failed"
 
 
 class WateringType(Enum):

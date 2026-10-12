@@ -3,7 +3,7 @@ import time
 import threading
 from datetime import datetime, timedelta
 
-from .enums import SystemStatus, AutoWateringMode, ManualWateringResult, WateringType
+from .enums import SystemStatus, AutoWateringMode, WateringResult, WateringType
 from .dataclasses import Task, SensorValue, SensorValues, Image
 from .settings import Settings
 from .database import WateringDatabase
@@ -62,24 +62,22 @@ class SystemController:
 
     # ========== 外部から呼び出し ==========
 
-    def manual_watering(self, amount_ml) -> ManualWateringResult:
+    def manual_watering(self, amount_ml) -> WateringResult:
         try:
             amount_ml = int(amount_ml)
         except (TypeError, ValueError):
-            return ManualWateringResult.INVALID_AMOUNT
+            return WateringResult.INVALID_AMOUNT
 
         if not MIN_WATER_AMOUNT_ML <= amount_ml <= MAX_WATER_AMOUNT_ML:
-            return ManualWateringResult.INVALID_AMOUNT
+            return WateringResult.INVALID_AMOUNT
 
         last_watered_at = self.watering_database.get_last_watered_at()
         if last_watered_at is not None:
             elapsed = (datetime.now() - last_watered_at).total_seconds()
             if elapsed < MIN_WATERING_INTERVAL_SEC:
-                return ManualWateringResult.TOO_SOON
+                return WateringResult.TOO_SOON
 
-        self._start_watering_once(WateringType.MANUAL, amount_ml)
-
-        return ManualWateringResult.ACCEPTED
+        return self._start_watering_once(WateringType.MANUAL, amount_ml)
 
     def stop_watering(self):
         self.watering_stop_event.set()
@@ -181,19 +179,28 @@ class SystemController:
             with self._status_lock:
                 self.status = SystemStatus.IDLE
 
-    def _start_watering_once(self, watering_type, amount_ml):
+    def _start_watering_once(self, watering_type, amount_ml) -> WateringResult:
         with self._status_lock:
             if self.status != SystemStatus.IDLE:
-                return ManualWateringResult.NOT_IDLE
+                return WateringResult.NOT_IDLE
             self.status = SystemStatus.WATERING
 
         self.watering_stop_event.clear()
 
-        threading.Thread(  # TODO スレッド生成に失敗したときidleに戻す
-            target=self._run_watering_once,
-            args=(watering_type, amount_ml),
-            daemon=False,
-        ).start()
+        try:
+            thread = threading.Thread(
+                target=self._run_watering_once,
+                args=(watering_type, amount_ml),
+                daemon=False,
+            )
+            thread.start()
+        except Exception:
+            with self._status_lock:
+                self.status = SystemStatus.IDLE
+
+            return WateringResult.THREAD_START_FAILED
+
+        return WateringResult.ACCEPTED
 
     def _check_sensors(self):
         with self._status_lock:
