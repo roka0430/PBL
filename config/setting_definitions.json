@@ -46,5 +46,29 @@
     "default": 20.0,
     "min": 0,
     "max": null
+  },
+  "auto_watering_check_interval_sec": {
+    "label": "自動給水判定間隔",
+    "description": "description",
+    "unit": "s",
+    "default": 600,
+    "min": 10,
+    "max": null
+  },
+  "watering_start_threshold": {
+    "label": "自動給水開始しきい値",
+    "description": "description",
+    "unit": "%",
+    "default": 40,
+    "min": 0,
+    "max": 100
+  },
+  "watering_stop_threshold": {
+    "label": "自動給水終了始しきい値",
+    "description": "description",
+    "unit": "%",
+    "default": 60,
+    "min": 0,
+    "max": 100
   }
 }

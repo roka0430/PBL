@@ -1,9 +1,9 @@
 import os
 import time
 import threading
-from datetime import datetime
+from datetime import datetime, timedelta
 
-from .enums import SystemStatus, ManualWateringResult, WateringType
+from .enums import SystemStatus, AutoWateringMode, ManualWateringResult, WateringType
 from .dataclasses import SensorValue, SensorValues, Image
 from .settings import Settings
 from .database import WateringDatabase
@@ -38,6 +38,8 @@ class SystemController:
 
         self.status = SystemStatus.IDLE
         self._status_lock = threading.Lock()
+
+        self.auto_watering_mode = AutoWateringMode.THRESHOLD_CONTROL  # TODO OFFにする
 
         self.watering_database = WateringDatabase()
 
@@ -120,8 +122,22 @@ class SystemController:
     def mainloop(self):
         time.sleep(self.settings.get("sensor_startup_delay_sec"))
 
+        next_watering_check = time.monotonic() + self.settings.get(
+            "auto_watering_check_interval_sec"
+        )
+
         while True:
             self._check_sensors()
+
+            if (
+                self.auto_watering_mode != AutoWateringMode.OFF
+                and time.monotonic() >= next_watering_check
+            ):
+                self._process_auto_watering()
+                next_watering_check = time.monotonic() + self.settings.get(
+                    "auto_watering_check_interval_sec"
+                )
+
             time.sleep(self.settings.get("sensor_check_interval_sec"))
 
     # ========== 内部処理 ==========
@@ -177,3 +193,57 @@ class SystemController:
         self.sensor_values.humidity = SensorValue(
             value=humidity, measured_at=measured_at
         )
+
+    def _process_auto_watering(self):
+        if self.auto_watering_mode == AutoWateringMode.OFF:
+            return
+
+        if self.auto_watering_mode == AutoWateringMode.THRESHOLD_CONTROL:
+            self._process_threshold_control()
+
+        if self.auto_watering_mode == AutoWateringMode.FIXED_AMOUNT:
+            self._process_fixed_amount()
+
+        if self.auto_watering_mode == AutoWateringMode.SCHEDULED:
+            self._process_scheduled()
+
+    def _process_threshold_control(self):
+        if not self._is_soil_dry:
+            return
+
+    def _process_fixed_amount(self):
+        if not self._is_soil_dry:
+            return
+
+        amount_ml = self.settings.get("watering_amount_ml")
+        duration_sec = amount_ml / self.settings.get("pump_flow_ml_per_sec")
+        self._watering(WateringType.AUTO, amount_ml, duration_sec)
+
+    def _process_scheduled(self):
+        pass
+
+    def _is_soil_dry(self) -> bool | None:
+        value = self._get_valid_soil_moisture()
+
+        if value is None:
+            return None
+
+        return value < self.settings.get("watering_start_threshold")
+
+    def _is_soil_wet(self) -> bool | None:
+        value = self._get_valid_soil_moisture()
+
+        if value is None:
+            return None
+
+        return value > self.settings.get("watering_stop_threshold")
+
+    def _get_valid_soil_moisture(self) -> float | None:
+        soil_moisture = self.sensor_values.soil_moisture
+        max_age = timedelta(seconds=self.settings.get("sensor_check_interval_sec"))
+
+        if datetime.now() - soil_moisture.measured_at > max_age:
+            print("too old sensor value")
+            return None
+
+        return soil_moisture.value

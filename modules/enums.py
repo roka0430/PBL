@@ -8,6 +8,14 @@ class SystemStatus(Enum):
     ERROR = "error"  # 異常
 
 
+class AutoWateringMode(Enum):
+    OFF = "off"
+
+    THRESHOLD_CONTROL = "threshold_control"
+    FIXED_AMOUNT = "fixed_amount"
+    SCHEDULED = "scheduled"
+
+
 class ManualWateringResult(Enum):
     ACCEPTED = "accepted"  # 受理
     INVALID_AMOUNT = "invalid_amount"  # 無効な給水量
