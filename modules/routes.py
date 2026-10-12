@@ -253,19 +253,12 @@ def get_image():
 @admin_api_required
 def watering():
     amount_ml = request.form["amount"]
-    result, duration = app.system.manual_watering(amount_ml)
+    result = app.system.manual_watering(amount_ml)
 
     if result == ManualWateringResult.ACCEPTED:
-        return jsonify({"success": True, "duration": duration}), 202
-
-    if result == ManualWateringResult.INVALID_AMOUNT:
-        return jsonify({"success": False, "error": "invalid_amount"}), 400
-
-    if result == ManualWateringResult.TOO_SOON:
-        return jsonify({"success": False, "error": "too_soon"}), 429
-
-    if result == ManualWateringResult.NOT_IDLE:
-        return jsonify({"success": False, "error": "not_idle"}), 409
+        return jsonify({"success": True}), 202
+    else:
+        return jsonify({"success": False, "error": result.value}), 400
 
 
 @app.post("/api/watering/stop")

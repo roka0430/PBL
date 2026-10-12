@@ -58,20 +58,20 @@ class SystemController:
         try:
             amount_ml = int(amount_ml)
         except (TypeError, ValueError):
-            return ManualWateringResult.INVALID_AMOUNT, None
+            return ManualWateringResult.INVALID_AMOUNT
 
         if not MIN_WATER_AMOUNT_ML <= amount_ml <= MAX_WATER_AMOUNT_ML:
-            return ManualWateringResult.INVALID_AMOUNT, None
+            return ManualWateringResult.INVALID_AMOUNT
 
         last_watered_at = self.watering_database.get_last_watered_at()
         if last_watered_at is not None:
             elapsed = (datetime.now() - last_watered_at).total_seconds()
             if elapsed < MIN_WATERING_INTERVAL_SEC:
-                return ManualWateringResult.TOO_SOON, None
+                return ManualWateringResult.TOO_SOON
 
         with self._status_lock:
             if self.status != SystemStatus.IDLE:
-                return ManualWateringResult.NOT_IDLE, None
+                return ManualWateringResult.NOT_IDLE
             self.status = SystemStatus.WATERING
 
         self.watering_stop_event.clear()
@@ -84,7 +84,7 @@ class SystemController:
             daemon=False,
         ).start()
 
-        return (ManualWateringResult.ACCEPTED, duration_sec)
+        return ManualWateringResult.ACCEPTED
 
     def stop_watering(self):
         self.watering_stop_event.set()
