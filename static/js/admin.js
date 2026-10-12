@@ -112,29 +112,11 @@ document.addEventListener("alpine:init", () => {
       },
     ],
 
+    CALIBRATABLE_SETTINGS: ["soil_moisture_dry", "soil_moisture_wet", "pump_flow_ml_per_sec"],
+
     async init() {
       this.settings = await this.loadSettings();
-      this.setSettingsLayout();
-    },
-
-    async setSettingsLayout() {
-      this.settingsLayout.splice(0);
-
-      for (const { title, keys } of this.SETTINGS_GROUPS) {
-        this.settingsLayout.push({
-          type: "heading",
-          label: title,
-        });
-
-        for (const key of keys) {
-          this.settingsLayout.push({
-            type: "setting",
-            ...this.settings[key],
-          });
-        }
-      }
-
-      console.log(this.settingsLayout);
+      this.settingsLayout = this.createSettingsLayout();
     },
 
     async loadSettings() {
@@ -145,6 +127,31 @@ document.addEventListener("alpine:init", () => {
       }
 
       return await res.json();
+    },
+
+    createSettingsLayout() {
+      const settingsLayout = [];
+
+      for (const { title, keys } of this.SETTINGS_GROUPS) {
+        settingsLayout.push({
+          type: "heading",
+          label: title,
+        });
+
+        for (const key of keys) {
+          settingsLayout.push({
+            key: key,
+            type: "setting",
+            ...this.settings[key],
+          });
+        }
+      }
+
+      return settingsLayout;
+    },
+
+    isCalibratable(key) {
+      return this.CALIBRATABLE_SETTINGS.includes(key);
     },
   }));
 });
