@@ -76,11 +76,9 @@ class SystemController:
 
         self.watering_stop_event.clear()
 
-        duration_sec = amount_ml / self.settings.get("pump_flow_ml_per_sec")
-
         threading.Thread(  # TODO スレッド生成に失敗したときidleに戻す
             target=self._run_watering_once,
-            args=(WateringType.MANUAL, amount_ml, duration_sec),
+            args=(WateringType.MANUAL, amount_ml),
             daemon=False,
         ).start()
 
@@ -142,8 +140,10 @@ class SystemController:
 
     # ========== 内部処理 ==========
 
-    def _watering(self, watering_type, amount_ml, duration_sec):
+    def _watering(self, watering_type, amount_ml):
         try:
+            duration_sec = amount_ml / self.settings.get("pump_flow_ml_per_sec")
+
             self.pump.start()
 
             stopped = self.watering_stop_event.wait(duration_sec)
@@ -161,19 +161,18 @@ class SystemController:
         finally:
             self.pump.stop()
 
-    def _run_watering_once(self, watering_type, amount_ml, duration_sec):
+    def _run_watering_once(self, watering_type, amount_ml):
         try:
-            self._watering(watering_type, amount_ml, duration_sec)
+            self._watering(watering_type, amount_ml)
         finally:
             with self._status_lock:
                 self.status = SystemStatus.IDLE
 
     def _run_watering_loop(self, watering_type):
         amount_ml = 50
-        duration_sec = amount_ml / self.settings.get("pump_flow_ml_per_sec")
 
         try:
-            self._watering(watering_type, amount_ml, duration_sec)
+            self._watering(watering_type, amount_ml)
         finally:
             with self._status_lock:
                 self.status = SystemStatus.IDLE
@@ -238,9 +237,8 @@ class SystemController:
             self.status = SystemStatus.WATERING
 
         amount_ml = self.settings.get("watering_amount_ml")
-        duration_sec = amount_ml / self.settings.get("pump_flow_ml_per_sec")
 
-        self._run_watering_once(WateringType.AUTO, amount_ml, duration_sec)
+        self._run_watering_once(WateringType.AUTO, amount_ml)
 
     def _process_scheduled(self):
         pass
