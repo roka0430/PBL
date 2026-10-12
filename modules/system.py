@@ -4,7 +4,7 @@ import threading
 from datetime import datetime, timedelta
 
 from .enums import SystemStatus, AutoWateringMode, ManualWateringResult, WateringType
-from .dataclasses import SensorValue, SensorValues, Image
+from .dataclasses import Task, SensorValue, SensorValues, Image
 from .settings import Settings
 from .database import WateringDatabase
 
@@ -51,6 +51,14 @@ class SystemController:
         self.camera = Camera()
         self.soil_moisture_sensor = SoilMoistureSensor(self.settings)
         self.temperature_and_humidity_sensor = TemperatureAndHumiditySensor()
+
+        self._tasks = [
+            Task(self._check_sensors, interval_key="sensor_check_interval_sec"),
+            Task(
+                self._process_auto_watering,
+                interval_key="auto_watering_check_interval_sec",
+            ),
+        ]
 
     # ========== 外部から呼び出し ==========
 
@@ -118,25 +126,34 @@ class SystemController:
     # ========== メインループ ==========
 
     def mainloop(self):
-        time.sleep(self.settings.get("sensor_startup_delay_sec"))
+        time.sleep(self.settings.get("senso_startup_delay_sec"))
 
-        next_watering_check = time.monotonic() + self.settings.get(
-            "auto_watering_check_interval_sec"
-        )
+        now = time.monotonic()
+
+        for task in self._tasks:
+            task.next_run = now
 
         while True:
-            self._check_sensors()
+            now = time.monotonic()
 
-            if (
-                self.auto_watering_mode != AutoWateringMode.OFF
-                and time.monotonic() >= next_watering_check
-            ):
-                self._process_auto_watering()
-                next_watering_check = time.monotonic() + self.settings.get(
-                    "auto_watering_check_interval_sec"
-                )
+            due_tasks = [task for task in self._tasks if task.next_run <= now]
 
-            time.sleep(self.settings.get("sensor_check_interval_sec"))
+            if due_tasks:
+                for task in due_tasks:
+                    interval = self.settings.get(task.interval_key)
+                    task.next_run = time.monotonic() + interval
+
+                    try:
+                        task.callback()
+                    except Exception:
+                        print("定期タスクの実行に失敗しました")
+
+                continue
+
+            next_run = min(task.next_run for task in self._tasks)
+            timeout = max(0.0, next_run - time.monotonic())
+
+            time.sleep(timeout)
 
     # ========== 内部処理 ==========
 

@@ -1,5 +1,13 @@
 from datetime import datetime
-from dataclasses import dataclass, fields
+from dataclasses import dataclass, fields, field
+from collections.abc import Callable
+
+
+@dataclass
+class Task:
+    callback: Callable[[], None]
+    interval_key: str
+    next_run: float = field(default=0.0)
 
 
 @dataclass
