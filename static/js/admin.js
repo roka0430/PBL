@@ -153,5 +153,13 @@ document.addEventListener("alpine:init", () => {
     isCalibratable(key) {
       return this.CALIBRATABLE_SETTINGS.includes(key);
     },
+
+    editSetting(key) {
+      console.log("edit", key);
+    },
+
+    calibrateSetting(key) {
+      console.log("calibrate", key);
+    },
   }));
 });
