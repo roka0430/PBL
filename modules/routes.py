@@ -23,7 +23,7 @@ from flask_login import (
     login_required,
 )
 
-from .enums import ManualWateringResult
+from .enums import WateringResult
 
 
 class User(UserMixin):
@@ -255,7 +255,7 @@ def watering():
     amount_ml = request.form["amount"]
     result = app.system.manual_watering(amount_ml)
 
-    if result == ManualWateringResult.ACCEPTED:
+    if result == WateringResult.ACCEPTED:
         return jsonify({"success": True}), 202
     else:
         return jsonify({"success": False, "error": result.value}), 400
