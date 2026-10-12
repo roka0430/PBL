@@ -149,7 +149,7 @@ class SystemController:
             amount_ml=amount_ml,
         )
 
-    def _watering(self, watering_type, amount_ml):
+    def _watering(self, amount_ml):
         try:
             duration_sec = amount_ml / self.settings.get("pump_flow_ml_per_sec")
 
@@ -167,7 +167,7 @@ class SystemController:
 
     def _run_watering_once(self, watering_type, amount_ml):
         try:
-            self._watering(watering_type, amount_ml)
+            self._watering(amount_ml)
         finally:
             with self._status_lock:
                 self.status = SystemStatus.IDLE
@@ -197,13 +197,13 @@ class SystemController:
 
         return WateringResult.ACCEPTED
 
-    def _run_watering_loop(self, watering_type):  # TODO 自動水やり作る
+    def _run_watering_loop(self, watering_type):
         total_amount_ml = 0
 
         try:
             while not self.watering_stop_event.is_set():
                 amount_ml = 50
-                self._watering(watering_type, amount_ml)
+                self._watering(amount_ml)
                 total_amount_ml += amount_ml
 
                 if self.watering_stop_event.wait(2):
@@ -320,7 +320,7 @@ class SystemController:
 
     def _get_valid_soil_moisture(self) -> float | None:
         soil_moisture = self.sensor_values.soil_moisture
-        max_age = timedelta(seconds=self.settings.get("sensor_check_interval_sec"))
+        max_age = timedelta(seconds=self.settings.get("sensor_check_interval_sec") * 2)
 
         if datetime.now() - soil_moisture.measured_at > max_age:
             print("too old sensor value")
