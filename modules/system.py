@@ -39,7 +39,7 @@ class SystemController:
         self.status = SystemStatus.IDLE
         self._status_lock = threading.Lock()
 
-        self.auto_watering_mode = AutoWateringMode.THRESHOLD_CONTROL  # TODO OFFにする
+        self.auto_watering_mode = AutoWateringMode.FIXED_AMOUNT  # TODO OFFにする
 
         self.watering_database = WateringDatabase()
 
@@ -78,8 +78,8 @@ class SystemController:
 
         duration_sec = amount_ml / self.settings.get("pump_flow_ml_per_sec")
 
-        threading.Thread(
-            target=self._watering,
+        threading.Thread(  # TODO スレッド生成に失敗したときidleに戻す
+            target=self._run_watering_once,
             args=(WateringType.MANUAL, amount_ml, duration_sec),
             daemon=False,
         ).start()
@@ -161,8 +161,25 @@ class SystemController:
         finally:
             self.pump.stop()
 
+    def _run_watering_once(self, watering_type, amount_ml, duration_sec):
+        try:
+            self._watering(watering_type, amount_ml, duration_sec)
+        finally:
             with self._status_lock:
                 self.status = SystemStatus.IDLE
+
+    def _run_watering_loop(self, watering_type):
+        amount_ml = 50
+        duration_sec = amount_ml / self.settings.get("pump_flow_ml_per_sec")
+
+        try:
+            self._watering(watering_type, amount_ml, duration_sec)
+        finally:
+            with self._status_lock:
+                self.status = SystemStatus.IDLE
+
+    def _thread_watering_once(self, watering_type, amount_ml):
+        pass
 
     def _check_sensors(self):
         with self._status_lock:
@@ -194,7 +211,7 @@ class SystemController:
             value=humidity, measured_at=measured_at
         )
 
-    def _process_auto_watering(self):
+    def _process_auto_watering(self):  # TODO 給水中などの早期returnを追加
         if self.auto_watering_mode == AutoWateringMode.OFF:
             return
 
@@ -208,16 +225,22 @@ class SystemController:
             self._process_scheduled()
 
     def _process_threshold_control(self):
-        if not self._is_soil_dry:
+        if not self._is_soil_dry():
             return
 
     def _process_fixed_amount(self):
-        if not self._is_soil_dry:
+        if self._is_soil_dry() is not True:
             return
+
+        with self._status_lock:
+            if self.status != SystemStatus.IDLE:
+                return
+            self.status = SystemStatus.WATERING
 
         amount_ml = self.settings.get("watering_amount_ml")
         duration_sec = amount_ml / self.settings.get("pump_flow_ml_per_sec")
-        self._watering(WateringType.AUTO, amount_ml, duration_sec)
+
+        self._run_watering_once(WateringType.AUTO, amount_ml, duration_sec)
 
     def _process_scheduled(self):
         pass
