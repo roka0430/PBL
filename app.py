@@ -47,6 +47,8 @@ def main():
     finally:
         zeroconf.unregister_service(mdns_info)
         zeroconf.close()
+
+        system.stop_system()
         system.close()
 
 

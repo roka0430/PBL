@@ -45,6 +45,7 @@ class SystemController:
 
         self.sensor_values = SensorValues()
 
+        self.system_stop_event = threading.Event()
         self.watering_stop_event = threading.Event()
 
         self.pump = Pump()
@@ -61,6 +62,10 @@ class SystemController:
         ]
 
     # ========== 外部から呼び出し ==========
+
+    def stop_system(self):
+        self.system_stop_event.set()
+        self.stop_watering()
 
     def manual_watering(self, amount_ml) -> WateringResult:
         try:
@@ -119,7 +124,7 @@ class SystemController:
         for task in self._tasks:
             task.next_run = now
 
-        while True:  # TODO system stop eventを導入
+        while not self.system_stop_event.is_set():
             now = time.monotonic()
             due_tasks = [task for task in self._tasks if task.next_run <= now]
 
@@ -138,7 +143,8 @@ class SystemController:
             next_run = min(task.next_run for task in self._tasks)
             timeout = max(0.0, next_run - time.monotonic())
 
-            time.sleep(timeout)
+            if self.system_stop_event.wait(timeout):
+                break
 
     # ========== 内部処理 ==========
 
@@ -272,7 +278,11 @@ class SystemController:
             value=humidity, measured_at=measured_at
         )
 
-    def _process_auto_watering(self):  # TODO 給水中などの早期returnを追加
+    def _process_auto_watering(self):
+        with self._status_lock:
+            if self.status != SystemStatus.IDLE:
+                return
+
         if self.auto_watering_mode == AutoWateringMode.OFF:
             return
 
