@@ -54,12 +54,14 @@ class SystemController:
         self.temperature_and_humidity_sensor = TemperatureAndHumiditySensor()
 
         self._tasks = [
-            Task(self._check_sensors, interval_key="sensor_check_interval_sec"),
-            Task(
-                self._process_auto_watering,
-                interval_key="auto_watering_check_interval_sec",
-            ),
+            Task(self._check_sensors, interval_key="sys_sensor_check_interval_sec"),
         ]
+
+        # Task(
+        #     self._process_auto_watering,
+        #     interval_key="auto_watering_check_interval_sec",
+        # ),
+        # TODO タスク自体に有効無効を付与
 
     # ========== 外部から呼び出し ==========
 
@@ -128,7 +130,7 @@ class SystemController:
     # ========== メインループ ==========
 
     def mainloop(self):
-        time.sleep(self.settings.get("startup_delay_sec"))
+        time.sleep(self.settings.get("sys_startup_delay_sec"))
 
         now = time.monotonic()
         for task in self._tasks:
@@ -145,8 +147,8 @@ class SystemController:
 
                     try:
                         task.callback()
-                    except Exception:
-                        print("定期タスクの実行に失敗しました")
+                    except Exception as e:
+                        print(f"定期タスクの実行に失敗しました: {e}")
 
                 continue
 
@@ -169,7 +171,7 @@ class SystemController:
 
     def _watering(self, amount_ml):
         try:
-            duration_sec = amount_ml / self.settings.get("pump_flow_ml_per_sec")
+            duration_sec = amount_ml / self.settings.get("sys_pump_flow_ml_per_sec")
 
             self.pump.start()
 
@@ -287,11 +289,13 @@ class SystemController:
         if self._is_soil_dry() is not True:
             return
 
-        amount_ml = self.settings.get("watering_amount_ml")
+        # amount_ml = self.settings.get("watering_amount_ml")
+        amount_ml = 100  # TODO 後でセッティングを参照
         self._start_watering_once(WateringType.AUTO, amount_ml)
 
     def _process_scheduled(self):
-        amount_ml = self.settings.get("watering_amount_ml")
+        # amount_ml = self.settings.get("watering_amount_ml")
+        amount_ml = 100  # TODO 後でセッティングを参照
         self._start_watering_once(WateringType.AUTO, amount_ml)
 
     def _is_soil_dry(self) -> bool | None:
@@ -300,7 +304,8 @@ class SystemController:
         if value is None:
             return None
 
-        return value < self.settings.get("watering_start_threshold")
+        # return value < self.settings.get("watering_start_threshold")
+        return value < 40  # TODO 後で設定を参照
 
     def _is_soil_wet(self) -> bool | None:
         value = self._get_valid_soil_moisture()
@@ -308,11 +313,14 @@ class SystemController:
         if value is None:
             return None
 
-        return value > self.settings.get("watering_stop_threshold")
+        # return value > self.settings.get("watering_stop_threshold")
+        return value > 60  # TODO 後で設定を参照
 
     def _get_valid_soil_moisture(self) -> float | None:
         soil_moisture = self.sensor_values.soil_moisture
-        max_age = timedelta(seconds=self.settings.get("sensor_check_interval_sec") * 2)
+        max_age = timedelta(
+            seconds=self.settings.get("sys_sensor_check_interval_sec") * 2
+        )
 
         if datetime.now() - soil_moisture.measured_at > max_age:
             print("too old sensor value")

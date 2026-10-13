@@ -1,74 +1,37 @@
 {
-  "startup_delay_sec": {
+  "sys_startup_delay_sec": {
     "label": "システム起動待機時間",
-    "description": "システムの起動後、センサーによる計測を開始するまでの待機時間です",
     "unit": "秒",
-    "default": 10,
-    "min": 0,
+    "default": 10.0,
+    "min": 0.0,
     "max": null
   },
-  "sensor_check_interval_sec": {
+  "sys_sensor_check_interval_sec": {
     "label": "センシング間隔",
-    "description": "センサーの値を取得する間隔です",
     "unit": "秒",
-    "default": 5,
-    "min": 1,
+    "default": 5.0,
+    "min": 1.0,
     "max": null
   },
-  "watering_amount_ml": {
-    "label": "自動給水量",
-    "description": "自動給水を実行する際の給水量です",
-    "unit": "mL",
-    "default": 100,
-    "min": 10,
-    "max": 200
-  },
-  "soil_moisture_dry": {
+  "sys_soil_moisture_dry": {
     "label": "乾燥時の土壌水分センサ値",
-    "description": "土壌が乾燥しているときのセンサ値です。土壌水分量の換算に使用します",
     "unit": "",
-    "default": 1000,
-    "min": 0,
-    "max": 1023
+    "default": 1000.0,
+    "min": 0.0,
+    "max": 1023.0
   },
-  "soil_moisture_wet": {
+  "sys_soil_moisture_wet": {
     "label": "湿潤時の土壌水分センサ値",
-    "description": "土壌が十分に湿っているときのセンサ値です。土壌水分量の換算に使用します",
     "unit": "",
-    "default": 100,
-    "min": 0,
-    "max": 1023
+    "default": 100.0,
+    "min": 0.0,
+    "max": 1023.0
   },
-  "pump_flow_ml_per_sec": {
+  "sys_pump_flow_ml_per_sec": {
     "label": "ポンプ流量",
-    "description": "単位時間あたりにポンプが排出する水の量です。給水量の算出に使用します",
     "unit": "mL/s",
     "default": 20.0,
-    "min": 0,
+    "min": 0.0,
     "max": null
-  },
-  "auto_watering_check_interval_sec": {
-    "label": "自動給水判定間隔",
-    "description": "自動給水を実行するかどうかを判定する間隔です",
-    "unit": "s",
-    "default": 600,
-    "min": 10,
-    "max": null
-  },
-  "watering_start_threshold": {
-    "label": "自動給水開始しきい値",
-    "description": "土壌水分量がこの値を下回ると、自動給水を開始します",
-    "unit": "%",
-    "default": 40,
-    "min": 0,
-    "max": 100
-  },
-  "watering_stop_threshold": {
-    "label": "自動給水終了始しきい値",
-    "description": "土壌水分量がこの値に達すると、自動給水を終了します",
-    "unit": "%",
-    "default": 60,
-    "min": 0,
-    "max": 100
   }
 }

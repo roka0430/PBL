@@ -2,12 +2,11 @@ document.addEventListener("alpine:init", () => {
   Alpine.store("settings", {
     SETTINGS_TYPES: {
       settings: [
-        "sensor_check_interval_sec",
-        "startup_delay_sec",
-        "soil_moisture_dry",
-        "soil_moisture_wet",
-        "watering_amount_ml",
-        "pump_flow_ml_per_sec",
+        "sys_startup_delay_sec",
+        "sys_sensor_check_interval_sec",
+        "sys_soil_moisture_dry",
+        "sys_soil_moisture_wet",
+        "sys_pump_flow_ml_per_sec",
       ],
       auto_watering_threshold_control: [],
       auto_watering_fixed_amount: [],
@@ -217,15 +216,20 @@ document.addEventListener("alpine:init", () => {
     SETTINGS_GROUPS: [
       {
         title: "センサ",
-        ids: ["sensor_check_interval_sec", "startup_delay_sec", "soil_moisture_dry", "soil_moisture_wet"],
+        ids: [
+          "sys_sensor_check_interval_sec",
+          "sys_startup_delay_sec",
+          "sys_soil_moisture_dry",
+          "sys_soil_moisture_wet",
+        ],
       },
       {
         title: "ポンプ",
-        ids: ["watering_amount_ml", "pump_flow_ml_per_sec"],
+        ids: ["sys_pump_flow_ml_per_sec"],
       },
     ],
 
-    CALIBRATABLE_SETTINGS: ["soil_moisture_dry", "soil_moisture_wet", "pump_flow_ml_per_sec"],
+    CALIBRATABLE_SETTINGS: ["sys_soil_moisture_dry", "sys_soil_moisture_wet", "sys_pump_flow_ml_per_sec"],
 
     init() {
       this.$watch(
