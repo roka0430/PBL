@@ -119,6 +119,12 @@ class SystemController:
         self.stop_watering()
         self.auto_watering_mode = AutoWateringMode.OFF
 
+    def set_auto_watering_mode(self, mode):
+        if mode not in {mode.value for mode in AutoWateringMode}:
+            return
+
+        self.auto_watering_mode = AutoWateringMode(mode)
+
     # ========== メインループ ==========
 
     def mainloop(self):

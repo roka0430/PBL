@@ -100,6 +100,28 @@ document.addEventListener("alpine:init", () => {
     },
   }));
 
+  Alpine.data("autoWatering", () => ({
+    mode: null,
+
+    toggleMode() {
+      if (this.mode === null) {
+        fetch("/api/auto-watering-mode", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mode: "threshold_control" }),
+        });
+        this.mode = true;
+      } else {
+        fetch("/api/auto-watering-mode", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mode: "off" }),
+        });
+        this.mode = null;
+      }
+    },
+  }));
+
   Alpine.data("manualWatering", () => ({
     amount: 10,
     watering: true,

@@ -71,7 +71,7 @@ MizuMori | Admin
           </button>
         </div>
       </section>
-      <section class="admin__section">
+      <section class="admin__section" x-data="autoWatering">
         <div class="admin__section-header">
           <h2 class="heading">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-settings-automation">
@@ -86,8 +86,8 @@ MizuMori | Admin
           <div class="auto-watering__toggle">
             <h3 class="auto-watering__toggle-heading">自動給水</h3>
             <p class="auto-watering__toggle-description">自動給水の有効・無効</p>
-            <div class="auto-watering__toggle-status">無効</div>
-            <button class="auto-watering__toggle-button">
+            <div class="auto-watering__toggle-status" :class="{ 'enable': mode !== null }" x-text="mode === null ? '無効' : '有効'"></div>
+            <button class="auto-watering__toggle-button" :class="{ 'enable': mode !== null }" @click="toggleMode()">
               <span class="circle"></span>
             </button>
           </div>
