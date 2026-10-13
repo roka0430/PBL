@@ -295,6 +295,14 @@
   grid-column: 2;
 }
 
+.auto-watering__settings {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+
+  margin-top: 30px;
+}
+
 /* manual-watering */
 
 .manual-watering__status {

@@ -9,7 +9,7 @@ document.addEventListener("alpine:init", () => {
         "watering_amount_ml",
         "pump_flow_ml_per_sec",
       ],
-      auto_watering_threshold: [],
+      auto_watering_threshold_control: [],
       auto_watering_fixed_amount: [],
       auto_watering_scheduled: [],
     },
@@ -101,9 +101,24 @@ document.addEventListener("alpine:init", () => {
   }));
 
   Alpine.data("autoWatering", () => ({
+    settings: [],
+
     enable: false,
     mode: "threshold_control",
     updating: false,
+
+    init() {
+      this.$watch(
+        () => this.$store.settings.revision,
+        () => {
+          this.loadSettings();
+        },
+      );
+    },
+
+    loadSettings() {
+      this.settings = this.$store.settings.getListByType(`auto_watering_${this.mode}`);
+    },
 
     toggleMode() {
       this.enable = !this.enable;
@@ -124,6 +139,7 @@ document.addEventListener("alpine:init", () => {
       }
 
       this.updating = false;
+      this.loadSettings();
     },
 
     getCurrentMode() {
