@@ -1,4 +1,50 @@
 document.addEventListener("alpine:init", () => {
+  Alpine.store("settings", {
+    SETTINGS_TYPES: {
+      settings: [
+        "sensor_check_interval_sec",
+        "startup_delay_sec",
+        "soil_moisture_dry",
+        "soil_moisture_wet",
+        "watering_amount_ml",
+        "pump_flow_ml_per_sec",
+      ],
+      auto_watering_threshold: [],
+      auto_watering_fixed_amount: [],
+      auto_watering_scheduled: [],
+    },
+
+    settings: {},
+    revision: 0,
+
+    async init() {
+      this.settings = await this.loadSettings();
+      this.revision++;
+    },
+
+    async loadSettings() {
+      const res = await fetch("/api/settings/definition");
+
+      if (!res.ok) {
+        throw new Error("Failed to load settings");
+      }
+
+      return await res.json();
+    },
+
+    getByType(type) {
+      const settings = {};
+
+      for (const id of this.SETTINGS_TYPES[type]) {
+        settings[id] = { id, ...this.settings[id] };
+      }
+
+      return settings;
+    },
+  });
+
+  Alpine.store("settingsPopup", {});
+
   Alpine.data("sensors", () => ({
     soilMoisture: null,
     soilMoistureRaw: null,
@@ -104,45 +150,39 @@ document.addEventListener("alpine:init", () => {
     SETTINGS_GROUPS: [
       {
         title: "センサ",
-        keys: ["sensor_check_interval_sec", "startup_delay_sec", "soil_moisture_dry", "soil_moisture_wet"],
+        ids: ["sensor_check_interval_sec", "startup_delay_sec", "soil_moisture_dry", "soil_moisture_wet"],
       },
       {
         title: "ポンプ",
-        keys: ["watering_amount_ml", "pump_flow_ml_per_sec"],
+        ids: ["watering_amount_ml", "pump_flow_ml_per_sec"],
       },
     ],
 
     CALIBRATABLE_SETTINGS: ["soil_moisture_dry", "soil_moisture_wet", "pump_flow_ml_per_sec"],
 
-    async init() {
-      this.settings = await this.loadSettings();
-      this.settingsLayout = this.createSettingsLayout();
+    init() {
+      this.$watch(
+        () => this.$store.settings.revision,
+        () => {
+          const settings = this.$store.settings.getByType("settings");
+          this.settingsLayout = this.createSettingsLayout(settings);
+        },
+      );
     },
 
-    async loadSettings() {
-      const res = await fetch("/api/settings/definition");
-
-      if (!res.ok) {
-        throw new Error("Failed to load settings");
-      }
-
-      return await res.json();
-    },
-
-    createSettingsLayout() {
+    createSettingsLayout(settings) {
       const settingsLayout = [];
 
-      for (const { title, keys } of this.SETTINGS_GROUPS) {
+      for (const { title, ids } of this.SETTINGS_GROUPS) {
         settingsLayout.push({
           type: "heading",
           label: title,
         });
 
-        for (const key of keys) {
+        for (const id of ids) {
           settingsLayout.push({
-            key: key,
             type: "setting",
-            ...this.settings[key],
+            ...settings[id],
           });
         }
       }
@@ -150,16 +190,16 @@ document.addEventListener("alpine:init", () => {
       return settingsLayout;
     },
 
-    isCalibratable(key) {
-      return this.CALIBRATABLE_SETTINGS.includes(key);
+    isCalibratable(id) {
+      return this.CALIBRATABLE_SETTINGS.includes(id);
     },
 
-    editSetting(key) {
-      console.log("edit", key);
+    editSetting(id) {
+      console.log("edit", id);
     },
 
-    calibrateSetting(key) {
-      console.log("calibrate", key);
+    calibrateSetting(id) {
+      console.log("calibrate", id);
     },
   }));
 });
