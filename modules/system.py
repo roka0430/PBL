@@ -248,36 +248,6 @@ class SystemController:
 
         return WateringResult.ACCEPTED
 
-    def _check_sensors(self):
-        with self._status_lock:
-            if self.status == SystemStatus.IDLE:
-                self._check_soil_moisture()
-        self._check_temperature_and_humidity()
-
-    def _check_soil_moisture(self):
-        soil_moisture, soil_moisture_raw = self.soil_moisture_sensor.read()
-        measured_at = datetime.now()
-
-        self.sensor_values.soil_moisture = SensorValue(
-            value=soil_moisture, measured_at=measured_at
-        )
-
-        self.sensor_values.soil_moisture_raw = SensorValue(
-            value=soil_moisture_raw, measured_at=measured_at
-        )
-
-    def _check_temperature_and_humidity(self):
-        temperature, humidity = self.temperature_and_humidity_sensor.read()
-        measured_at = datetime.now()
-
-        self.sensor_values.temperature = SensorValue(
-            value=temperature, measured_at=measured_at
-        )
-
-        self.sensor_values.humidity = SensorValue(
-            value=humidity, measured_at=measured_at
-        )
-
     def _process_auto_watering(self):
         with self._status_lock:
             if self.status != SystemStatus.IDLE:
@@ -337,3 +307,33 @@ class SystemController:
             return None
 
         return soil_moisture.value
+
+    def _check_sensors(self):
+        with self._status_lock:
+            if self.status == SystemStatus.IDLE:
+                self._check_soil_moisture()
+        self._check_temperature_and_humidity()
+
+    def _check_soil_moisture(self):
+        soil_moisture, soil_moisture_raw = self.soil_moisture_sensor.read()
+        measured_at = datetime.now()
+
+        self.sensor_values.soil_moisture = SensorValue(
+            value=soil_moisture, measured_at=measured_at
+        )
+
+        self.sensor_values.soil_moisture_raw = SensorValue(
+            value=soil_moisture_raw, measured_at=measured_at
+        )
+
+    def _check_temperature_and_humidity(self):
+        temperature, humidity = self.temperature_and_humidity_sensor.read()
+        measured_at = datetime.now()
+
+        self.sensor_values.temperature = SensorValue(
+            value=temperature, measured_at=measured_at
+        )
+
+        self.sensor_values.humidity = SensorValue(
+            value=humidity, measured_at=measured_at
+        )
