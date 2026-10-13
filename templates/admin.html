@@ -84,12 +84,30 @@ MizuMori | Admin
         </div>
         <div>
           <div class="auto-watering__toggle">
-            <h3 class="auto-watering__toggle-heading">自動給水</h3>
+            <h3 class="auto-watering__heading auto-watering__toggle-heading">自動給水</h3>
             <p class="auto-watering__toggle-description">自動給水の有効・無効</p>
-            <div class="auto-watering__toggle-status" :class="{ 'enable': mode !== null }" x-text="mode === null ? '無効' : '有効'"></div>
-            <button class="auto-watering__toggle-button" :class="{ 'enable': mode !== null }" @click="toggleMode()">
+            <div class="auto-watering__toggle-status" :class="{ 'enable': enable }" x-text="enable ? '有効' : '無効'"></div>
+            <button class="auto-watering__toggle-button" :class="{ 'enable': enable }" :disabled="updating" @click="toggleMode()">
               <span class="circle"></span>
             </button>
+          </div>
+          <div class="auto-watering__mode">
+            <h3 class="auto-watering__heading">給水方式</h3>
+            <label class="auto-watering__mode-item">
+              <span class="heading">閾値制御</span>
+              <span class="description">土壌水分量に応じて給水を開始・終了</span>
+              <input type="radio" name="autoWateringMode" value="threshold_control" x-model="mode" :disabled="updating || !enable" @change="changeMode()">
+            </label>
+            <label class="auto-watering__mode-item">
+              <span class="heading">一定量給水</span>
+              <span class="description">乾燥を検知したら一定量給水</span>
+              <input type="radio" name="autoWateringMode" value="fixed_amount" x-model="mode" :disabled="updating || !enable" @change="changeMode()">
+            </label>
+            <label class="auto-watering__mode-item">
+              <span class="heading">スケジュール</span>
+              <span class="description">設定した時間間隔で定期的に給水</span>
+              <input type="radio" name="autoWateringMode" value="scheduled" x-model="mode" :disabled="updating || !enable" @change="changeMode()">
+            </label>
           </div>
         </div>
       </section>

@@ -101,24 +101,37 @@ document.addEventListener("alpine:init", () => {
   }));
 
   Alpine.data("autoWatering", () => ({
-    mode: null,
+    enable: false,
+    mode: "threshold_control",
+    updating: false,
 
     toggleMode() {
-      if (this.mode === null) {
-        fetch("/api/auto-watering-mode", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ mode: "threshold_control" }),
-        });
-        this.mode = true;
-      } else {
-        fetch("/api/auto-watering-mode", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ mode: "off" }),
-        });
-        this.mode = null;
+      this.enable = !this.enable;
+      this.changeMode();
+    },
+
+    async changeMode() {
+      this.updating = true;
+
+      const res = await fetch("/api/auto-watering-mode", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mode: this.getCurrentMode() }),
+      });
+
+      if (!res.ok) {
+        throw new Error("モードを変更できませんでした");
       }
+
+      this.updating = false;
+    },
+
+    getCurrentMode() {
+      if (!this.enable) {
+        return "off";
+      }
+
+      return this.mode;
     },
   }));
 
