@@ -268,6 +268,13 @@ def stop_watering():
     return {"status": "accepted"}
 
 
+@app.post("/api/watering/emergency-stop")
+@admin_api_required
+def emergency_stop():
+    app.system.emergency_stop()
+    return {"status": "accepted"}
+
+
 # ==================================================
 # 起動
 # ==================================================

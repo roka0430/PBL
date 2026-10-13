@@ -115,6 +115,10 @@ class SystemController:
         self.pump.close()
         self.soil_moisture_sensor.close()
 
+    def emergency_stop(self):
+        self.stop_watering()
+        self.auto_watering_mode = AutoWateringMode.OFF
+
     # ========== メインループ ==========
 
     def mainloop(self):
@@ -154,6 +158,8 @@ class SystemController:
             watering_type=watering_type,
             amount_ml=amount_ml,
         )
+
+        # TODO 異常終了時に記録されてしまうのを防御。あるいは中断されましたメッセージを追加
 
     def _watering(self, amount_ml):
         try:

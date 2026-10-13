@@ -143,6 +143,31 @@
   font-size: 0.8em;
 }
 
+/* emergency-stop */
+
+.emergency-stop__button {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  padding: 10px;
+
+  background: var(--color-error);
+  border-radius: 5px;
+
+  color: var(--color-text-white);
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.emergency-stop__button span {
+  transform: translateY(1px);
+}
+
 /* auto-watering */
 
 /* manual-watering */

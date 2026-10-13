@@ -88,6 +88,12 @@ document.addEventListener("alpine:init", () => {
     },
   }));
 
+  Alpine.data("emergencyStop", () => ({
+    async emergencyStop() {
+      await fetch("/api/watering/emergency-stop", { method: "POST" });
+    },
+  }));
+
   Alpine.data("manualWatering", () => ({
     amount: 10,
     watering: true,
