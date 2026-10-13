@@ -455,17 +455,6 @@
   font-size: 0.9rem;
 }
 
-.settings__description {
-  display: none;
-
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  color: var(--color-text-muted);
-  font-size: 0.75rem;
-}
-
 .settings__value {
   display: flex;
   gap: 4px;
