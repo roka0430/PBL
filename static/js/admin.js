@@ -41,6 +41,10 @@ document.addEventListener("alpine:init", () => {
 
       return settings;
     },
+
+    getListByType(type) {
+      return Object.values(this.getByType(type));
+    },
   });
 
   Alpine.store("settingsPopup", {});
