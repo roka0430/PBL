@@ -1,4 +1,5 @@
 import json
+import copy
 
 from .paths import SETTINGS_PATH
 
@@ -107,64 +108,93 @@ DEFINITIONS = {
 
 class Settings:
     def __init__(self):
-        self._setting_definitions = self._load(SETTING_DEFINITIONS_PATH)
+        self._settings = copy.deepcopy(DEFINITIONS)
 
-        self._settings = {
-            key: value["default"] for key, value in self._setting_definitions.items()
+        settings = self._load()
+        for group, group_settings in settings.items():
+            if group not in self._settings:
+                continue
+
+            for setting_id, value in group_settings.items():
+                if setting_id not in self._settings[group]:
+                    continue
+
+                clamped = self._clamp(f"{group}.{setting_id}", value)
+                self._settings[group][setting_id]["value"] = clamped
+
+        for group, group_definitions in self._settings.items():
+            for setting_id, definition in group_definitions.items():
+                if "value" in definition:
+                    continue
+
+                definition["value"] = definition["default"]
+
+    def get_settings(self):
+        return {
+            group: {
+                setting_id: definition["value"]
+                for setting_id, definition in settings.items()
+            }
+            for group, settings in self._settings.items()
         }
 
-        need_save = False
+    def get_definitions(self):
+        return self._settings()
 
-        if SETTINGS_PATH.exists():
-            settings = self._load(SETTINGS_PATH)
-            for key, value in settings.items():
-                if key in self._settings:
-                    self._settings[key] = value
-                    need_save = True
-        else:
-            need_save = True
+    def get(self, key):
+        return self._get(key)
 
-        if need_save:
-            self._save()
+    def update(self, key, value):
+        if not self._set(key, value):
+            return False
+        self._save()
+        return True
 
-    def _load(self, path):
-        with open(path, "r", encoding="utf-8") as f:
+    def _load(self):
+        with open(SETTINGS_PATH, "r", encoding="utf-8") as f:
             return json.load(f)
 
     def _save(self):
         with open(SETTINGS_PATH, "w", encoding="utf-8") as f:
             json.dump(self._settings, f, indent=2)
 
+    def _exists(self, key):
+        try:
+            group, setting_id = key.split(".")
+            return setting_id in self._settings[group]
+        except (ValueError, KeyError):
+            return False
+
+    def _get_definition(self, key):
+        try:
+            group, setting_id = key.split(".")
+            return self._settings[group][setting_id]
+        except (ValueError, KeyError, TypeError):
+            return None
+
+    def _set(self, key, value):
+        definition = self._get_definition(key)
+        if definition is None:
+            return False
+        definition["value"] = value
+        return True
+
+    def _get(self, key):
+        definition = self._get_definition(key)
+        if definition is None:
+            return None
+        return definition.get("value")
+
     def _clamp(self, key, value):
-        settings = self._setting_definitions[key]
+        definition = self._get_definition(key)
 
-        min_value = settings["min"]
-        max_value = settings["max"]
+        if value is None:
+            value = definition["default"]
 
-        if min_value is not None and value < min_value:
-            return min_value
+        if definition["min"] is not None and value < definition["min"]:
+            return definition["min"]
 
-        if max_value is not None and value > max_value:
-            return max_value
+        if definition["max"] is not None and value > definition["max"]:
+            return definition["max"]
 
         return value
-
-    def get(self, key):
-        return self._clamp(key, self._settings[key])
-
-    def get_all(self):
-        return self._settings
-
-    def get_definitions(self):
-        return {
-            key: {**config, "value": self._settings.get(key, config["default"])}
-            for key, config in self._setting_definitions.items()
-        }
-
-    def update(self, settings):
-        for key, value in settings.items():
-            if key not in self._setting_definitions:
-                raise KeyError(key)
-
-            self._settings[key] = self._clamp(key, value)
-        self._save()
