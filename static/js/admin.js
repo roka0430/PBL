@@ -1,5 +1,6 @@
 document.addEventListener("alpine:init", () => {
   Alpine.store("settings", {
+    // TODO ネスト付き設定に対応
     SETTINGS_TYPES: {
       settings: [
         "sys_startup_delay_sec",
@@ -31,18 +32,20 @@ document.addEventListener("alpine:init", () => {
       return await res.json();
     },
 
-    getByType(type) {
+    getByGroup(group) {
       const settings = {};
 
-      for (const id of this.SETTINGS_TYPES[type]) {
-        settings[id] = { id, ...this.settings[id] };
+      console.log();
+
+      for (const [id, setting] of Object.entries(this.settings[group])) {
+        settings[id] = { id, ...setting };
       }
 
       return settings;
     },
 
-    getListByType(type) {
-      return Object.values(this.getByType(type));
+    getListByGroup(group) {
+      return Object.values(this.getByGroup(group));
     },
   });
 
@@ -103,7 +106,7 @@ document.addEventListener("alpine:init", () => {
     settings: [],
 
     enable: false,
-    mode: "threshold_control",
+    mode: "thr",
     updating: false,
 
     init() {
@@ -116,7 +119,7 @@ document.addEventListener("alpine:init", () => {
     },
 
     loadSettings() {
-      this.settings = this.$store.settings.getListByType(`auto_watering_${this.mode}`);
+      this.settings = this.$store.settings.getListByGroup(this.mode);
     },
 
     toggleMode() {
@@ -146,7 +149,13 @@ document.addEventListener("alpine:init", () => {
         return "off";
       }
 
-      return this.mode;
+      const modes = {
+        thr: "threshold_control",
+        fix: "fixed_amount",
+        sch: "scheduled",
+      };
+
+      return modes[this.mode];
     },
   }));
 
@@ -216,26 +225,21 @@ document.addEventListener("alpine:init", () => {
     SETTINGS_GROUPS: [
       {
         title: "センサ",
-        ids: [
-          "sys_sensor_check_interval_sec",
-          "sys_startup_delay_sec",
-          "sys_soil_moisture_dry",
-          "sys_soil_moisture_wet",
-        ],
+        ids: ["sensing_interval_sec", "startup_waiting_sec", "soil_moisture_dry", "soil_moisture_wet"],
       },
       {
         title: "ポンプ",
-        ids: ["sys_pump_flow_ml_per_sec"],
+        ids: ["pump_flow_rate_ml_sec"],
       },
     ],
 
-    CALIBRATABLE_SETTINGS: ["sys_soil_moisture_dry", "sys_soil_moisture_wet", "sys_pump_flow_ml_per_sec"],
+    CALIBRATABLE_SETTINGS: ["soil_moisture_dry", "soil_moisture_wet", "pump_flow_rate_ml_sec"],
 
     init() {
       this.$watch(
         () => this.$store.settings.revision,
         () => {
-          const settings = this.$store.settings.getByType("settings");
+          const settings = this.$store.settings.getByGroup("sys");
           this.settingsLayout = this.createSettingsLayout(settings);
         },
       );
