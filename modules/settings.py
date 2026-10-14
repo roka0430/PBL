@@ -1,6 +1,108 @@
 import json
 
-from .paths import SETTINGS_PATH, SETTING_DEFINITIONS_PATH
+from .paths import SETTINGS_PATH
+
+DEFINITIONS = {
+    "sys": {
+        "sensing_interval_sec": {
+            "label": "センシング間隔",
+            "unit": "秒",
+            "default": 10.0,
+            "min": 1.0,
+            "max": None,
+        },
+        "startup_waiting_sec": {
+            "label": "起動待機時間",
+            "unit": "秒",
+            "default": 10.0,
+            "min": 0.0,
+            "max": None,
+        },
+        "soil_moisture_dry": {
+            "label": "乾燥時の土壌水分センサ値",
+            "unit": "",
+            "default": 800.0,
+            "min": 0.0,
+            "max": 1023.0,
+        },
+        "soil_moisture_wet": {
+            "label": "湿潤時の土壌水分センサ値",
+            "unit": "",
+            "default": 300.0,
+            "min": 0.0,
+            "max": 1023.0,
+        },
+        "pump_flow_rate_ml_sec": {
+            "label": "ポンプ流量",
+            "unit": "mL/s",
+            "default": 10.0,
+            "min": 1.0,
+            "max": None,
+        },
+    },
+    "thr": {
+        "determination_interval_sec": {
+            "label": "給水判定間隔",
+            "unit": "秒",
+            "default": 60.0,
+            "min": 1.0,
+            "max": None,
+        },
+        "start_soil_moisture_percent": {
+            "label": "給水開始しきい値",
+            "unit": "%",
+            "default": 30.0,
+            "min": 0.0,
+            "max": 100.0,
+        },
+        "stop_soil_moisture_percent": {
+            "label": "給水終了しきい値",
+            "unit": "%",
+            "default": 50.0,
+            "min": 0.0,
+            "max": 100.0,
+        },
+    },
+    "fix": {
+        "determination_interval_sec": {
+            "label": "給水判定間隔",
+            "unit": "秒",
+            "default": 60.0,
+            "min": 1.0,
+            "max": None,
+        },
+        "start_soil_moisture_percent": {
+            "label": "給水開始しきい値",
+            "unit": "%",
+            "default": 30.0,
+            "min": 0.0,
+            "max": 100.0,
+        },
+        "amount_ml": {
+            "label": "給水量",
+            "unit": "mL",
+            "default": 50.0,
+            "min": 10.0,
+            "max": None,
+        },
+    },
+    "sch": {
+        "interval_sec": {
+            "label": "給水間隔",
+            "unit": "秒",
+            "default": 21600.0,
+            "min": 60.0,
+            "max": None,
+        },
+        "amount_ml": {
+            "label": "給水量",
+            "unit": "mL",
+            "default": 50.0,
+            "min": 10.0,
+            "max": None,
+        },
+    },
+}
 
 
 class Settings:

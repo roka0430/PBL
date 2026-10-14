@@ -6,5 +6,4 @@ CONFIG_DIR = ROOT_DIR / "config"
 INSTANCE_DIR = ROOT_DIR / "instance"
 
 SETTINGS_PATH = CONFIG_DIR / "settings.json"
-SETTING_DEFINITIONS_PATH = CONFIG_DIR / "setting_definitions.json"
 DATABASE_PATH = INSTANCE_DIR / "watering.db"
