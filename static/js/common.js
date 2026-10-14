@@ -114,7 +114,7 @@ document.addEventListener("alpine:init", () => {
     },
   }));
 
-  Alpine.data("common_theme", () => ({
+  Alpine.data("theme", () => ({
     theme: localStorage.getItem(THEME_STORAGE_KEY) ?? "system",
 
     init() {

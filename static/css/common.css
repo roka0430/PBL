@@ -388,7 +388,7 @@ body.page-admin .site-role {
   align-items: center;
 
   min-height: 45px;
-  padding-inline: 16px;
+  padding-inline: 14px;
 
   font-size: 0.9rem;
 
@@ -411,8 +411,8 @@ body.page-admin .site-role {
   align-items: flex-start;
 
   margin-bottom: 5px;
-  padding-block: 8px;
-  padding-inline: 10px;
+  padding-block: 4px;
+  padding-inline: 5px;
 
   border: solid 1px var(--color-border);
   border-radius: 3px;
@@ -427,11 +427,34 @@ body.page-admin .site-role {
 }
 
 .theme-change button {
+  width: 100%;
+
   display: flex;
   gap: 5px;
   align-items: center;
 
+  padding-block: 5px;
+  padding-inline: 8px 10px;
+  border-radius: 3px;
+
   cursor: pointer;
+}
+
+.theme-change button:hover {
+  background: var(--color-navigation-hover);
+}
+
+.theme-change button .spacer {
+  flex: 1;
+}
+
+.theme-change button .check {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.theme-change button .check.current {
+  opacity: 1;
 }
 
 /*  */
