@@ -437,9 +437,8 @@
 }
 
 .settings__entry {
-  display: grid;
-  gap: 3px 16px;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  display: flex;
+  gap: 16px;
   align-items: center;
 
   position: relative;
@@ -451,6 +450,8 @@
 }
 
 .settings__name {
+  flex: 1;
+
   min-width: 0;
   font-size: 0.9rem;
 }
