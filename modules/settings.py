@@ -139,7 +139,7 @@ class Settings:
         }
 
     def get_definitions(self):
-        return self._settings()
+        return self._settings
 
     def get(self, key):
         return self._get(key)
