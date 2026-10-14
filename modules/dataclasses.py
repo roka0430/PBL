@@ -7,6 +7,7 @@ from collections.abc import Callable
 class Task:
     callback: Callable[[], None]
     interval_key: str
+    enable: bool = True
     next_run: float = field(default=0.0)
 
 

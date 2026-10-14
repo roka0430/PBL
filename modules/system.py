@@ -47,27 +47,101 @@ class SystemController:
 
         self.system_stop_event = threading.Event()
         self.watering_stop_event = threading.Event()
+        self.task_changed_event = threading.Event()
 
         self.pump = Pump()
         self.camera = Camera()
         self.soil_moisture_sensor = SoilMoistureSensor(self.settings)
         self.temperature_and_humidity_sensor = TemperatureAndHumiditySensor()
 
-        self._tasks = [
-            Task(self._check_sensors, interval_key="sys.sensing_interval_sec"),
-        ]
+        self._tasks = {
+            "sensors": Task(
+                callback=self._check_sensors,
+                interval_key="sys.sensing_interval_sec",
+            ),
+            "threshold_control": Task(
+                callback=self._process_auto_watering,
+                interval_key="thr.determination_interval_sec",
+                enable=False,
+            ),
+            "fixed_amount": Task(
+                callback=self._process_auto_watering,
+                interval_key="fix.determination_interval_sec",
+                enable=False,
+            ),
+            "scheduled": Task(
+                callback=self._process_auto_watering,
+                interval_key="sch.interval_sec",
+                enable=False,
+            ),
+        }
 
-        # Task(
-        #     self._process_auto_watering,
-        #     interval_key="auto_watering_check_interval_sec",
-        # ),
-        # TODO タスク自体に有効無効を付与
+    #
 
-    # ========== 外部から呼び出し ==========
+    def mainloop(self):
+        time.sleep(self.settings.get("sys.startup_waiting_sec"))
+
+        now = time.monotonic()
+        for task in self._tasks.values():
+            task.next_run = now
+
+        while not self.system_stop_event.is_set():
+            self.task_changed_event.clear()
+            now = time.monotonic()
+
+            due_tasks = [
+                task
+                for task in self._tasks.values()
+                if task.enable and task.next_run <= now
+            ]
+
+            if due_tasks:
+                for task in due_tasks:
+                    interval = self.settings.get(task.interval_key)
+                    task.next_run = time.monotonic() + interval
+
+                    try:
+                        task.callback()
+                    except Exception as e:
+                        print(f"定期タスクの実行に失敗しました: {e}")
+                continue
+
+            enabled_tasks = [task for task in self._tasks.values() if task.enable]
+
+            if enabled_tasks:
+                next_run = min(task.next_run for task in enabled_tasks)
+                timeout = max(0.0, next_run - time.monotonic())
+            else:
+                timeout = None
+
+            self.task_changed_event.wait(timeout)
+
+    # -------------------- 外部 --------------------
 
     def stop_system(self):
         self.system_stop_event.set()
         self.stop_watering()
+
+    def close(self):
+        self.pump.close()
+        self.soil_moisture_sensor.close()
+
+    #
+
+    def get_status(self) -> SystemStatus:
+        return self.status
+
+    def emergency_stop(self):
+        self.stop_watering()
+        self.auto_watering_mode = AutoWateringMode.OFF
+
+    def set_auto_watering_mode(self, mode):
+        if mode not in {mode.value for mode in AutoWateringMode}:
+            return
+        self.auto_watering_mode = AutoWateringMode(mode)
+        self._sync_tasks_with_state()
+
+    #
 
     def manual_watering(self, amount_ml) -> WateringResult:
         try:
@@ -90,20 +164,23 @@ class SystemController:
         self.watering_stop_event.set()
         self.pump.stop()
 
+    #
+
     def get_sensor_values(self) -> SensorValues:
         return self.sensor_values
 
     def get_image(self) -> Image:
         return self.camera.get_image()
 
-    def get_status(self) -> SystemStatus:
-        return self.status
+    #
 
     def get_settings(self) -> list[dict]:
         return self.settings.get_settings()
 
     def get_setting_definitions(self) -> list[dict]:
         return self.settings.get_definitions()
+
+    #
 
     def get_history_count(self) -> int:
         return self.watering_database.get_count()
@@ -113,154 +190,13 @@ class SystemController:
             before_id=before_id, after_id=after_id, limit=limit
         )
 
-    def close(self):
-        self.pump.close()
-        self.soil_moisture_sensor.close()
+    # -------------------- タスク管理 --------------------
 
-    def emergency_stop(self):
-        self.stop_watering()
-        self.auto_watering_mode = AutoWateringMode.OFF
+    def _sync_tasks_with_state(self):
+        # TODO ここで設定やモードの変更をtaskに反映する、その後反映を通知
+        self.task_changed_event.set()
 
-    def set_auto_watering_mode(self, mode):
-        if mode not in {mode.value for mode in AutoWateringMode}:
-            return
-
-        self.auto_watering_mode = AutoWateringMode(mode)
-
-    # ========== メインループ ==========
-
-    def mainloop(self):
-        time.sleep(self.settings.get("sys.startup_waiting_sec"))
-
-        now = time.monotonic()
-        for task in self._tasks:
-            task.next_run = now
-
-        while not self.system_stop_event.is_set():
-            now = time.monotonic()
-            due_tasks = [task for task in self._tasks if task.next_run <= now]
-
-            if due_tasks:
-                for task in due_tasks:
-                    interval = self.settings.get(task.interval_key)
-                    task.next_run = time.monotonic() + interval
-
-                    try:
-                        task.callback()
-                    except Exception as e:
-                        print(f"定期タスクの実行に失敗しました: {e}")
-
-                continue
-
-            next_run = min(task.next_run for task in self._tasks)
-            timeout = max(0.0, next_run - time.monotonic())
-
-            if self.system_stop_event.wait(timeout):
-                break
-
-    # ========== 内部処理 ==========
-
-    def _record_watering_history(self, watering_type, amount_ml):
-        self.watering_database.add(
-            watered_at=datetime.now(),
-            watering_type=watering_type,
-            amount_ml=amount_ml,
-        )
-
-        # TODO 異常終了時に記録されてしまうのを防御。あるいは中断されましたメッセージを追加
-
-    def _watering(self, amount_ml):
-        try:
-            duration_sec = amount_ml / self.settings.get("sys.pump_flow_rate_ml_sec")
-
-            self.pump.start()
-
-            stopped = self.watering_stop_event.wait(duration_sec)
-
-            self.pump.stop()
-
-            if stopped:
-                return
-
-        finally:
-            self.pump.stop()
-
-    def _run_watering_once(self, watering_type, amount_ml):
-        try:
-            self._watering(amount_ml)
-        finally:
-            with self._status_lock:
-                self.status = SystemStatus.IDLE
-
-            self._record_watering_history(watering_type, amount_ml)
-
-    def _start_watering_once(self, watering_type, amount_ml) -> WateringResult:
-        with self._status_lock:
-            if self.status != SystemStatus.IDLE:
-                return WateringResult.NOT_IDLE
-            self.status = SystemStatus.WATERING
-
-        self.watering_stop_event.clear()
-
-        try:
-            thread = threading.Thread(
-                target=self._run_watering_once,
-                args=(watering_type, amount_ml),
-                daemon=False,
-            )
-            thread.start()
-        except Exception:
-            with self._status_lock:
-                self.status = SystemStatus.IDLE
-
-            return WateringResult.THREAD_START_FAILED
-
-        return WateringResult.ACCEPTED
-
-    def _run_watering_loop(self, watering_type):
-        total_amount_ml = 0
-
-        try:
-            while not self.watering_stop_event.is_set():
-                amount_ml = 50
-                self._watering(amount_ml)
-                total_amount_ml += amount_ml
-
-                if self.watering_stop_event.wait(2):
-                    break
-
-                self._check_soil_moisture()
-
-                if self._is_soil_wet("thr.stop_soil_moisture_percent"):
-                    break
-        finally:
-            with self._status_lock:
-                self.status = SystemStatus.IDLE
-
-            self._record_watering_history(watering_type, total_amount_ml)
-
-    def _start_watering_loop(self, watering_type) -> WateringResult:
-        with self._status_lock:
-            if self.status != SystemStatus.IDLE:
-                return WateringResult.NOT_IDLE
-            self.status = SystemStatus.WATERING
-
-        self.watering_stop_event.clear()
-
-        try:
-            thread = threading.Thread(
-                target=self._run_watering_loop,
-                args=(watering_type,),
-                daemon=False,
-            )
-            thread.start()
-        except Exception:
-            with self._status_lock:
-                self.status = SystemStatus.IDLE
-
-            return WateringResult.THREAD_START_FAILED
-
-        return WateringResult.ACCEPTED
+    # -------------------- 自動給水 --------------------
 
     def _process_auto_watering(self):
         with self._status_lock:
@@ -296,6 +232,8 @@ class SystemController:
         amount_ml = self.settings.get("sch.amount_ml")
         self._start_watering_once(WateringType.AUTO, amount_ml)
 
+    #
+
     def _is_soil_dry(self, key) -> bool | None:
         value = self._get_valid_soil_moisture()
 
@@ -321,6 +259,115 @@ class SystemController:
             return None
 
         return soil_moisture.value
+
+    # -------------------- 給水処理 --------------------
+
+    def _start_watering_once(self, watering_type, amount_ml) -> WateringResult:
+        with self._status_lock:
+            if self.status != SystemStatus.IDLE:
+                return WateringResult.NOT_IDLE
+            self.status = SystemStatus.WATERING
+
+        self.watering_stop_event.clear()
+
+        try:
+            thread = threading.Thread(
+                target=self._run_watering_once,
+                args=(watering_type, amount_ml),
+                daemon=False,
+            )
+            thread.start()
+        except Exception:
+            with self._status_lock:
+                self.status = SystemStatus.IDLE
+
+            return WateringResult.THREAD_START_FAILED
+
+        return WateringResult.ACCEPTED
+
+    def _run_watering_once(self, watering_type, amount_ml):
+        try:
+            self._watering(amount_ml)
+        finally:
+            with self._status_lock:
+                self.status = SystemStatus.IDLE
+
+            self._record_watering_history(watering_type, amount_ml)
+
+    #
+
+    def _start_watering_loop(self, watering_type) -> WateringResult:
+        with self._status_lock:
+            if self.status != SystemStatus.IDLE:
+                return WateringResult.NOT_IDLE
+            self.status = SystemStatus.WATERING
+
+        self.watering_stop_event.clear()
+
+        try:
+            thread = threading.Thread(
+                target=self._run_watering_loop,
+                args=(watering_type,),
+                daemon=False,
+            )
+            thread.start()
+        except Exception:
+            with self._status_lock:
+                self.status = SystemStatus.IDLE
+
+            return WateringResult.THREAD_START_FAILED
+
+        return WateringResult.ACCEPTED
+
+    def _run_watering_loop(self, watering_type):
+        total_amount_ml = 0
+
+        try:
+            while not self.watering_stop_event.is_set():
+                amount_ml = 50
+                self._watering(amount_ml)
+                total_amount_ml += amount_ml
+
+                if self.watering_stop_event.wait(2):
+                    break
+
+                self._check_soil_moisture()
+
+                if self._is_soil_wet("thr.stop_soil_moisture_percent"):
+                    break
+        finally:
+            with self._status_lock:
+                self.status = SystemStatus.IDLE
+
+            self._record_watering_history(watering_type, total_amount_ml)
+
+    #
+
+    def _watering(self, amount_ml):
+        try:
+            duration_sec = amount_ml / self.settings.get("sys.pump_flow_rate_ml_sec")
+
+            self.pump.start()
+
+            stopped = self.watering_stop_event.wait(duration_sec)
+
+            self.pump.stop()
+
+            if stopped:
+                return
+
+        finally:
+            self.pump.stop()
+
+    def _record_watering_history(self, watering_type, amount_ml):
+        # TODO 異常終了時に記録されてしまうのを防御。あるいは中断されましたメッセージを追加
+        self.watering_database.add(
+            watered_at=datetime.now(),
+            watering_type=watering_type,
+            amount_ml=amount_ml,
+        )
+
+    # -------------------- センサ処理 --------------------
 
     def _check_sensors(self):
         with self._status_lock:
