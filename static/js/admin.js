@@ -1,19 +1,5 @@
 document.addEventListener("alpine:init", () => {
   Alpine.store("settings", {
-    // TODO ネスト付き設定に対応
-    SETTINGS_TYPES: {
-      settings: [
-        "sys_startup_delay_sec",
-        "sys_sensor_check_interval_sec",
-        "sys_soil_moisture_dry",
-        "sys_soil_moisture_wet",
-        "sys_pump_flow_ml_per_sec",
-      ],
-      auto_watering_threshold_control: [],
-      auto_watering_fixed_amount: [],
-      auto_watering_scheduled: [],
-    },
-
     settings: {},
     revision: 0,
 
@@ -149,13 +135,11 @@ document.addEventListener("alpine:init", () => {
         return "off";
       }
 
-      const modes = {
+      return {
         thr: "threshold_control",
         fix: "fixed_amount",
         sch: "scheduled",
-      };
-
-      return modes[this.mode];
+      }[this.mode];
     },
   }));
 
