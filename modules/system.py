@@ -39,7 +39,7 @@ class SystemController:
         self.status = SystemStatus.IDLE
         self._status_lock = threading.Lock()
 
-        self.auto_watering_mode = AutoWateringMode.THRESHOLD_CONTROL  # TODO OFFにする
+        self.auto_watering_mode = AutoWateringMode.OFF
 
         self.watering_database = WateringDatabase()
 
@@ -140,6 +140,9 @@ class SystemController:
             return
         self.auto_watering_mode = AutoWateringMode(mode)
         self._sync_tasks_with_mode()
+
+    def get_auto_watering_mode(self):
+        return self.auto_watering_mode.value
 
     #
 

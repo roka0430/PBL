@@ -96,17 +96,17 @@ MizuMori | Admin
             <label class="auto-watering__mode-item">
               <span class="heading">閾値制御</span>
               <span class="description">土壌水分量に応じて給水を開始・終了</span>
-              <input type="radio" name="autoWateringMode" value="thr" x-model="mode" :disabled="updating" @change="changeMode()">
+              <input type="radio" name="autoWateringMode" value="threshold_control" x-model="mode" :disabled="updating" @change="changeMode()">
             </label>
             <label class="auto-watering__mode-item">
               <span class="heading">一定量給水</span>
               <span class="description">乾燥を検知したら一定量給水</span>
-              <input type="radio" name="autoWateringMode" value="fix" x-model="mode" :disabled="updating" @change="changeMode()">
+              <input type="radio" name="autoWateringMode" value="fixed_amount" x-model="mode" :disabled="updating" @change="changeMode()">
             </label>
             <label class="auto-watering__mode-item">
               <span class="heading">スケジュール</span>
               <span class="description">設定した時間間隔で定期的に給水</span>
-              <input type="radio" name="autoWateringMode" value="sch" x-model="mode" :disabled="updating" @change="changeMode()">
+              <input type="radio" name="autoWateringMode" value="scheduled" x-model="mode" :disabled="updating" @change="changeMode()">
             </label>
           </div>
           <div class="auto-watering__settings">

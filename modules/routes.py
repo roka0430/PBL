@@ -284,6 +284,13 @@ def emergency_stop():
     return {"status": "accepted"}
 
 
+@app.get("/api/auto-watering-mode")
+@login_required
+def get_auto_watering_mode():
+    mode = app.system.get_auto_watering_mode()
+    return jsonify({"mode": mode})
+
+
 @app.post("/api/auto-watering-mode")
 @admin_api_required
 def post_auto_watering_mode():

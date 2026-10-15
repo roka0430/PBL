@@ -21,8 +21,6 @@ document.addEventListener("alpine:init", () => {
     getByGroup(group) {
       const settings = {};
 
-      console.log();
-
       for (const [id, setting] of Object.entries(this.settings[group])) {
         settings[id] = { id, ...setting };
       }
@@ -89,13 +87,22 @@ document.addEventListener("alpine:init", () => {
   }));
 
   Alpine.data("autoWatering", () => ({
+    MODES: {
+      OFF: "off",
+      THRESHOLD_CONTROL: "threshold_control",
+      FIXED_AMOUNT: "fixed_amount",
+      SCHEDULED: "scheduled",
+    },
+
     settings: [],
-
+    mode: null,
     enable: false,
-    mode: "thr",
-    updating: false,
+    updating: true,
 
-    init() {
+    async init() {
+      await this.initWateringMode();
+      this.loadSettings();
+
       this.$watch(
         () => this.$store.settings.revision,
         () => {
@@ -104,8 +111,33 @@ document.addEventListener("alpine:init", () => {
       );
     },
 
+    async initWateringMode() {
+      const res = await fetch("/api/auto-watering-mode");
+
+      if (!res.ok) {
+        throw new Error("Failed to load current watering mode");
+      }
+
+      const { mode } = await res.json();
+
+      if (mode === this.MODES.OFF) {
+        this.mode = this.MODES.THRESHOLD_CONTROL;
+        this.enable = false;
+        this.updating = false;
+        return;
+      }
+
+      if (Object.values(this.MODES).includes(mode)) {
+        this.mode = mode;
+        this.enable = true;
+      }
+
+      this.updating = false;
+    },
+
     loadSettings() {
-      this.settings = this.$store.settings.getListByGroup(this.mode);
+      const modePrefix = this.mode.slice(0, 3);
+      this.settings = this.$store.settings.getListByGroup(modePrefix);
     },
 
     toggleMode() {
@@ -132,14 +164,10 @@ document.addEventListener("alpine:init", () => {
 
     getCurrentMode() {
       if (!this.enable) {
-        return "off";
+        return this.MODES.OFF;
       }
 
-      return {
-        thr: "threshold_control",
-        fix: "fixed_amount",
-        sch: "scheduled",
-      }[this.mode];
+      return this.mode;
     },
   }));
 
