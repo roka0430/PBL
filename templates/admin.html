@@ -236,6 +236,48 @@ MizuMori | Admin
       </div>
     </section>
   </div>
+  <div class="popups">
+    <div class="popups__content">
+      <div class="setting-popup">
+        <div class="setting-popup__header">
+          <h2 class="setting-popup__heading">ここに設定値の名前</h2>
+          <button class="setting-popup__close">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M18 6l-12 12" />
+              <path d="M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="setting-popup__content">
+          <div class="setting-popup__info">
+            <div class="setting-popup__current-setting">
+              <h3>現在の設定値</h3>
+              <div>
+                <span>35</span>
+                <span class="unit">%</span>
+              </div>
+            </div>
+            <div class="setting-popup__range">
+              <h3>設定範囲</h3>
+              <div>10 ~ 30 %</div>
+            </div>
+          </div>
+          <label class="setting-popup__entry">
+            <span class="label">新しい設定値</span>
+            <span class="box">
+              <input type="number" class="input">
+              <span class="unit">%</span>
+            </span>
+          </label>
+          <div class="setting-popup__actions">
+            <button class="setting-popup__action setting-popup__action--cancel">キャンセル</button>
+            <button class="setting-popup__action setting-popup__action--save">保存する</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
 
