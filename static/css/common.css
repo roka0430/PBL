@@ -411,8 +411,7 @@ body.page-admin .site-role {
   align-items: flex-start;
 
   margin-bottom: 5px;
-  padding-block: 4px;
-  padding-inline: 5px;
+  padding: 5px;
 
   border: solid 1px var(--color-border);
   border-radius: 3px;
