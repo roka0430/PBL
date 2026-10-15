@@ -8,36 +8,36 @@ DEFINITIONS = {
         "sensing_interval_sec": {
             "label": "センシング間隔",
             "unit": "秒",
-            "default": 10.0,
-            "min": 1.0,
+            "default": 10,
+            "min": 1,
             "max": None,
         },
         "startup_waiting_sec": {
             "label": "起動待機時間",
             "unit": "秒",
-            "default": 10.0,
-            "min": 0.0,
+            "default": 10,
+            "min": 0,
             "max": None,
         },
         "soil_moisture_dry": {
             "label": "乾燥時の土壌水分センサ値",
             "unit": "",
-            "default": 800.0,
-            "min": 0.0,
-            "max": 1023.0,
+            "default": 800,
+            "min": 0,
+            "max": 1023,
         },
         "soil_moisture_wet": {
             "label": "湿潤時の土壌水分センサ値",
             "unit": "",
-            "default": 300.0,
-            "min": 0.0,
-            "max": 1023.0,
+            "default": 300,
+            "min": 0,
+            "max": 1023,
         },
         "pump_flow_rate_ml_sec": {
             "label": "ポンプ流量",
             "unit": "mL/s",
-            "default": 10.0,
-            "min": 1.0,
+            "default": 10,
+            "min": 1,
             "max": None,
         },
     },
@@ -45,45 +45,45 @@ DEFINITIONS = {
         "determination_interval_sec": {
             "label": "給水判定間隔",
             "unit": "秒",
-            "default": 60.0,
-            "min": 1.0,
+            "default": 60,
+            "min": 1,
             "max": None,
         },
         "start_soil_moisture_percent": {
             "label": "給水開始しきい値",
             "unit": "%",
-            "default": 30.0,
-            "min": 0.0,
-            "max": 100.0,
+            "default": 30,
+            "min": 0,
+            "max": 100,
         },
         "stop_soil_moisture_percent": {
             "label": "給水終了しきい値",
             "unit": "%",
-            "default": 50.0,
-            "min": 0.0,
-            "max": 100.0,
+            "default": 50,
+            "min": 0,
+            "max": 100,
         },
     },
     "fix": {
         "determination_interval_sec": {
             "label": "給水判定間隔",
             "unit": "秒",
-            "default": 60.0,
-            "min": 1.0,
+            "default": 60,
+            "min": 1,
             "max": None,
         },
         "start_soil_moisture_percent": {
             "label": "給水開始しきい値",
             "unit": "%",
-            "default": 30.0,
-            "min": 0.0,
-            "max": 100.0,
+            "default": 30,
+            "min": 0,
+            "max": 100,
         },
         "amount_ml": {
             "label": "給水量",
             "unit": "mL",
-            "default": 50.0,
-            "min": 10.0,
+            "default": 50,
+            "min": 10,
             "max": None,
         },
     },
@@ -91,15 +91,15 @@ DEFINITIONS = {
         "interval_sec": {
             "label": "給水間隔",
             "unit": "秒",
-            "default": 21600.0,
-            "min": 0.0,
+            "default": 21600,
+            "min": 0,
             "max": None,
         },
         "amount_ml": {
             "label": "給水量",
             "unit": "mL",
-            "default": 50.0,
-            "min": 10.0,
+            "default": 50,
+            "min": 10,
             "max": None,
         },
     },
@@ -145,10 +145,14 @@ class Settings:
         return self._get(key)
 
     def update(self, key, value):
+        if not isinstance(value, int) and not isinstance(value, float):
+            return None
+
         if not self._set(key, value):
-            return False
+            return None
+
         self._save()
-        return True
+        return self._get(key)
 
     def _load(self):
         with open(SETTINGS_PATH, "r", encoding="utf-8") as f:
@@ -156,7 +160,7 @@ class Settings:
 
     def _save(self):
         with open(SETTINGS_PATH, "w", encoding="utf-8") as f:
-            json.dump(self._settings, f, indent=2)
+            json.dump(self.get_settings(), f, indent=2, ensure_ascii=False)
 
     def _exists(self, key):
         try:
@@ -176,7 +180,8 @@ class Settings:
         definition = self._get_definition(key)
         if definition is None:
             return False
-        definition["value"] = value
+
+        definition["value"] = self._clamp(key, value)
         return True
 
     def _get(self, key):

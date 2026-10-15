@@ -143,6 +143,11 @@ class SystemController:
 
     #
 
+    def set_setting(self, key, value):
+        return {"key": key, "value": self.settings.update(key, value)}
+
+    #
+
     def manual_watering(self, amount_ml) -> WateringResult:
         try:
             amount_ml = int(amount_ml)

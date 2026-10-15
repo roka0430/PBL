@@ -205,6 +205,15 @@ def get_setting_definitions():
     return jsonify(app.system.get_setting_definitions())
 
 
+@app.post("/api/settings")
+@admin_required
+def post_setting():
+    data = request.get_json()
+    key = data.get("key")
+    value = data.get("value")
+    return jsonify(app.system.set_setting(key, value))
+
+
 @app.get("/api/watering-history")
 @login_required
 def get_watering_history():
