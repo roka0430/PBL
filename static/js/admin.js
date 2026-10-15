@@ -33,7 +33,11 @@ document.addEventListener("alpine:init", () => {
     },
   });
 
-  Alpine.store("settingsPopup", {});
+  Alpine.store("settingsPopup", {
+    edit(group, id) {
+      console.log(group, id);
+    },
+  });
 
   Alpine.data("sensors", () => ({
     soilMoisture: null,
@@ -111,6 +115,10 @@ document.addEventListener("alpine:init", () => {
       );
     },
 
+    get group() {
+      return this.mode.slice(0, 3);
+    },
+
     async initWateringMode() {
       const res = await fetch("/api/auto-watering-mode");
 
@@ -136,8 +144,7 @@ document.addEventListener("alpine:init", () => {
     },
 
     loadSettings() {
-      const modePrefix = this.mode.slice(0, 3);
-      this.settings = this.$store.settings.getListByGroup(modePrefix);
+      this.settings = this.$store.settings.getListByGroup(this.group);
     },
 
     toggleMode() {
@@ -279,14 +286,6 @@ document.addEventListener("alpine:init", () => {
 
     isCalibratable(id) {
       return this.CALIBRATABLE_SETTINGS.includes(id);
-    },
-
-    editSetting(id) {
-      console.log("edit", id);
-    },
-
-    calibrateSetting(id) {
-      console.log("calibrate", id);
     },
   }));
 });
