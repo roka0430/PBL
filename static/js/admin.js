@@ -33,9 +33,35 @@ document.addEventListener("alpine:init", () => {
     },
   });
 
+  Alpine.store("popup", {
+    opened: false,
+    id: "",
+
+    open(id) {
+      this.id = id;
+      this.opened = true;
+    },
+
+    close() {
+      this.id = "";
+      this.opened = false;
+    },
+  });
+
   Alpine.store("settingsPopup", {
+    group: null,
+    id: null,
+    revision: 0,
+
     edit(group, id) {
-      console.log(group, id);
+      this.group = group;
+      this.id = id;
+      this.revision++;
+      Alpine.store("popup").open("setting");
+    },
+
+    cancel() {
+      Alpine.store("popup").close();
     },
   });
 
@@ -286,6 +312,35 @@ document.addEventListener("alpine:init", () => {
 
     isCalibratable(id) {
       return this.CALIBRATABLE_SETTINGS.includes(id);
+    },
+  }));
+
+  Alpine.data("settingsPopup", () => ({
+    group: null,
+    id: null,
+
+    heading: "",
+    unit: "",
+
+    min: null,
+    max: null,
+    currentValue: null,
+    value: null,
+
+    init() {
+      this.$watch(
+        () => this.$store.settingsPopup.revision,
+        () => {
+          this.group = this.$store.settingsPopup.group;
+          this.id = this.$store.settingsPopup.id;
+        },
+      );
+
+      // TODO settings storeにgroupとidから特定の設定値のみを取得するメソッドを実装して、その設定値を基に各変数を設定する
+    },
+
+    save() {
+      console.log("save");
     },
   }));
 });

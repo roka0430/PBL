@@ -640,6 +640,12 @@
   flex: 1;
 }
 
+.setting-popup__entry .box .input::-webkit-inner-spin-button,
+.setting-popup__entry .box .input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .setting-popup__entry .box .unit {
   font-size: 0.9rem;
 }
@@ -666,3 +672,5 @@
 .setting-popup__action--save {
   background: var(--color-primary);
 }
+
+/* TODO レスポンシブ対応する */
