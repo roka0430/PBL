@@ -97,7 +97,6 @@ class SystemController:
 
             if due_tasks:
                 for task in due_tasks:
-                    print(task.interval_key)
                     interval = self.settings.get(task.interval_key)
                     task.next_run = time.monotonic() + interval
 

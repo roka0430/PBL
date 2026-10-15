@@ -92,7 +92,7 @@ DEFINITIONS = {
             "label": "給水間隔",
             "unit": "秒",
             "default": 21600.0,
-            "min": 60.0,
+            "min": 0.0,
             "max": None,
         },
         "amount_ml": {
