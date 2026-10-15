@@ -62,17 +62,17 @@ class SystemController:
             "threshold_control": Task(
                 callback=self._process_auto_watering,
                 interval_key="thr.determination_interval_sec",
-                enable=False,
+                enabled=False,
             ),
             "fixed_amount": Task(
                 callback=self._process_auto_watering,
                 interval_key="fix.determination_interval_sec",
-                enable=False,
+                enabled=False,
             ),
             "scheduled": Task(
                 callback=self._process_auto_watering,
                 interval_key="sch.interval_sec",
-                enable=False,
+                enabled=False,
             ),
         }
 
@@ -92,11 +92,12 @@ class SystemController:
             due_tasks = [
                 task
                 for task in self._tasks.values()
-                if task.enable and task.next_run <= now
+                if task.enabled and task.next_run <= now
             ]
 
             if due_tasks:
                 for task in due_tasks:
+                    print(task.interval_key)
                     interval = self.settings.get(task.interval_key)
                     task.next_run = time.monotonic() + interval
 
@@ -106,7 +107,7 @@ class SystemController:
                         print(f"定期タスクの実行に失敗しました: {e}")
                 continue
 
-            enabled_tasks = [task for task in self._tasks.values() if task.enable]
+            enabled_tasks = [task for task in self._tasks.values() if task.enabled]
 
             if enabled_tasks:
                 next_run = min(task.next_run for task in enabled_tasks)
@@ -139,7 +140,7 @@ class SystemController:
         if mode not in {mode.value for mode in AutoWateringMode}:
             return
         self.auto_watering_mode = AutoWateringMode(mode)
-        self._sync_tasks_with_state()
+        self._sync_tasks_with_mode()
 
     #
 
@@ -192,8 +193,21 @@ class SystemController:
 
     # -------------------- タスク管理 --------------------
 
-    def _sync_tasks_with_state(self):
-        # TODO ここで設定やモードの変更をtaskに反映する、その後反映を通知
+    def _sync_tasks_with_mode(self):
+        for mode in AutoWateringMode:
+            if mode == AutoWateringMode.OFF:
+                continue
+
+            task = self._tasks[mode.value]
+
+            if mode == self.auto_watering_mode:
+                interval = self.settings.get(task.interval_key)
+                task.enabled = True
+                task.next_run = time.monotonic() + interval
+            else:
+                task.enabled = False
+                task.next_run = None
+
         self.task_changed_event.set()
 
     # -------------------- 自動給水 --------------------
