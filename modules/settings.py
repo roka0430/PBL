@@ -92,7 +92,7 @@ DEFINITIONS = {
             "label": "給水間隔",
             "unit": "秒",
             "default": 21600,
-            "min": 60,
+            "min": 10,  # TODO 適切な時間に再設定
             "max": None,
         },
         "amount_ml": {

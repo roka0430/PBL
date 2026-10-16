@@ -331,7 +331,8 @@ class SystemController:
             with self._status_lock:
                 self.status = SystemStatus.IDLE
 
-            self._record_watering_history(watering_type, amount_ml)
+            success = not self.watering_stop_event.is_set()
+            self._record_watering_history(success, watering_type, amount_ml)
 
     #
 
@@ -378,7 +379,8 @@ class SystemController:
             with self._status_lock:
                 self.status = SystemStatus.IDLE
 
-            self._record_watering_history(watering_type, total_amount_ml)
+            success = not self.watering_stop_event.is_set()
+            self._record_watering_history(success, watering_type, total_amount_ml)
 
     #
 
@@ -398,9 +400,9 @@ class SystemController:
         finally:
             self.pump.stop()
 
-    def _record_watering_history(self, watering_type, amount_ml):
-        # TODO 異常終了時に記録されてしまうのを防御。あるいは中断されましたメッセージを追加
+    def _record_watering_history(self, success, watering_type, amount_ml):
         self.watering_database.add(
+            success=success,
             watered_at=datetime.now(),
             watering_type=watering_type,
             amount_ml=amount_ml,

@@ -23,9 +23,11 @@ class WateringDatabase:
                 )
                 """)
 
-    def add(self, watered_at, watering_type, amount_ml):
+    def add(self, success, watered_at, watering_type, amount_ml):
         watered_at_str = watered_at.isoformat(timespec="seconds")
-        print(watered_at_str, watering_type, amount_ml)
+        print("成功" if success else "失敗", watered_at_str, watering_type, amount_ml)
+
+        # TODO successをdbに保存
 
         # with sqlite3.connect(DATABASE_PATH) as con:
         #     con.execute(
