@@ -1,0 +1,15 @@
+[Unit]
+Description=PBL Automatic Watering System
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/PBL
+ExecStart=/home/pi/PBL/.venv/bin/python3 /home/pi/PBL/app.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
