@@ -146,16 +146,6 @@ class SystemController:
 
     #
 
-    def set_setting(self, key, value):
-        success, value = self.settings.update(key, value)
-
-        if not success:
-            return {"success": False, "key": key}
-
-        return {"success": True, "key": key, "value": value}
-
-    #
-
     def manual_watering(self, amount_ml) -> WateringResult:
         try:
             amount_ml = int(amount_ml)
@@ -193,6 +183,15 @@ class SystemController:
     def get_setting_definitions(self) -> list[dict]:
         return self.settings.get_definitions()
 
+    def set_setting(self, key, value):
+        success, value = self.settings.update(key, value)
+
+        if not success:
+            return {"success": False, "key": key}
+
+        self._sync_tasks_with_setting(key)
+        return {"success": True, "key": key, "value": value}
+
     #
 
     def get_history_count(self) -> int:
@@ -221,6 +220,20 @@ class SystemController:
                 task.next_run = None
 
         self.task_changed_event.set()
+
+    def _sync_tasks_with_setting(self, updated_key):
+        changed = False
+
+        for task in self._tasks.values():
+            if task.interval_key != updated_key:
+                continue
+
+            interval = self.settings.get(task.interval_key)
+            task.next_run = time.monotonic() + interval
+            changed = True
+
+        if changed:
+            self.task_changed_event.set()
 
     # -------------------- 自動給水 --------------------
 
