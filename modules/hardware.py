@@ -56,6 +56,13 @@ class Camera:
             camera.set(cv2.CAP_PROP_FRAME_WIDTH, self.IMAGE_WIDTH)
             camera.set(cv2.CAP_PROP_FRAME_HEIGHT, self.IMAGE_HEIGHT)
 
+            for _ in range(10):
+                success, frame = camera.read()
+                if not success:
+                    raise RuntimeError("Failed to capture image")
+
+            time.sleep(0.1)
+
             success, frame = camera.read()
             if not success:
                 raise RuntimeError("Failed to capture image")
