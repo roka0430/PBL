@@ -370,7 +370,14 @@ document.addEventListener("alpine:init", () => {
     SETTINGS_GROUPS: [
       {
         title: "センサ",
-        ids: ["sensing_interval_sec", "startup_waiting_sec", "soil_moisture_dry", "soil_moisture_wet"],
+        ids: [
+          "sensing_interval_sec",
+          "startup_waiting_sec",
+          "high_temperature_threshold",
+          "low_temperature_threshold",
+          "soil_moisture_dry",
+          "soil_moisture_wet",
+        ],
       },
       {
         title: "ポンプ",

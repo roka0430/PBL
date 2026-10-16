@@ -7,6 +7,7 @@ DEFINITIONS = {
     "sys": {
         "sensing_interval_sec": {
             "label": "センシング間隔",
+            "description": "土壌水分などのセンサ値を取得する間隔を設定します。",
             "unit": "秒",
             "default": 10,
             "min": 1,
@@ -14,6 +15,7 @@ DEFINITIONS = {
         },
         "startup_waiting_sec": {
             "label": "起動待機時間",
+            "description": "システム起動後、センシングを始めるまでの待機時間を設定します。",
             "unit": "秒",
             "default": 10,
             "min": 0,
@@ -21,6 +23,7 @@ DEFINITIONS = {
         },
         "soil_moisture_dry": {
             "label": "乾燥時の土壌水分センサ値",
+            "description": "土壌が乾燥しているときのセンサ値を設定します。土壌水分量の算出に使用します。",
             "unit": "",
             "default": 800,
             "min": 0,
@@ -28,6 +31,7 @@ DEFINITIONS = {
         },
         "soil_moisture_wet": {
             "label": "湿潤時の土壌水分センサ値",
+            "description": "土壌が十分に湿っているときのセンサ値を設定します。土壌水分量の算出に使用します。",
             "unit": "",
             "default": 300,
             "min": 0,
@@ -35,15 +39,33 @@ DEFINITIONS = {
         },
         "pump_flow_rate_ml_sec": {
             "label": "ポンプ流量",
+            "description": "ポンプが1秒間に排出する水量を設定します。給水量の算出に使用します。",
             "unit": "mL/s",
             "default": 10,
             "min": 1,
             "max": None,
         },
+        "high_temperature_threshold": {
+            "label": "高温警告しきい値",
+            "description": "気温がこの値以上になると、高温警告を行います。",
+            "unit": "℃",
+            "default": 40,
+            "min": -40,
+            "max": 80,
+        },
+        "low_temperature_threshold": {
+            "label": "低温警告しきい値",
+            "description": "気温がこの値以下になると、低温警告を行います。",
+            "unit": "℃",
+            "default": 0,
+            "min": -40,
+            "max": 80,
+        },
     },
     "thr": {
         "determination_interval_sec": {
             "label": "給水判定間隔",
+            "description": "土壌水分量を確認し、給水の開始を判定する間隔を設定します。",
             "unit": "秒",
             "default": 60,
             "min": 60,
@@ -51,6 +73,7 @@ DEFINITIONS = {
         },
         "start_soil_moisture_percent": {
             "label": "給水開始しきい値",
+            "description": "土壌水分量がこの値を下回ると、自動給水を開始します。",
             "unit": "%",
             "default": 30,
             "min": 0,
@@ -58,6 +81,7 @@ DEFINITIONS = {
         },
         "stop_soil_moisture_percent": {
             "label": "給水終了しきい値",
+            "description": "土壌水分量がこの値を上回ると、自動給水を終了します。",
             "unit": "%",
             "default": 50,
             "min": 0,
@@ -67,6 +91,7 @@ DEFINITIONS = {
     "fix": {
         "determination_interval_sec": {
             "label": "給水判定間隔",
+            "description": "土壌水分率を確認し、給水するかどうかを判定する間隔を設定します。",
             "unit": "秒",
             "default": 60,
             "min": 1,
@@ -74,6 +99,7 @@ DEFINITIONS = {
         },
         "start_soil_moisture_percent": {
             "label": "給水開始しきい値",
+            "description": "土壌水分率がこの値を下回ると、設定した量の給水を行います。",
             "unit": "%",
             "default": 30,
             "min": 0,
@@ -81,6 +107,7 @@ DEFINITIONS = {
         },
         "amount_ml": {
             "label": "給水量",
+            "description": "1回の給水でポンプから排出する水量を設定します。",
             "unit": "mL",
             "default": 50,
             "min": 10,
@@ -90,6 +117,7 @@ DEFINITIONS = {
     "sch": {
         "interval_sec": {
             "label": "給水間隔",
+            "description": "定期給水を実行する間隔を設定します。",
             "unit": "秒",
             "default": 21600,
             "min": 10,  # TODO 適切な時間に再設定
@@ -97,6 +125,7 @@ DEFINITIONS = {
         },
         "amount_ml": {
             "label": "給水量",
+            "description": "1回の定期給水でポンプから排出する水量を設定します。",
             "unit": "mL",
             "default": 50,
             "min": 10,
