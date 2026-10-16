@@ -4,10 +4,13 @@ from datetime import datetime
 from pathlib import Path
 
 import cv2
-import board
-import adafruit_ahtx0
+
+# import board
+# import adafruit_ahtx0
 import spidev
 from gpiozero import PWMOutputDevice
+
+import random  # TODO ランダム消す
 
 from .dataclasses import Image
 
@@ -110,12 +113,17 @@ class SoilMoistureSensor:
         self._spi.close()
 
 
+# class TemperatureAndHumiditySensor:
+#     def __init__(self):
+#         self._sensor = adafruit_ahtx0.AHTx0(board.I2C())
+
+#     def read(self) -> tuple[float, float]:
+#         temperature = self._sensor.temperature
+#         humidity = self._sensor.relative_humidity
+
+#         return temperature, humidity
+
+
 class TemperatureAndHumiditySensor:
-    def __init__(self):
-        self._sensor = adafruit_ahtx0.AHTx0(board.I2C())
-
     def read(self) -> tuple[float, float]:
-        temperature = self._sensor.temperature
-        humidity = self._sensor.relative_humidity
-
-        return temperature, humidity
+        return random.randint(100, 400) / 10, random.randint(0, 1000) / 10  # 温度, 湿度

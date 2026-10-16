@@ -2,7 +2,7 @@ from time import sleep
 from gpiozero import PWMOutputDevice
 
 MOTOR_PIN = 26
-PWM_FREQUENCY = 1000
+PWM_FREQUENCY = 5000
 
 DUTY_CYCLES = [
     0.0,
