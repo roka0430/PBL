@@ -296,7 +296,8 @@ body.page-admin .site-role {
   position: fixed;
   inset: 0;
 
-  background: color-mix(in srgb, var(--color-background) 50%, transparent);
+  /* background: color-mix(in srgb, var(--color-background) 50%, transparent); */
+  background: rgb(0 0 0 / 40%);
 
   z-index: 8190;
 }
