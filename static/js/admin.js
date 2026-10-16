@@ -421,6 +421,7 @@ document.addEventListener("alpine:init", () => {
     group: null,
     id: null,
 
+    description: null,
     heading: null,
     unit: null,
     min: null,
@@ -441,6 +442,7 @@ document.addEventListener("alpine:init", () => {
 
       const setting = this.$store.settings.getById(this.group, this.id);
 
+      this.description = setting.description;
       this.heading = setting.label;
       this.unit = setting.unit;
       this.min = setting.min;

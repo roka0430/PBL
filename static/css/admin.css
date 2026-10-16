@@ -621,11 +621,11 @@
   justify-content: space-between;
 
   padding-block: 12px;
-  padding-inline: 14px;
+  padding-inline: 20px;
 
   background: var(--color-surface);
   border: solid 1px var(--color-border);
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 .setting-popup__current-setting {
@@ -660,6 +660,12 @@
 
 .setting-popup__range div {
   font-size: 0.9rem;
+}
+
+.setting-popup__description {
+  margin-top: 10px;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
 }
 
 .setting-popup__entry {
@@ -713,13 +719,13 @@
   display: flex;
   gap: 15px;
 
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .setting-popup__action {
   flex: 1;
   padding-block: 6px 5px;
-  border-radius: 5px;
+  border-radius: 3px;
   font-size: 0.8rem;
   cursor: pointer;
 }
