@@ -46,7 +46,7 @@ DEFINITIONS = {
             "label": "給水判定間隔",
             "unit": "秒",
             "default": 60,
-            "min": 1,
+            "min": 60,
             "max": None,
         },
         "start_soil_moisture_percent": {
@@ -92,7 +92,7 @@ DEFINITIONS = {
             "label": "給水間隔",
             "unit": "秒",
             "default": 21600,
-            "min": 0,
+            "min": 60,
             "max": None,
         },
         "amount_ml": {
