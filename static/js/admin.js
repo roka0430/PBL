@@ -166,7 +166,10 @@ document.addEventListener("alpine:init", () => {
   }));
 
   Alpine.data("emergencyStop", () => ({
+    stopping: false,
+
     async emergencyStop() {
+      this.stopping = true;
       const res = await fetch("/api/watering/emergency-stop", { method: "POST" });
 
       if (!res.ok) {
@@ -174,6 +177,7 @@ document.addEventListener("alpine:init", () => {
       }
 
       alert("緊急停止しました");
+      this.stopping = false;
     },
   }));
 

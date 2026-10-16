@@ -168,6 +168,11 @@
   transform: translateY(1px);
 }
 
+.emergency-stop__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 /* auto-watering */
 
 .auto-watering__heading {
