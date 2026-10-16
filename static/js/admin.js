@@ -94,6 +94,10 @@ document.addEventListener("alpine:init", () => {
     },
   });
 
+  Alpine.store("watering", {
+    syncAfterEmergencyStop: null,
+  });
+
   Alpine.store("popup", {
     opened: false,
     id: "",
@@ -170,14 +174,20 @@ document.addEventListener("alpine:init", () => {
 
     async emergencyStop() {
       this.stopping = true;
-      const res = await fetch("/api/watering/emergency-stop", { method: "POST" });
 
-      if (!res.ok) {
-        throw new Error("緊急停止に失敗しました");
+      try {
+        const res = await fetch("/api/watering/emergency-stop", { method: "POST" });
+
+        if (!res.ok) {
+          throw new Error("緊急停止に失敗しました");
+        }
+
+        await this.$store.watering.syncAfterEmergencyStop?.();
+
+        alert("緊急停止しました");
+      } finally {
+        this.stopping = false;
       }
-
-      alert("緊急停止しました");
-      this.stopping = false;
     },
   }));
 
@@ -195,8 +205,10 @@ document.addEventListener("alpine:init", () => {
     updating: true,
 
     async init() {
-      await this.initWateringMode();
+      await this.syncWateringMode();
       this.loadSettings();
+
+      this.$store.watering.syncAfterEmergencyStop = () => this.onEmergencyStop();
 
       this.$watch(
         () => this.$store.settings.revision,
@@ -210,7 +222,19 @@ document.addEventListener("alpine:init", () => {
       return this.mode.slice(0, 3);
     },
 
-    async initWateringMode() {
+    async onEmergencyStop() {
+      this.enable = false;
+      this.updating = true;
+
+      try {
+        await this.syncWateringMode();
+        this.loadSettings();
+      } finally {
+        this.updating = false;
+      }
+    },
+
+    async syncWateringMode() {
       const res = await fetch("/api/auto-watering-mode");
 
       if (!res.ok) {

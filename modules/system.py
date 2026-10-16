@@ -27,7 +27,7 @@ elif hardware_mode == "mock":
 
 
 MIN_WATER_AMOUNT_ML = 10  # 1回給水量下限
-MAX_WATER_AMOUNT_ML = 200  # 1回給水量上限
+MAX_WATER_AMOUNT_ML = 1000  # 1回給水量上限 # TODO 量を減らす
 
 MIN_WATERING_INTERVAL_SEC = 10  # 給水間隔制限
 
