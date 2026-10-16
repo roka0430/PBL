@@ -146,13 +146,13 @@ class Settings:
 
     def update(self, key, value):
         if not isinstance(value, int) and not isinstance(value, float):
-            return None
+            return False, None
 
         if not self._set(key, value):
-            return None
+            return False, None
 
         self._save()
-        return self._get(key)
+        return True, self._get(key)
 
     def _load(self):
         with open(SETTINGS_PATH, "r", encoding="utf-8") as f:

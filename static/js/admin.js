@@ -46,7 +46,52 @@ document.addEventListener("alpine:init", () => {
       return settings[id];
     },
 
-    update(group, id, value) {},
+    async update(group, id, value) {
+      try {
+        const res = await fetch("/api/settings", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            key: `${group}.${id}`,
+            value: value,
+          }),
+        });
+
+        const result = await res.json();
+
+        if (!res.ok) {
+          return {
+            success: false,
+            message: result.message ?? "設定の更新に失敗しました",
+          };
+        }
+
+        this._set(group, id, result.value);
+
+        return {
+          success: true,
+          value: result.value,
+        };
+      } catch {
+        return {
+          success: false,
+          message: "サーバーに接続できませんでした",
+        };
+      }
+    },
+
+    _set(group, id, value) {
+      if (!(group in this.settings)) {
+        return;
+      }
+
+      if (!(id in this.settings[group])) {
+        return;
+      }
+
+      this.settings[group][id].value = value;
+      this.revision++;
+    },
   });
 
   Alpine.store("popup", {
@@ -332,6 +377,11 @@ document.addEventListener("alpine:init", () => {
   }));
 
   Alpine.data("settingsPopup", () => ({
+    saving: false,
+
+    group: null,
+    id: null,
+
     heading: null,
     unit: null,
     min: null,
@@ -347,10 +397,10 @@ document.addEventListener("alpine:init", () => {
     },
 
     updatePopup() {
-      const group = this.$store.settingsPopup.group;
-      const id = this.$store.settingsPopup.id;
+      this.group = this.$store.settingsPopup.group;
+      this.id = this.$store.settingsPopup.id;
 
-      const setting = this.$store.settings.getById(group, id);
+      const setting = this.$store.settings.getById(this.group, this.id);
 
       this.heading = setting.label;
       this.unit = setting.unit;
@@ -363,8 +413,17 @@ document.addEventListener("alpine:init", () => {
       });
     },
 
-    save() {
-      console.log("save");
+    async save() {
+      this.saving = true;
+
+      const result = await this.$store.settings.update(this.group, this.id, Number(this.value));
+
+      if (!result.success) {
+        alert("設定値を変更できませんでした");
+      }
+
+      this.$store.popup.close();
+      this.saving = false;
     },
 
     get validation() {

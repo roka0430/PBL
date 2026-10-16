@@ -147,7 +147,12 @@ class SystemController:
     #
 
     def set_setting(self, key, value):
-        return {"key": key, "value": self.settings.update(key, value)}
+        success, value = self.settings.update(key, value)
+
+        if not success:
+            return {"success": False, "key": key}
+
+        return {"success": True, "key": key, "value": value}
 
     #
 

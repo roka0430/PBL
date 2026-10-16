@@ -211,7 +211,13 @@ def post_setting():
     data = request.get_json()
     key = data.get("key")
     value = data.get("value")
-    return jsonify(app.system.set_setting(key, value))
+
+    result = app.system.set_setting(key, value)
+
+    if not result["success"]:
+        return jsonify(result), 400
+
+    return jsonify(result), 200
 
 
 @app.get("/api/watering-history")

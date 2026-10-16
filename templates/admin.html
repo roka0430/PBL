@@ -275,7 +275,7 @@ MizuMori | Admin
           </div>
           <div class="setting-popup__actions">
             <button class="setting-popup__action setting-popup__action--cancel" @click="$store.popup.close()">キャンセル</button>
-            <button class="setting-popup__action setting-popup__action--save" :disabled="!validation.isValid" @click="save()">保存する</button>
+            <button class="setting-popup__action setting-popup__action--save" :disabled="!validation.isValid || saving" @click="save()">保存する</button>
           </div>
         </div>
       </div>
