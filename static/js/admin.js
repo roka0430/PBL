@@ -2,20 +2,31 @@ document.addEventListener("alpine:init", () => {
   Alpine.store("settings", {
     settings: {},
     revision: 0,
+    loading: false,
 
     async init() {
-      this.settings = await this.loadSettings();
-      this.revision++;
+      await this.loadSettings();
     },
 
     async loadSettings() {
-      const res = await fetch("/api/settings/definition");
-
-      if (!res.ok) {
-        throw new Error("Failed to load settings");
+      if (this.loading) {
+        return;
       }
 
-      return await res.json();
+      this.loading = true;
+
+      try {
+        const res = await fetch("/api/settings/definition");
+
+        if (!res.ok) {
+          throw new Error("Failed to load settings");
+        }
+
+        this.settings = await res.json();
+      } finally {
+        this.revision++;
+        this.loading = false;
+      }
     },
 
     getByGroup(group) {
