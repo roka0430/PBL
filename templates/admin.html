@@ -260,19 +260,22 @@ MizuMori | Admin
             </div>
             <div class="setting-popup__range">
               <h3>設定範囲</h3>
-              <div><span x-text="min || '--'"></span> ~ <span x-text="max || '--'"></span> <span x-text="unit"></span></div>
+              <div><span x-text="min"></span> ~ <span x-text="max"></span> <span x-text="unit"></span></div>
             </div>
           </div>
           <label class="setting-popup__entry">
             <span class="label">新しい設定値</span>
             <span class="box">
-              <input type="number" class="input" x-model="value">
+              <input type="number" class="input" x-model="value" x-ref="input">
               <span class="unit" x-text="unit"></span>
             </span>
           </label>
+          <div class="setting-popup__message">
+            <p x-text="validation.message"></p>
+          </div>
           <div class="setting-popup__actions">
             <button class="setting-popup__action setting-popup__action--cancel" @click="$store.popup.close()">キャンセル</button>
-            <button class="setting-popup__action setting-popup__action--save" @click="save()">保存する</button>
+            <button class="setting-popup__action setting-popup__action--save" :disabled="!validation.isValid" @click="save()">保存する</button>
           </div>
         </div>
       </div>

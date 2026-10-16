@@ -21,6 +21,10 @@ document.addEventListener("alpine:init", () => {
     getByGroup(group) {
       const settings = {};
 
+      if (!(group in this.settings)) {
+        return null;
+      }
+
       for (const [id, setting] of Object.entries(this.settings[group])) {
         settings[id] = { id, ...setting };
       }
@@ -31,6 +35,18 @@ document.addEventListener("alpine:init", () => {
     getListByGroup(group) {
       return Object.values(this.getByGroup(group));
     },
+
+    getById(group, id) {
+      const settings = this.getByGroup(group);
+
+      if (settings === null || !(id in settings)) {
+        return null;
+      }
+
+      return settings[id];
+    },
+
+    update(group, id, value) {},
   });
 
   Alpine.store("popup", {
@@ -316,12 +332,8 @@ document.addEventListener("alpine:init", () => {
   }));
 
   Alpine.data("settingsPopup", () => ({
-    group: null,
-    id: null,
-
-    heading: "",
-    unit: "",
-
+    heading: null,
+    unit: null,
     min: null,
     max: null,
     currentValue: null,
@@ -330,17 +342,68 @@ document.addEventListener("alpine:init", () => {
     init() {
       this.$watch(
         () => this.$store.settingsPopup.revision,
-        () => {
-          this.group = this.$store.settingsPopup.group;
-          this.id = this.$store.settingsPopup.id;
-        },
+        () => this.updatePopup(),
       );
+    },
 
-      // TODO settings storeにgroupとidから特定の設定値のみを取得するメソッドを実装して、その設定値を基に各変数を設定する
+    updatePopup() {
+      const group = this.$store.settingsPopup.group;
+      const id = this.$store.settingsPopup.id;
+
+      const setting = this.$store.settings.getById(group, id);
+
+      this.heading = setting.label;
+      this.unit = setting.unit;
+      this.min = setting.min;
+      this.max = setting.max;
+      this.currentValue = this.value = setting.value;
+
+      this.$nextTick(() => {
+        this.$refs.input.focus();
+      });
     },
 
     save() {
       console.log("save");
+    },
+
+    get validation() {
+      const value = this.value;
+
+      if (value === "") {
+        return {
+          isValid: false,
+          message: "値を入力してください",
+        };
+      }
+
+      const number = Number(value);
+
+      if (!Number.isFinite(number)) {
+        return {
+          isValid: false,
+          message: "数値を入力してください",
+        };
+      }
+
+      if (this.min !== null && number < this.min) {
+        return {
+          isValid: false,
+          message: `${this.min}${this.unit}以上の値を入力してください`,
+        };
+      }
+
+      if (this.max !== null && number > this.max) {
+        return {
+          isValid: false,
+          message: `${this.max}${this.unit}以下の値を入力してください`,
+        };
+      }
+
+      return {
+        isValid: true,
+        message: "",
+      };
     },
   }));
 });

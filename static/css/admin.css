@@ -525,9 +525,11 @@
 .popups__content {
   width: 500px;
 
-  background: var(--color-surface);
+  background: var(--color-background);
   border: solid 1px var(--color-border);
   border-radius: 5px;
+
+  overflow: hidden;
 }
 
 /*  */
@@ -539,6 +541,7 @@
   padding-block: 10px;
   padding-inline: 12px;
 
+  background: var(--color-navigation);
   border-bottom: solid 1px var(--color-border);
 }
 
@@ -574,6 +577,7 @@
   padding-block: 12px;
   padding-inline: 14px;
 
+  background: var(--color-surface);
   border: solid 1px var(--color-border);
   border-radius: 5px;
 }
@@ -632,6 +636,7 @@
   padding-block: 5px;
   padding-inline: 10px;
 
+  background: var(--color-surface);
   border: solid 1px var(--color-border);
   border-radius: 3px;
 }
@@ -650,9 +655,17 @@
   font-size: 0.9rem;
 }
 
+.setting-popup__message {
+  height: 1em;
+  margin-top: 4px;
+
+  color: var(--color-error);
+  font-size: 0.8rem;
+}
+
 .setting-popup__actions {
   display: flex;
-  gap: 10px;
+  gap: 15px;
 
   margin-top: 20px;
 }
@@ -666,11 +679,21 @@
 }
 
 .setting-popup__action--cancel {
+  background: var(--color-surface);
   border: solid 1px var(--color-border);
 }
 
 .setting-popup__action--save {
   background: var(--color-primary);
+  color: var(--color-text-white);
+  transition: all 0.15s ease;
+}
+
+.setting-popup__action--save:disabled {
+  background: var(--color-border);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 /* TODO レスポンシブ対応する */
