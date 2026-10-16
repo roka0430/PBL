@@ -517,7 +517,7 @@
   position: fixed;
   inset: 0;
 
-  background: color-mix(in srgb, var(--color-background) 50%, transparent);
+  background: rgb(0 0 0 / 40%);
 
   z-index: 9000;
 }
@@ -532,17 +532,40 @@
   overflow: hidden;
 }
 
-/*  */
-
-.setting-popup__header {
-  display: flex;
-  align-items: center;
-
+.popups__header {
   padding-block: 10px;
   padding-inline: 12px;
 
   background: var(--color-navigation);
   border-bottom: solid 1px var(--color-border);
+}
+
+@media (max-width: 767px) {
+  .popups__content {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    width: auto;
+    max-height: calc(100% - 24px);
+    padding-bottom: 15;
+
+    border-bottom: none;
+    border-radius: 24px 24px 0 0;
+  }
+
+  .popups__header {
+    padding-block: 18px 15px;
+    padding-inline: 20px;
+  }
+}
+
+/*  */
+
+.setting-popup__header {
+  display: flex;
+  align-items: center;
 }
 
 .setting-popup__heading {
