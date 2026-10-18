@@ -93,24 +93,13 @@ class Camera:
 
 
 class SoilMoistureSensor:
-    def __init__(self, settings):
-        self.settings = settings
-
+    def __init__(self):
         self._spi = spidev.SpiDev()
         self._spi.open(0, 0)
         self._spi.max_speed_hz = 1_000_000
         self._spi.mode = 0
 
-    def read(self) -> float:
-        raw_value = self._read_raw()
-
-        dry = self.settings.get("sys.soil_moisture_dry")
-        wet = self.settings.get("sys.soil_moisture_wet")
-
-        moisture = (raw_value - dry) / (wet - dry) * 100
-        return max(0.0, min(100.0, moisture)), raw_value
-
-    def _read_raw(self) -> int:
+    def read(self) -> int:
         response = self._spi.xfer2([0x68, 0x00])  # TODO CH0でなければ修正
         return ((response[0] & 0x03) << 8) | response[1]
 

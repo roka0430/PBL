@@ -51,7 +51,7 @@ class SystemController:
 
         self.pump = Pump()
         self.camera = Camera()
-        self.soil_moisture_sensor = SoilMoistureSensor(self.settings)
+        self.soil_moisture_sensor = SoilMoistureSensor()
         self.temperature_and_humidity_sensor = TemperatureAndHumiditySensor()
 
         self._tasks = {
@@ -417,7 +417,13 @@ class SystemController:
         self._check_temperature_and_humidity()
 
     def _check_soil_moisture(self):
-        soil_moisture, soil_moisture_raw = self.soil_moisture_sensor.read()
+        soil_moisture_raw = self.soil_moisture_sensor.read()
+
+        dry = self.settings.get("sys.soil_moisture_dry")
+        wet = self.settings.get("sys.soil_moisture_wet")
+        soil_moisture = (soil_moisture_raw - dry) / (wet - dry) * 100
+        soil_moisture = max(0.0, min(100.0, soil_moisture))
+
         measured_at = datetime.now()
 
         self.sensor_values.soil_moisture = SensorValue(

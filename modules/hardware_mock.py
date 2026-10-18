@@ -47,19 +47,7 @@ class Camera:
 
 
 class SoilMoistureSensor:
-    def __init__(self, settings):
-        self.settings = settings
-
-    def read(self) -> float:
-        raw_value = self._read_raw()
-
-        dry = self.settings.get("sys.soil_moisture_dry")
-        wet = self.settings.get("sys.soil_moisture_wet")
-
-        moisture = (raw_value - dry) / (wet - dry) * 100
-        return max(0.0, min(100.0, moisture)), raw_value
-
-    def _read_raw(self) -> int:
+    def read(self) -> int:
         # TODO: MCP3002から取得
         return random.randint(0, 1023)
 
