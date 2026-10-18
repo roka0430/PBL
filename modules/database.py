@@ -76,7 +76,7 @@ class WateringDatabase:
             return [
                 {
                     "id": row["id"],
-                    "watered_at": datetime.fromisoformat(row["watered_at"]),
+                    "watered_at": row["watered_at"],
                     "watering_type": WateringType(row["watering_type"]),
                     "amount_ml": row["amount_ml"],
                 }
@@ -96,7 +96,7 @@ class WateringDatabase:
             return [
                 {
                     "id": row["id"],
-                    "watered_at": datetime.fromisoformat(row["watered_at"]),
+                    "watered_at": row["watered_at"],
                     "watering_type": WateringType(row["watering_type"]),
                     "amount_ml": row["amount_ml"],
                 }
@@ -169,10 +169,24 @@ class SensorDatabase:
         return [
             {
                 "id": row["id"],
-                "measured_at": datetime.fromisoformat(row["measured_at"]),
+                "measured_at": row["measured_at"],
                 "temperature": row["temperature"],
                 "humidity": row["humidity"],
                 "soil_moisture": row["soil_moisture"],
             }
             for row in reversed(rows)
         ]
+
+    def get_last_measured_at(self) -> datetime | None:
+        with sqlite3.connect(DATABASE_PATH) as con:
+            row = con.execute("""
+                SELECT measured_at
+                FROM sensor_history
+                ORDER BY measured_at DESC
+                LIMIT 1
+                """).fetchone()
+
+        if row is None:
+            return None
+
+        return datetime.fromisoformat(row[0])

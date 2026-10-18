@@ -235,7 +235,6 @@ def get_watering_history():
     histories = app.system.get_watering_history(before_id, after_id, limit)
 
     for history in histories:
-        history["watered_at"] = history["watered_at"].isoformat()
         history["watering_type"] = history["watering_type"].value
 
     return jsonify(
@@ -244,6 +243,15 @@ def get_watering_history():
             "total_count": app.system.get_history_count(),
         }
     )
+
+
+@app.get("/api/sensor-history")
+@login_required
+def get_sensor_history():
+    limit = 10
+    histories = app.system.get_sensor_history(limit)
+
+    return jsonify(histories)
 
 
 @app.get("/api/sensors")

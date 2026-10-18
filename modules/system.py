@@ -201,6 +201,9 @@ class SystemController:
             before_id=before_id, after_id=after_id, limit=limit
         )
 
+    def get_sensor_history(self, limit) -> list[dict]:
+        return self.sensor_database.get(limit=limit)
+
     # -------------------- タスク管理 --------------------
 
     def _sync_tasks_with_mode(self):
