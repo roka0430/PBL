@@ -447,4 +447,5 @@ input:checked + .system-info__header .history-list-opener svg {
 
 .sensor-charts__container {
   height: 300px;
+  width: 300px;
 }

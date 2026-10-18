@@ -172,19 +172,29 @@ document.addEventListener("alpine:init", () => {
       this.chart = new Chart(this.$refs.chart, {
         type: "line",
         data: {
-          labels: ["10:00", "10:10", "10:20", "10:30", "10:40"],
+          labels: ["10/18 00:00", "10/18 08:00", "10/18 16:00", "10/19 00:00", "10/19 08:00", "10/19 16:00"],
           datasets: [
             {
               label: "土壌水分 (%)",
-              data: [65, 58, 52, 44, 39],
+              data: [65, 58, 52, null, 44, 39],
               borderColor: "#10a37f",
               tension: 0.2,
+              spanGaps: false,
             },
           ],
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          scales: {
+            y: {
+              min: 0,
+              max: 100,
+              ticks: {
+                stepSize: 20,
+              },
+            },
+          },
         },
       });
     },
