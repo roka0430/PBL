@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from .enums import SystemStatus, AutoWateringMode, WateringResult, WateringType
 from .dataclasses import Task, SensorValue, SensorValues, Image
 from .settings import Settings
-from .database import WateringDatabase
+from .database import WateringDatabase, SensorDatabase
 
 hardware_mode = os.environ["HARDWARE_MODE"]
 
@@ -44,9 +44,10 @@ class SystemController:
         self.watering_stop_event = threading.Event()
         self.task_changed_event = threading.Event()
 
-        self.sensor_values = SensorValues()
         self.watering_database = WateringDatabase()
+        self.sensor_database = SensorDatabase()
 
+        self.sensor_values = SensorValues()
         self.pump = Pump()
         self.camera = Camera()
         self.soil_moisture_sensor = SoilMoistureSensor()

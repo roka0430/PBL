@@ -4,18 +4,14 @@ from datetime import datetime
 from .paths import DATABASE_PATH
 from .enums import WateringType
 
-print(DATABASE_PATH)
-
 
 class WateringDatabase:
-    WATERING_HISTORY_TABLE = "watering_history"
-
     def __init__(self):
         DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
 
         with sqlite3.connect(DATABASE_PATH) as con:
-            con.execute(f"""
-                CREATE TABLE IF NOT EXISTS {self.WATERING_HISTORY_TABLE} (
+            con.execute("""
+                CREATE TABLE IF NOT EXISTS watering_history (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     watered_at TEXT NOT NULL,
                     watering_type TEXT NOT NULL,
@@ -25,19 +21,20 @@ class WateringDatabase:
 
     def add(self, success, watered_at, watering_type, amount_ml):
         watered_at_str = watered_at.isoformat(timespec="seconds")
-        print("成功" if success else "失敗", watered_at_str, watering_type, amount_ml)
 
-        # TODO successをdbに保存
+        print("成功" if success else "失敗", watered_at_str, watering_type, amount_ml)
+        # TODO printは消す
 
         # with sqlite3.connect(DATABASE_PATH) as con:
         #     con.execute(
-        #         f"""
-        #         INSERT INTO {self.WATERING_HISTORY_TABLE}
+        #         """
+        #         INSERT INTO watering_history
         #             (watered_at, watering_type, amount_ml)
         #         VALUES (?, ?, ?)
         #         """,
         #         (watered_at_str, watering_type.value, amount_ml),
         #     )
+        # TODO successをdbに保存する処理を追加する
 
     def get(self, before_id, after_id, limit) -> list[dict]:
         with sqlite3.connect(DATABASE_PATH) as con:
@@ -90,9 +87,9 @@ class WateringDatabase:
         with sqlite3.connect(DATABASE_PATH) as con:
             con.row_factory = sqlite3.Row
 
-            rows = con.execute(f"""
+            rows = con.execute("""
                 SELECT id, watered_at, watering_type, amount_ml
-                FROM {self.WATERING_HISTORY_TABLE}
+                FROM watering_history
                 ORDER BY watered_at DESC
                 """).fetchall()
 
@@ -114,9 +111,9 @@ class WateringDatabase:
 
     def get_last_watered_at(self) -> datetime | None:
         with sqlite3.connect(DATABASE_PATH) as con:
-            row = con.execute(f"""
+            row = con.execute("""
                 SELECT watered_at
-                FROM {self.WATERING_HISTORY_TABLE}
+                FROM watering_history
                 ORDER BY watered_at DESC
                 LIMIT 1
                 """).fetchone()
@@ -125,3 +122,57 @@ class WateringDatabase:
             return None
 
         return datetime.fromisoformat(row[0])
+
+
+class SensorDatabase:
+    def __init__(self):
+        DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+        with sqlite3.connect(DATABASE_PATH) as con:
+            con.execute("""
+                CREATE TABLE IF NOT EXISTS sensor_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    measured_at TEXT NOT NULL,
+                    temperature REAL,
+                    humidity REAL,
+                    soil_moisture REAL
+                )
+                """)
+
+    def add(self, measured_at, temperature, humidity, soil_moisture):
+        measured_at_str = measured_at.isoformat(timespec="seconds")
+
+        with sqlite3.connect(DATABASE_PATH) as con:
+            con.execute(
+                """
+                INSERT INTO sensor_history
+                    (measured_at, temperature, humidity, soil_moisture)
+                VALUES (?, ?, ?, ?)
+                """,
+                (measured_at_str, temperature, humidity, soil_moisture),
+            )
+
+    def get(self, limit) -> list[dict]:
+        with sqlite3.connect(DATABASE_PATH) as con:
+            con.row_factory = sqlite3.Row
+
+            rows = con.execute(
+                """
+                SELECT id, measured_at, temperature, humidity, soil_moisture
+                FROM sensor_history
+                ORDER BY id DESC
+                LIMIT ?
+                """,
+                (limit,),
+            ).fetchall()
+
+        return [
+            {
+                "id": row["id"],
+                "measured_at": datetime.fromisoformat(row["measured_at"]),
+                "temperature": row["temperature"],
+                "humidity": row["humidity"],
+                "soil_moisture": row["soil_moisture"],
+            }
+            for row in reversed(rows)
+        ]

@@ -6,4 +6,4 @@ CONFIG_DIR = ROOT_DIR / "config"
 INSTANCE_DIR = ROOT_DIR / "instance"
 
 SETTINGS_PATH = CONFIG_DIR / "settings.json"
-DATABASE_PATH = INSTANCE_DIR / "watering.db"
+DATABASE_PATH = INSTANCE_DIR / "mizumori.db"
