@@ -38,16 +38,14 @@ class SystemController:
 
         self.status = SystemStatus.IDLE
         self._status_lock = threading.Lock()
-
         self.auto_watering_mode = AutoWateringMode.OFF
-
-        self.watering_database = WateringDatabase()
-
-        self.sensor_values = SensorValues()
 
         self.system_stop_event = threading.Event()
         self.watering_stop_event = threading.Event()
         self.task_changed_event = threading.Event()
+
+        self.sensor_values = SensorValues()
+        self.watering_database = WateringDatabase()
 
         self.pump = Pump()
         self.camera = Camera()
