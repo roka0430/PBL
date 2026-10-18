@@ -161,4 +161,32 @@ document.addEventListener("alpine:init", () => {
       this.getWateringHistory();
     },
   }));
+
+  Alpine.data("sensorCharts", () => ({
+    chart: null,
+
+    async init() {
+      Chart.defaults.font.family = '"IBM Plex Sans JP", sans-serif';
+      Chart.defaults.font.size = 12;
+
+      this.chart = new Chart(this.$refs.chart, {
+        type: "line",
+        data: {
+          labels: ["10:00", "10:10", "10:20", "10:30", "10:40"],
+          datasets: [
+            {
+              label: "土壌水分 (%)",
+              data: [65, 58, 52, 44, 39],
+              borderColor: "#10a37f",
+              tension: 0.2,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+        },
+      });
+    },
+  }));
 });

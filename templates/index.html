@@ -96,8 +96,10 @@ MizuMori
           </span>
         </div>
       </div>
-      <div class="sensor-values__detail">
-        ここに各種センサの推移などをグラフ化できたらいいな
+    </section>
+    <section class="sensor-charts" x-data="sensorCharts">
+      <div class="sensor-charts__container">
+        <canvas x-ref="chart"></canvas>
       </div>
     </section>
   </main>
@@ -105,5 +107,6 @@ MizuMori
 {% endblock %}
 
 {% block script %}
+<script src="{{ url_for('static', filename='js/chart.umd.js') }}" type="module" defer></script>
 <script src="{{ url_for('static', filename='js/home.js') }}?t={{ cache_buster }}" type="module" defer></script>
 {% endblock %}

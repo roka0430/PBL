@@ -402,17 +402,6 @@ input:checked + .system-info__header .history-list-opener svg {
   font-size: 0.7em;
 }
 
-.sensor-values__detail {
-  height: 300px;
-
-  margin-top: 15px;
-  padding-block: 10px;
-  padding-inline: 12px;
-
-  background: var(--color-surface);
-  border-radius: 5px;
-}
-
 @media (max-width: 767px) {
   .sensor-values {
     grid-column: 1 / 2;
@@ -443,4 +432,19 @@ input:checked + .system-info__header .history-list-opener svg {
   .sensor-values__detail {
     border: solid 1px var(--color-border);
   }
+}
+
+/*  */
+
+.sensor-charts {
+  margin-top: 15px;
+  padding-block: 10px;
+  padding-inline: 12px;
+
+  background: var(--color-surface);
+  border-radius: 5px;
+}
+
+.sensor-charts__container {
+  height: 300px;
 }
