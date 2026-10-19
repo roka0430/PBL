@@ -107,6 +107,6 @@ MizuMori
 {% endblock %}
 
 {% block script %}
-<script src="{{ url_for('static', filename='js/chart.umd.js') }}" type="module" defer></script>
+<script src="{{ url_for('static', filename='js/chartjs/chart.umd.js') }}" type="module" defer></script>
 <script src="{{ url_for('static', filename='js/home.js') }}?t={{ cache_buster }}" type="module" defer></script>
 {% endblock %}
