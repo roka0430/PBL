@@ -61,6 +61,14 @@ DEFINITIONS = {
             "min": -40,
             "max": 80,
         },
+        "sensor_saving_interval_sec": {
+            "label": "センサ値保存間隔",
+            "description": "センサ値を保存する間隔を設定します。",
+            "unit": "秒",
+            "default": 600,
+            "min": 60,
+            "max": None,
+        },
     },
     "thr": {
         "determination_interval_sec": {

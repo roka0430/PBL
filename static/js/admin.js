@@ -377,6 +377,7 @@ document.addEventListener("alpine:init", () => {
           "low_temperature_threshold",
           "soil_moisture_dry",
           "soil_moisture_wet",
+          "sensor_saving_interval_sec",
         ],
       },
       {

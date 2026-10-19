@@ -58,6 +58,11 @@ class SystemController:
                 callback=self._check_sensors,
                 interval_key="sys.sensing_interval_sec",
             ),
+            "save_sensors": Task(
+                callback=self._save_sensors,
+                interval_key="sys.sensor_saving_interval_sec",
+                run_immediately=False,
+            ),
             "threshold_control": Task(
                 callback=self._process_auto_watering,
                 interval_key="thr.determination_interval_sec",
@@ -82,7 +87,8 @@ class SystemController:
 
         now = time.monotonic()
         for task in self._tasks.values():
-            task.next_run = now
+            interval = self.settings.get(task.interval_key)
+            task.next_run = now if task.run_immediately else now + interval
 
         while not self.system_stop_event.is_set():
             self.task_changed_event.clear()
@@ -113,6 +119,7 @@ class SystemController:
             else:
                 timeout = None
 
+            self._save_sensors()
             self.task_changed_event.wait(timeout)
 
     # -------------------- 外部 --------------------
@@ -447,3 +454,17 @@ class SystemController:
         self.sensor_values.humidity = SensorValue(
             value=humidity, measured_at=measured_at
         )
+
+    def _save_sensors(self):
+        measured_at = self.sensor_values.get_latest_measured_at()
+
+        max_age = timedelta(seconds=self.settings.get("sys.sensing_interval_sec") * 2)
+        if datetime.now() - measured_at >= max_age:
+            return
+
+        # self.sensor_database.add(
+        #     measured_at=measured_at,
+        #     temperature=self.sensor_values.temperature.value,
+        #     humidity=self.sensor_values.humidity.value,
+        #     soil_moisture=self.sensor_values.soil_moisture.value,
+        # )

@@ -8,6 +8,7 @@ class Task:
     callback: Callable[[], None]
     interval_key: str
     enabled: bool = True
+    run_immediately: bool = True
     next_run: float | None = None
 
 
@@ -47,6 +48,14 @@ class SensorValues:
             result[field.name] = value.to_dict() if value is not None else None
 
         return result
+
+    def get_latest_measured_at(self) -> datetime | None:
+        values = [value for value in vars(self).values() if value is not None]
+
+        if not values:
+            return None
+
+        return max(value.measured_at for value in values)
 
 
 @dataclass
