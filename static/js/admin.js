@@ -504,4 +504,21 @@ document.addEventListener("alpine:init", () => {
       };
     },
   }));
+
+  Alpine.data("calibrationPopup", () => ({
+    init() {
+      this.$watch(
+        () => this.$store.popup.revision,
+        () => this.updatePopup(),
+      );
+    },
+
+    updatePopup() {
+      this.group = this.$store.popup.settingGroup;
+      this.id = this.$store.popup.settingId;
+      const setting = this.$store.settings.getById(this.group, this.id);
+
+      console.log(setting);
+    },
+  }));
 });
