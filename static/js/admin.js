@@ -113,31 +113,21 @@ document.addEventListener("alpine:init", () => {
     opened: false,
     id: "",
 
-    open(id) {
+    settingGroup: null,
+    settingId: null,
+    revision: 0,
+
+    open(id, settingGroup, settingId) {
       this.id = id;
+      this.settingGroup = settingGroup;
+      this.settingId = settingId;
       this.opened = true;
+      this.revision++;
     },
 
     close() {
       this.id = "";
       this.opened = false;
-    },
-  });
-
-  Alpine.store("settingsPopup", {
-    group: null,
-    id: null,
-    revision: 0,
-
-    edit(group, id) {
-      this.group = group;
-      this.id = id;
-      this.revision++;
-      Alpine.store("popup").open("setting");
-    },
-
-    cancel() {
-      Alpine.store("popup").close();
     },
   });
 
@@ -439,14 +429,14 @@ document.addEventListener("alpine:init", () => {
 
     init() {
       this.$watch(
-        () => this.$store.settingsPopup.revision,
+        () => this.$store.popup.revision,
         () => this.updatePopup(),
       );
     },
 
     updatePopup() {
-      this.group = this.$store.settingsPopup.group;
-      this.id = this.$store.settingsPopup.id;
+      this.group = this.$store.popup.settingGroup;
+      this.id = this.$store.popup.settingId;
 
       const setting = this.$store.settings.getById(this.group, this.id);
 
