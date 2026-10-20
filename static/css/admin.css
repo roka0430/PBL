@@ -759,3 +759,42 @@
 .calibrate-popup__content {
   padding: 20px;
 }
+
+.calibrate-popup__notice {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  margin-top: 10px;
+}
+
+.calibrate-popup__notice h3 {
+  font-size: 0.9rem;
+}
+
+.calibrate-popup__notice li {
+  position: relative;
+  list-style: none;
+  padding-left: 1.4rem;
+}
+
+.calibrate-popup__notice li::before {
+  content: "";
+  position: absolute;
+  top: calc(50% - 1px);
+  left: 0.7rem;
+  transform: translate(-50%, -50%);
+
+  width: 1rem;
+  height: 1rem;
+}
+
+.calibrate-popup__notice li.instruction::before {
+  background: var(--color-primary);
+  mask: url("../images/circle-check.svg") center / contain no-repeat;
+}
+
+.calibrate-popup__notice li.warning::before {
+  background: var(--color-warning);
+  mask: url("../images/alert-circle.svg") center / contain no-repeat;
+}
