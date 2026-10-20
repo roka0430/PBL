@@ -315,6 +315,17 @@ def post_auto_watering_mode():
     return {"status": "accepted"}
 
 
+@app.post("/api/calibration/soil-moisture-dry")
+@admin_api_required
+def post_calibrate_soil_moisture_dry():
+    key = "sys.soil_moisture_dry"
+    try:
+        value = app.system.calibrate(key)
+        return jsonify({"status": "success", "key": key, "value": value}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "error": str(e)}), 500
+
+
 # ==================================================
 # 起動
 # ==================================================

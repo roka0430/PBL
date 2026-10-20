@@ -539,13 +539,30 @@ document.addEventListener("alpine:init", () => {
       this.currentValue = setting.value;
     },
 
-    drySoilCalibrate() {
+    async drySoilCalibrate() {
       if (!confirm("校正を開始しますか？")) {
         return;
       }
 
       this.calibrating = true;
       this.calibrationResult = "測定中";
+
+      const res = await fetch("/api/calibration/soil-moisture-dry", {
+        method: "POST",
+      });
+
+      if (!res.ok) {
+        console.log("error");
+        this.calibrating = false;
+        this.calibrationResult = "測定失敗";
+        return;
+      }
+
+      const result = await res.json();
+
+      this.calibrating = false;
+      this.complete = true;
+      this.calibrationResult = result.value;
     },
   }));
 });

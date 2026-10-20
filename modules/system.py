@@ -211,6 +211,15 @@ class SystemController:
     def get_sensor_history(self, limit) -> list[dict]:
         return self.sensor_database.get(limit=limit)
 
+    #
+
+    def calibrate(self, key):
+        time.sleep(3)
+
+        value = 10
+
+        return value
+
     # -------------------- タスク管理 --------------------
 
     def _sync_tasks_with_mode(self):
