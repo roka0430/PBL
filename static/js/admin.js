@@ -506,6 +506,15 @@ document.addEventListener("alpine:init", () => {
   }));
 
   Alpine.data("calibrationPopup", () => ({
+    settingId: null,
+    heading: null,
+    description: null,
+    unit: null,
+    min: null,
+    max: null,
+    currentValue: null,
+    value: null,
+
     init() {
       this.$watch(
         () => this.$store.popup.revision,
@@ -518,7 +527,13 @@ document.addEventListener("alpine:init", () => {
       this.id = this.$store.popup.settingId;
       const setting = this.$store.settings.getById(this.group, this.id);
 
-      console.log(setting);
+      this.settingId = setting.id;
+      this.description = setting.description;
+      this.heading = setting.label;
+      this.unit = setting.unit;
+      this.min = setting.min;
+      this.max = setting.max;
+      this.currentValue = this.value = setting.value;
     },
   }));
 });
