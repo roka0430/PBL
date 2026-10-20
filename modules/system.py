@@ -214,9 +214,10 @@ class SystemController:
     #
 
     def calibrate(self, key):
-        time.sleep(3)
-
-        value = 10
+        if key == "sys.soil_moisture_dry" or key == "sys.soil_moisture_wet":
+            value = self._calibrate_soil_moisture()
+        else:
+            raise ValueError(f"Unknown calibration key: {key}")
 
         return value
 
@@ -477,3 +478,36 @@ class SystemController:
         #     humidity=self.sensor_values.humidity.value,
         #     soil_moisture=self.sensor_values.soil_moisture.value,
         # )
+
+    # -------------------- 校正 --------------------
+
+    def _set_calibrating_status(self):
+        self.stop_watering()
+
+        deadline = time.monotonic() + 5
+        while self.status != SystemStatus.IDLE:
+            if time.monotonic() >= deadline:
+                raise TimeoutError("Watering did not stop in time")
+            time.sleep(0.05)
+
+        with self._status_lock:
+            if self.status != SystemStatus.IDLE:
+                raise RuntimeError("System is busy")
+            self.status = SystemStatus.CALIBRATING
+
+    def _calibrate_soil_moisture(self):
+        self._set_calibrating_status()
+
+        try:
+            values = []
+            for i in range(5):
+                self._check_soil_moisture()
+                values.append(self.sensor_values.soil_moisture_raw.value)
+
+                if i < 4:
+                    time.sleep(1)
+
+            return round(sum(values) / len(values))
+        finally:
+            with self._status_lock:
+                self.status = SystemStatus.IDLE
