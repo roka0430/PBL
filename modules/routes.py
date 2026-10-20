@@ -326,6 +326,17 @@ def post_calibrate_soil_moisture_dry():
         return jsonify({"status": "error", "error": str(e)}), 500
 
 
+@app.post("/api/calibration/soil-moisture-wet")
+@admin_api_required
+def post_calibrate_soil_moisture_wet():
+    key = "sys.soil_moisture_wet"
+    try:
+        value = app.system.calibrate(key)
+        return jsonify({"status": "success", "key": key, "value": value}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "error": str(e)}), 500
+
+
 # ==================================================
 # 起動
 # ==================================================

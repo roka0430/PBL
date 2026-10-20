@@ -315,17 +315,17 @@ MizuMori | Admin
           <div class="calibrate-popup__description" x-text="description"></div>
           <div class="calibrate-popup__body dry-soil-calibrate" x-show="settingId ===  'soil_moisture_dry'">
             <div class="calibrate-popup__notice">
-              <h3>校正時の注意点</h3>
+              <h3>測定時の注意点</h3>
               <ul>
                 <li class="instruction">十分に乾燥した土壌を用いて測定してください。</li>
-                <li class="warning">校正中は実行中の給水処理が停止されます。</li>
+                <li class="warning">測定開始時に実行中の給水処理は停止されます。</li>
               </ul>
             </div>
             <div class="calibrate-popup__actions">
               <button @click="drySoilCalibrate()" :disabled="calibrating">測定を開始</button>
             </div>
             <div class=" calibrate-popup__result">
-              <h3>校正結果</h3>
+              <h3>測定結果</h3>
               <div class="dry-soil-calibrate__result">
                 <div class="dry-soil-calibrate__value">
                   <div x-text="calibrationResult ?? '--'"></div>
@@ -335,11 +335,34 @@ MizuMori | Admin
             </div>
             <div class="calibrate-popup__actions">
               <button :disabled="calibrating" @click="if(!calibrating) $store.popup.close()">キャンセル</button>
-              <button :disabled="calibrating || !complete" class="success">校正結果を保存</button>
+              <button :disabled="calibrating || !complete" class="success">測定結果を保存</button>
             </div>
           </div>
-          <div class="dry-soil-calibrate" x-show="settingId ===  'soil_moisture_wet'"></div>
-          <div class="dry-soil-calibrate" x-show="settingId ===  'pump_flow_rate_ml_sec'"></div>
+          <div class="calibrate-popup__body wet-soil-calibrate" x-show="settingId ===  'soil_moisture_wet'">
+            <div class="calibrate-popup__notice">
+              <h3>測定時の注意点</h3>
+              <ul>
+                <li class="instruction">十分に湿潤した土壌を用いて測定してください。</li>
+                <li class="warning">測定開始時に実行中の給水処理は停止されます。</li>
+              </ul>
+            </div>
+            <div class="calibrate-popup__actions">
+              <button @click="wetSoilCalibrate()" :disabled="calibrating">測定を開始</button>
+            </div>
+            <div class=" calibrate-popup__result">
+              <h3>測定結果</h3>
+              <div class="dry-soil-calibrate__result">
+                <div class="dry-soil-calibrate__value">
+                  <div x-text="calibrationResult ?? '--'"></div>
+                  <span class="unit" x-text="unit"></span>
+                </div>
+              </div>
+            </div>
+            <div class="calibrate-popup__actions">
+              <button :disabled="calibrating" @click="if(!calibrating) $store.popup.close()">キャンセル</button>
+              <button :disabled="calibrating || !complete" class="success">測定結果を保存</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

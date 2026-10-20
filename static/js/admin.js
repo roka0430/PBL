@@ -537,10 +537,16 @@ document.addEventListener("alpine:init", () => {
       this.min = setting.min;
       this.max = setting.max;
       this.currentValue = setting.value;
+      this.calibrationResult = null;
+
+      this.calibrating = false;
+      this.complete = false;
     },
 
+    // TODO 保存ボタンを作成する
+
     async drySoilCalibrate() {
-      if (!confirm("校正を開始しますか？")) {
+      if (!confirm("測定を開始しますか？")) {
         return;
       }
 
@@ -548,6 +554,32 @@ document.addEventListener("alpine:init", () => {
       this.calibrationResult = "測定中";
 
       const res = await fetch("/api/calibration/soil-moisture-dry", {
+        method: "POST",
+      });
+
+      if (!res.ok) {
+        console.log("error");
+        this.calibrating = false;
+        this.calibrationResult = "測定失敗";
+        return;
+      }
+
+      const result = await res.json();
+
+      this.calibrating = false;
+      this.complete = true;
+      this.calibrationResult = result.value;
+    },
+
+    async wetSoilCalibrate() {
+      if (!confirm("測定を開始しますか？")) {
+        return;
+      }
+
+      this.calibrating = true;
+      this.calibrationResult = "測定中";
+
+      const res = await fetch("/api/calibration/soil-moisture-wet", {
         method: "POST",
       });
 
