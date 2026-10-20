@@ -513,7 +513,10 @@ document.addEventListener("alpine:init", () => {
     min: null,
     max: null,
     currentValue: null,
-    value: null,
+    calibrationResult: null,
+
+    calibrating: false,
+    complete: false,
 
     init() {
       this.$watch(
@@ -533,7 +536,16 @@ document.addEventListener("alpine:init", () => {
       this.unit = setting.unit;
       this.min = setting.min;
       this.max = setting.max;
-      this.currentValue = this.value = setting.value;
+      this.currentValue = setting.value;
+    },
+
+    drySoilCalibrate() {
+      if (!confirm("校正を開始しますか？")) {
+        return;
+      }
+
+      this.calibrating = true;
+      this.calibrationResult = "測定中";
     },
   }));
 });

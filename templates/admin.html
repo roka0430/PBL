@@ -244,8 +244,8 @@ MizuMori | Admin
     </section>
   </div>
   <div class="popups" x-show="$store.popup.opened">
-    <div class="popups__content" @click.outside="$store.popup.close()">
-      <div class="setting-popup" x-show="$store.popup.id === 'edit'" x-data="settingsPopup">
+    <div class="popups__content">
+      <div class="setting-popup" x-show="$store.popup.id === 'edit'" x-data="settingsPopup" @click.outside="$store.popup.close()">
         <div class="popups__header setting-popup__header">
           <h2 x-text="heading"></h2>
           <button class="popups__close" @click="$store.popup.close()">
@@ -287,10 +287,10 @@ MizuMori | Admin
           </div>
         </div>
       </div>
-      <div class="calibrate-popup" x-show="$store.popup.id === 'calibration'" x-data="calibrationPopup">
+      <div class="calibrate-popup" x-show="$store.popup.id === 'calibration'" x-data="calibrationPopup" @click.outside="if(!calibrating) $store.popup.close()">
         <div class="popups__header calibrate-popup__header">
           <h2 x-text="heading"></h2>
-          <button class="popups__close" @click="$store.popup.close()">
+          <button class="popups__close" @click="if(!calibrating) $store.popup.close()">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
               <path d="M18 6l-12 12" />
@@ -313,7 +313,7 @@ MizuMori | Admin
             </div>
           </div>
           <div class="calibrate-popup__description" x-text="description"></div>
-          <div class="dry-soil-calibrate" x-show="settingId ===  'soil_moisture_dry'">
+          <div class="calibrate-popup__body dry-soil-calibrate" x-show="settingId ===  'soil_moisture_dry'">
             <div class="calibrate-popup__notice">
               <h3>校正時の注意点</h3>
               <ul>
@@ -321,8 +321,22 @@ MizuMori | Admin
                 <li class="warning">校正中は実行中の給水処理が停止されます。</li>
               </ul>
             </div>
-            <button class="calibrate-popup__start">測定を開始</button>
-            <div class="dry-soil-calibrate__result"></div>
+            <div class="calibrate-popup__actions">
+              <button @click="drySoilCalibrate()" :disabled="calibrating">測定を開始</button>
+            </div>
+            <div class=" calibrate-popup__result">
+              <h3>校正結果</h3>
+              <div class="dry-soil-calibrate__result">
+                <div class="dry-soil-calibrate__value">
+                  <div x-text="calibrationResult ?? '--'"></div>
+                  <span class="unit" x-text="unit"></span>
+                </div>
+              </div>
+            </div>
+            <div class="calibrate-popup__actions">
+              <button :disabled="calibrating" @click="if(!calibrating) $store.popup.close()">キャンセル</button>
+              <button :disabled="calibrating || !complete" class="success">校正結果を保存</button>
+            </div>
           </div>
           <div class="dry-soil-calibrate" x-show="settingId ===  'soil_moisture_wet'"></div>
           <div class="dry-soil-calibrate" x-show="settingId ===  'pump_flow_rate_ml_sec'"></div>
