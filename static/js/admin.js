@@ -514,7 +514,8 @@ document.addEventListener("alpine:init", () => {
     max: null,
     currentValue: null,
     value: null,
-    calibrationMessage: null,
+
+    calibrationStatus: "idle",
 
     calibrating: false,
     complete: false,
@@ -540,24 +541,38 @@ document.addEventListener("alpine:init", () => {
       this.max = setting.max;
       this.currentValue = setting.value;
       this.value = null;
-      this.calibrationMessage = null;
+      this.calibrationStatus = "idle";
 
       this.calibrating = false;
       this.complete = false;
     },
 
     async save() {
-      console.log(this.validation);
+      if (!this.validation) {
+        return;
+      }
 
-      // this.saving = true;
+      this.saving = true;
 
-      // const result = await this.$store.settings.update(this.group, this.id, Number(this.value));
+      const result = await this.$store.settings.update(this.group, this.id, Number(this.value));
 
-      // if (!result.success) {
-      //   alert("設定値を変更できませんでした");
-      // }
-      // this.$store.popup.close();
-      // this.saving = false;
+      if (!result.success) {
+        alert("設定値を変更できませんでした");
+      }
+
+      this.$store.popup.close();
+      this.saving = false;
+    },
+
+    get calibrationMessage() {
+      const messages = {
+        idle: "待機中",
+        measuring: "測定中",
+        success: "測定完了",
+        error: "測定失敗",
+      };
+
+      return messages[this.calibrationStatus];
     },
 
     get validation() {
@@ -589,8 +604,9 @@ document.addEventListener("alpine:init", () => {
         return;
       }
 
+      this.value = null;
       this.calibrating = true;
-      this.calibrationMessage = "測定中";
+      this.calibrationStatus = "measuring";
 
       const res = await fetch("/api/calibration/soil-moisture-dry", {
         method: "POST",
@@ -599,7 +615,7 @@ document.addEventListener("alpine:init", () => {
       if (!res.ok) {
         console.log("error");
         this.calibrating = false;
-        this.calibrationMessage = "測定失敗";
+        this.calibrationStatus = "error";
         return;
       }
 
@@ -608,7 +624,7 @@ document.addEventListener("alpine:init", () => {
       this.calibrating = false;
       this.complete = true;
       this.value = result.value;
-      this.calibrationMessage = "測定完了";
+      this.calibrationStatus = "success";
     },
 
     async wetSoilCalibrate() {
@@ -616,8 +632,9 @@ document.addEventListener("alpine:init", () => {
         return;
       }
 
+      this.value = null;
       this.calibrating = true;
-      this.calibrationMessage = "測定中";
+      this.calibrationStatus = "measuring";
 
       const res = await fetch("/api/calibration/soil-moisture-wet", {
         method: "POST",
@@ -626,7 +643,7 @@ document.addEventListener("alpine:init", () => {
       if (!res.ok) {
         console.log("error");
         this.calibrating = false;
-        this.calibrationMessage = "測定失敗";
+        this.calibrationStatus = "error";
         return;
       }
 
@@ -634,7 +651,8 @@ document.addEventListener("alpine:init", () => {
 
       this.calibrating = false;
       this.complete = true;
-      this.calibrationMessage = result.value;
+      this.value = result.value;
+      this.calibrationStatus = "success";
     },
   }));
 });

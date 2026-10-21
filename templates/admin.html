@@ -313,7 +313,7 @@ MizuMori | Admin
             </div>
           </div>
           <div class="calibrate-popup__description" x-text="description"></div>
-          <div class="calibrate-popup__body dry-soil-calibrate" x-show="settingId ===  'soil_moisture_dry'">
+          <div class="calibrate-popup__body soil-moisture-calibrate" x-show="settingId ===  'soil_moisture_dry'">
             <div class="calibrate-popup__notice">
               <h3>測定時の注意点</h3>
               <ul>
@@ -324,11 +324,27 @@ MizuMori | Admin
             <div class="calibrate-popup__actions">
               <button @click="drySoilCalibrate()" :disabled="calibrating">測定を開始</button>
             </div>
-            <div class=" calibrate-popup__result">
-              <h3>測定結果</h3>
-              <div class="dry-soil-calibrate__result">
-                <div x-text="calibrationMessage ?? '待機中'"></div>
-                <div class="dry-soil-calibrate__value">
+            <div class="calibrate-popup__result">
+              <div class="soil-moisture-calibrate__result">
+                <div class="soil-moisture-calibrate__message" :class="calibrationStatus">
+                  <svg x-show="calibrationStatus === 'success'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                    <path d="M9 12l2 2l4 -4" />
+                  </svg>
+                  <svg x-show="calibrationStatus === 'error'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-alert-circle">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                    <path d="M12 8v4" />
+                    <path d="M12 16h.01" />
+                  </svg>
+                  <span x-text="calibrationMessage"></span>
+                  <svg class="loader" x-show="calibrationStatus === 'measuring'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M12 3a9 9 0 1 0 9 9" />
+                  </svg>
+                </div>
+                <div class="soil-moisture-calibrate__value">
                   <div x-text="value ?? '--'"></div>
                   <span class="unit" x-text="unit"></span>
                 </div>
@@ -350,11 +366,27 @@ MizuMori | Admin
             <div class="calibrate-popup__actions">
               <button @click="wetSoilCalibrate()" :disabled="calibrating">測定を開始</button>
             </div>
-            <div class=" calibrate-popup__result">
-              <h3>測定結果</h3>
-              <div class="dry-soil-calibrate__result">
-                <div x-text="calibrationMessage ?? '待機中'"></div>
-                <div class="dry-soil-calibrate__value">
+            <div class="calibrate-popup__result">
+              <div class="soil-moisture-calibrate__result">
+                <div class="soil-moisture-calibrate__message" :class="calibrationStatus">
+                  <svg x-show="calibrationStatus === 'success'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                    <path d="M9 12l2 2l4 -4" />
+                  </svg>
+                  <svg x-show="calibrationStatus === 'error'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-alert-circle">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                    <path d="M12 8v4" />
+                    <path d="M12 16h.01" />
+                  </svg>
+                  <span x-text="calibrationMessage"></span>
+                  <svg class="loader" x-show="calibrationStatus === 'measuring'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M12 3a9 9 0 1 0 9 9" />
+                  </svg>
+                </div>
+                <div class="soil-moisture-calibrate__value">
                   <div x-text="value ?? '--'"></div>
                   <span class="unit" x-text="unit"></span>
                 </div>
@@ -362,7 +394,7 @@ MizuMori | Admin
             </div>
             <div class="calibrate-popup__actions">
               <button :disabled="calibrating" @click="if(!calibrating) $store.popup.close()">キャンセル</button>
-              <button class="success" :disabled="calibrating || !complete" @click="save()">測定結果を保存</button>
+              <button class="success" :disabled="calibrating || !complete || !validation || saving" @click="save()">測定結果を保存</button>
             </div>
           </div>
         </div>

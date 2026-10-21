@@ -841,7 +841,7 @@
 }
 
 .calibrate-popup__result {
-  padding-block: 12px;
+  padding-block: 12px 8px;
   padding-inline: 20px;
 
   background: var(--color-surface);
@@ -860,6 +860,60 @@
 
 /*  */
 
-.dry-soil-calibrate__value {
-  font-size: 1.2rem;
+.soil-moisture-calibrate__result {
+  display: flex;
+  gap: 3px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.soil-moisture-calibrate__message {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+
+  font-size: 0.8rem;
+}
+
+.soil-moisture-calibrate__message svg.loader {
+  animation: rotate-loader 1.2s linear infinite;
+}
+
+@keyframes rotate-loader {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.soil-moisture-calibrate__message span {
+  padding-top: 3px;
+  line-height: 1;
+}
+
+.soil-moisture-calibrate__message.idle {
+  color: var(--color-text-muted);
+}
+
+.soil-moisture-calibrate__message.measuring {
+  color: var(--color-info);
+}
+
+.soil-moisture-calibrate__message.success {
+  color: var(--color-primary);
+}
+
+.soil-moisture-calibrate__message.error {
+  color: var(--color-error);
+}
+
+.soil-moisture-calibrate__value {
+  display: flex;
+  gap: 3px;
+  align-items: baseline;
+
+  font-size: 1.6rem;
+  font-weight: bold;
 }
