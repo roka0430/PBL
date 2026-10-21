@@ -169,6 +169,8 @@ a {
   gap: 6px;
   align-items: center;
 
+  position: relative;
+
   padding-block: 5px;
   padding-inline: 8px 12px;
 
@@ -182,16 +184,23 @@ a {
 
 .site-title__admin {
   display: none;
-  transform: translateY(1px);
+
+  position: absolute;
+  top: calc(50% + 1px);
+  left: calc(100% - 6px);
+  transform: translateY(-50%);
 
   margin-left: 4px;
+  padding-top: 2px;
   padding-left: 10px;
 
-  border-left: solid 2px var(--color-primary);
+  border-left: solid 1px var(--color-primary);
 
   color: var(--color-primary);
-  font-weight: bold;
+  /* font-weight: bold; */
   line-height: 1;
+
+  pointer-events: none;
 }
 
 body.page-admin .site-title__admin {
