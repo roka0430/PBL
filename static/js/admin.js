@@ -425,6 +425,7 @@ document.addEventListener("alpine:init", () => {
     unit: null,
     min: null,
     max: null,
+    defaultValue: null,
     currentValue: null,
     value: null,
 
@@ -446,6 +447,7 @@ document.addEventListener("alpine:init", () => {
       this.unit = setting.unit;
       this.min = setting.min;
       this.max = setting.max;
+      this.defaultValue = setting.default;
       this.currentValue = this.value = setting.value;
 
       this.$nextTick(() => {
@@ -514,6 +516,7 @@ document.addEventListener("alpine:init", () => {
 
     description: null,
     heading: null,
+    defaultValue: null,
     currentValue: null,
 
     init() {
@@ -531,6 +534,7 @@ document.addEventListener("alpine:init", () => {
 
       this.description = setting.description;
       this.heading = setting.label;
+      this.defaultValue = setting.default;
       this.currentValue = setting.value;
     },
 
@@ -555,6 +559,7 @@ document.addEventListener("alpine:init", () => {
     unit: null,
     min: null,
     max: null,
+    defaultValue: null,
     currentValue: null,
     value: null,
 
@@ -582,6 +587,7 @@ document.addEventListener("alpine:init", () => {
       this.unit = setting.unit;
       this.min = setting.min;
       this.max = setting.max;
+      this.defaultValue = setting.default;
       this.currentValue = setting.value;
       this.value = null;
       this.calibrationStatus = "idle";

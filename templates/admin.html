@@ -295,7 +295,12 @@ MizuMori | Admin
                 <span class="unit" x-text="unit"></span>
               </div>
             </div>
-            <div class="setting-popup__range">
+            <div class="setting-popup__info-spacer"></div>
+            <div class="setting-popup__info-meta">
+              <h3>デフォルト</h3>
+              <div><span x-text="defaultValue"></span></div>
+            </div>
+            <div class="setting-popup__info-meta">
               <h3>設定範囲</h3>
               <div><span x-text="min"></span> ~ <span x-text="max"></span> <span x-text="unit"></span></div>
             </div>
@@ -339,10 +344,11 @@ MizuMori | Admin
                 <span x-text="currentValue ? 'オン' : 'オフ'"></span>
               </div>
             </div>
-            <!-- <div class="setting-popup__range">
-              <h3>設定範囲</h3>
-              <div><span x-text="min"></span> ~ <span x-text="max"></span> <span x-text="unit"></span></div>
-            </div> -->
+            <div class="setting-popup__info-spacer"></div>
+            <div class="setting-popup__info-meta">
+              <h3>デフォルト</h3>
+              <div><span x-text="defaultValue ? 'オン' : 'オフ'"></span></div>
+            </div>
           </div>
           <div class="setting-popup__description" x-text="description"></div>
           <div class="setting-popup__actions">
@@ -371,7 +377,12 @@ MizuMori | Admin
                 <span class="unit" x-text="unit"></span>
               </div>
             </div>
-            <div class="calibrate-popup__range">
+            <div class="calibrate-popup__info-spacer"></div>
+            <div class="setting-popup__info-meta">
+              <h3>デフォルト</h3>
+              <div><span x-text="defaultValue"></span></div>
+            </div>
+            <div class="calibrate-popup__info-meta">
               <h3>設定範囲</h3>
               <div><span x-text="min"></span> ~ <span x-text="max"></span> <span x-text="unit"></span></div>
             </div>

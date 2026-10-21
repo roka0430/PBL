@@ -631,6 +631,7 @@
 .setting-popup__info,
 .calibrate-popup__info {
   display: flex;
+  gap: 15px;
   align-items: end;
   justify-content: space-between;
 
@@ -640,6 +641,11 @@
   background: var(--color-surface);
   border: solid 1px var(--color-border);
   border-radius: 3px;
+}
+
+.setting-popup__info-spacer,
+.calibrate-popup__info-spacer {
+  flex: 1;
 }
 
 .setting-popup__current-setting,
@@ -670,15 +676,15 @@
   font-size: 0.7em;
 }
 
-.setting-popup__range h3,
-.calibrate-popup__range h3 {
+.setting-popup__info-meta h3,
+.calibrate-popup__info-meta h3 {
   color: var(--color-text-muted);
   font-size: 0.8rem;
   font-weight: normal;
 }
 
-.setting-popup__range div,
-.calibrate-popup__range div {
+.setting-popup__info-meta div,
+.calibrate-popup__info-meta div {
   font-size: 0.9rem;
 }
 
