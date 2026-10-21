@@ -551,7 +551,7 @@
   width: 500px;
   max-height: 90vh;
 
-  padding-top: 43px;
+  /* padding-top: 43px; */
 
   background: var(--color-background);
   border: solid 1px var(--color-border);
@@ -565,10 +565,10 @@
   display: flex;
   align-items: center;
 
-  position: absolute;
+  /* position: absolute;
   top: 0;
   right: 0;
-  left: 0;
+  left: 0; */
 
   padding-block: 10px;
   padding-inline: 12px;
@@ -598,11 +598,9 @@
 @media (max-width: 767px) {
   .popups__content {
     position: absolute;
-    right: 0;
     bottom: 0;
-    left: 0;
 
-    width: auto;
+    width: 100%;
     max-height: calc(100% - 36px);
 
     padding-top: 53px;
@@ -751,8 +749,10 @@
 
 .setting-popup__action {
   flex: 1;
+
   padding-block: 6px 5px;
   border-radius: 50px;
+
   font-size: 0.8rem;
   cursor: pointer;
 }
@@ -787,17 +787,17 @@
   gap: 15px;
 }
 
+.calibrate-popup__body h3 {
+  margin-bottom: 3px;
+  font-size: 0.9rem;
+}
+
 .calibrate-popup__notice {
   display: flex;
   flex-direction: column;
   gap: 4px;
 
   margin-top: 10px;
-}
-
-.calibrate-popup__notice h3 {
-  margin-bottom: 3px;
-  font-size: 0.9rem;
 }
 
 .calibrate-popup__notice ul {
@@ -847,12 +847,18 @@
 
   padding-block: 6px 5px;
 
-  background: var(--color-surface);
-  border: solid 1px var(--color-border);
+  background: var(--color-text);
   border-radius: 50px;
 
+  color: var(--color-surface);
   font-size: 0.8rem;
   cursor: pointer;
+}
+
+.calibrate-popup__actions button.cancel {
+  background: var(--color-surface);
+  border: solid 1px var(--color-border);
+  color: var(--color-text);
 }
 
 .calibrate-popup__actions button.success {
@@ -862,6 +868,7 @@
 }
 
 .calibrate-popup__actions button:disabled {
+  color: var(--color-text-muted);
   cursor: not-allowed;
 }
 
@@ -872,11 +879,6 @@
   background: var(--color-surface);
   border: solid 1px var(--color-border);
   border-radius: 3px;
-}
-
-.calibrate-popup__result h3 {
-  margin-bottom: 3px;
-  font-size: 0.8rem;
 }
 
 .calibrate-popup__result .unit {
@@ -941,4 +943,38 @@
   gap: 3px;
   flex-direction: column;
   align-items: center;
+}
+
+/*  */
+
+.pump-flow-rate-calibrate__action {
+  padding-block: 12px;
+  padding-inline: 20px;
+
+  background: var(--color-surface);
+  border: solid 1px var(--color-border);
+  border-radius: 3px;
+}
+
+.pump-flow-rate-calibrate .calibrate-popup__message {
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.pump-flow-rate-calibrate__entry {
+  display: flex;
+  gap: 10px;
+}
+
+.pump-flow-rate-calibrate__entry span {
+  font-size: 0.8rem;
+}
+
+.pump-flow-rate-calibrate__entry input {
+  padding-block: 5px;
+  padding-inline: 10px;
+
+  background: var(--color-surface);
+  border: solid 1px var(--color-border);
+  border-radius: 3px;
 }

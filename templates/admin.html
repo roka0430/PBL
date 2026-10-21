@@ -419,7 +419,7 @@ MizuMori | Admin
               </div>
             </div>
             <div class="calibrate-popup__actions">
-              <button :disabled="calibrating" @click="if(!calibrating) $store.popup.close()">キャンセル</button>
+              <button class="cancel" :disabled="calibrating" @click="if(!calibrating) $store.popup.close()">キャンセル</button>
               <button class="success" :disabled="calibrating || !complete" @click="save()">測定結果を保存</button>
             </div>
           </div>
@@ -466,27 +466,28 @@ MizuMori | Admin
               </div>
             </div>
             <div class="calibrate-popup__actions">
-              <button :disabled="calibrating" @click="if(!calibrating) $store.popup.close()">キャンセル</button>
+              <button class="cancel" :disabled="calibrating" @click="if(!calibrating) $store.popup.close()">キャンセル</button>
               <button class="success" :disabled="calibrating || !complete || !validation || saving" @click="save()">測定結果を保存</button>
             </div>
           </div>
-          <div class="calibrate-popup__body pump-flow-rate-calibrate" x-show="settingId === 'sys.pump_flow_rate_ml_sec'">
+          <div class="calibrate-popup__body pump-flow-rate-calibrate" x-show="settingId === 'sys.pump_flow_rate_ml_sec'" x-data="calibrationPumpFlowRatePopup">
             <div class="calibrate-popup__notice">
               <h3>測定時の注意点</h3>
               <ul>
                 <li class="instruction">給水量を測定できる十分大きな容器を用意してください。</li>
                 <li class="instruction">5秒給水と10秒給水をそれぞれ2回ずつ測定してください。</li>
-                <li class="warning">測定開始時に実行中の給水処理は停止されます。</li>
-                <li class="warning">測定開始と同時にポンプが駆動します。水濡れや水の飛散に注意してください。</li>
+                <li class="warning">給水開始時に実行中の給水処理は停止されます。</li>
+                <li class="warning">給水開始と同時にポンプが駆動します。水濡れや水の飛散に注意してください。</li>
               </ul>
             </div>
-            <div class="calibrate-popup__actions">
-              <button @click="pumpFlowRateCalibrate(5)" :disabled="calibrating">5秒給水</button>
-              <button @click="pumpFlowRateCalibrate(10)" :disabled="calibrating">10秒給水</button>
-            </div>
-            <div class="calibrate-popup__result">
-              <div class="pump-flow-rate-calibrate__result">
+            <div>
+              <h3>10秒間の給水</h3>
+              <div class="pump-flow-rate-calibrate__action">
+                <div class="calibrate-popup__actions">
+                  <button @click="pumpFlowRateCalibrate()" :disabled="calibrating">10秒給水</button>
+                </div>
                 <div class="calibrate-popup__message" :class="calibrationStatus">
+                  <span>ポンプ：</span>
                   <svg x-show="calibrationStatus === 'success'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
@@ -499,28 +500,52 @@ MizuMori | Admin
                     <path d="M12 16h.01" />
                   </svg>
                   <span x-text="{
-                    idle: '待機中',
-                    measuring: '給水中',
-                    success: '給水完了',
-                    error: '給水失敗',
-                  }[calibrationStatus]"></span>
+                      idle: '待機中',
+                      measuring: '給水中',
+                      success: '給水完了',
+                      error: '給水失敗',
+                    }[calibrationStatus]"></span>
                   <svg class="loader" x-show="calibrationStatus === 'measuring'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M12 3a9 9 0 1 0 9 9" />
                   </svg>
                 </div>
-                <div class="pump-flow-rate-calibrate__entry">
-                  <!-- TODO ここに給水量の入力欄を -->
-                </div>
-                <div class="calibrate-popup__value">
-                  <div x-text="value ?? '--'"></div>
-                  <span class="unit" x-text="unit"></span>
+              </div>
+            </div>
+            <div class="pump-flow-rate-calibrate__entry">
+              <label>
+                <span>1回目の給水量（mL）</span>
+                <input type="number" x-model="v1">
+              </label>
+              <label>
+                <span>2回目の給水量（mL）</span>
+                <input type="number" x-model="v2">
+              </label>
+            </div>
+            <div class="pump-flow-rate-calibrate__entry">
+              <label>
+                <span>3回目の給水量（mL）</span>
+                <input type="number" x-model="v3">
+              </label>
+              <label>
+                <span>4回目の給水量（mL）</span>
+                <input type="number" x-model="v4">
+              </label>
+            </div>
+            <div>
+              <h3>校正結果</h3>
+              <div class="calibrate-popup__result">
+                <div class="pump-flow-rate-calibrate__result">
+                  <div class="calibrate-popup__value">
+                    <div x-text="pumpFlowRate"></div>
+                    <span class="unit" x-text="unit"></span>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="calibrate-popup__actions">
-              <button :disabled="calibrating" @click="if(!calibrating) $store.popup.close()">キャンセル</button>
-              <button class="success" :disabled="calibrating || !complete || !validation || saving" @click="save()">測定結果を保存</button>
+              <button class="cancel" :disabled="calibrating" @click="if(!calibrating) $store.popup.close()">キャンセル</button>
+              <button class="success" :disabled="calibrating || !validation || saving" @click="save()">校正結果を保存</button>
             </div>
           </div>
         </div>

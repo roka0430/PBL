@@ -564,7 +564,6 @@ document.addEventListener("alpine:init", () => {
     value: null,
 
     calibrationStatus: "idle",
-
     calibrating: false,
     complete: false,
     saving: false,
@@ -691,8 +690,10 @@ document.addEventListener("alpine:init", () => {
       this.calibrationStatus = "success";
     },
 
-    async pumpFlowRateCalibrate(duration_sec) {
-      if (!confirm(`${duration_sec}秒給水を開始しますか？`)) {
+    async pumpFlowRateCalibrate() {
+      const DURATION_SEC = 10;
+
+      if (!confirm(`${DURATION_SEC}秒給水を開始しますか？`)) {
         return;
       }
 
@@ -703,7 +704,7 @@ document.addEventListener("alpine:init", () => {
       const res = await fetch("/api/calibration/pump-flow-rate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ duration_sec: duration_sec }),
+        body: JSON.stringify({ duration_sec: DURATION_SEC }),
       });
 
       if (!res.ok) {
@@ -715,9 +716,42 @@ document.addEventListener("alpine:init", () => {
       const result = await res.json();
 
       this.calibrating = false;
-      this.complete = true;
       this.value = result.value;
       this.calibrationStatus = "success";
+    },
+  }));
+
+  Alpine.data("calibrationPumpFlowRatePopup", () => ({
+    v1: 0,
+    v2: 0,
+    v3: 0,
+    v4: 0,
+
+    init() {
+      this.$watch(
+        () => this.pumpFlowRate,
+        (rate) => {
+          this.value = rate;
+        },
+      );
+
+      this.$watch(
+        () => this.$store.popup.revision,
+        () => this.updatePopup(),
+      );
+    },
+
+    get pumpFlowRate() {
+      const [v1, v2, v3, v4] = [this.v1, this.v2, this.v3, this.v4].map(Number);
+      const rate = (v1 + v2 + v3 + v4) / 40;
+      return Math.round(rate * 100) / 100;
+    },
+
+    updatePopup() {
+      this.v5s1 = 0;
+      this.v5s2 = 0;
+      this.v10s1 = 0;
+      this.v10s2 = 0;
     },
   }));
 });
