@@ -877,16 +877,7 @@
   font-size: 0.7em;
 }
 
-/*  */
-
-.soil-moisture-calibrate__result {
-  display: flex;
-  gap: 3px;
-  flex-direction: column;
-  align-items: center;
-}
-
-.soil-moisture-calibrate__message {
+.calibrate-popup__message {
   display: flex;
   gap: 3px;
   align-items: center;
@@ -894,7 +885,7 @@
   font-size: 0.8rem;
 }
 
-.soil-moisture-calibrate__message svg.loader {
+.calibrate-popup__message svg.loader {
   animation: rotate-loader 1.2s linear infinite;
 }
 
@@ -907,28 +898,28 @@
   }
 }
 
-.soil-moisture-calibrate__message span {
+.calibrate-popup__message span {
   padding-top: 3px;
   line-height: 1;
 }
 
-.soil-moisture-calibrate__message.idle {
+.calibrate-popup__message.idle {
   color: var(--color-text-muted);
 }
 
-.soil-moisture-calibrate__message.measuring {
+.calibrate-popup__message.measuring {
   color: var(--color-info);
 }
 
-.soil-moisture-calibrate__message.success {
+.calibrate-popup__message.success {
   color: var(--color-primary);
 }
 
-.soil-moisture-calibrate__message.error {
+.calibrate-popup__message.error {
   color: var(--color-error);
 }
 
-.soil-moisture-calibrate__value {
+.calibrate-popup__value {
   display: flex;
   gap: 3px;
   align-items: baseline;
@@ -938,3 +929,10 @@
 }
 
 /*  */
+
+.soil-moisture-calibrate__result {
+  display: flex;
+  gap: 3px;
+  flex-direction: column;
+  align-items: center;
+}

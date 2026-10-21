@@ -564,17 +564,6 @@ document.addEventListener("alpine:init", () => {
       this.saving = false;
     },
 
-    get calibrationMessage() {
-      const messages = {
-        idle: "待機中",
-        measuring: "測定中",
-        success: "測定完了",
-        error: "測定失敗",
-      };
-
-      return messages[this.calibrationStatus];
-    },
-
     get validation() {
       const value = this.value;
 

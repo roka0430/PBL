@@ -326,7 +326,7 @@ MizuMori | Admin
             </div>
             <div class="calibrate-popup__result">
               <div class="soil-moisture-calibrate__result">
-                <div class="soil-moisture-calibrate__message" :class="calibrationStatus">
+                <div class="calibrate-popup__message" :class="calibrationStatus">
                   <svg x-show="calibrationStatus === 'success'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
@@ -338,13 +338,18 @@ MizuMori | Admin
                     <path d="M12 8v4" />
                     <path d="M12 16h.01" />
                   </svg>
-                  <span x-text="calibrationMessage"></span>
+                  <span x-text="{
+                    idle: '待機中',
+                    measuring: '測定中',
+                    success: '測定完了',
+                    error: '測定失敗',
+                  }[calibrationStatus]"></span>
                   <svg class="loader" x-show="calibrationStatus === 'measuring'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M12 3a9 9 0 1 0 9 9" />
                   </svg>
                 </div>
-                <div class="soil-moisture-calibrate__value">
+                <div class="calibrate-popup__value">
                   <div x-text="value ?? '--'"></div>
                   <span class="unit" x-text="unit"></span>
                 </div>
@@ -368,7 +373,7 @@ MizuMori | Admin
             </div>
             <div class="calibrate-popup__result">
               <div class="soil-moisture-calibrate__result">
-                <div class="soil-moisture-calibrate__message" :class="calibrationStatus">
+                <div class="calibrate-popup__message" :class="calibrationStatus">
                   <svg x-show="calibrationStatus === 'success'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
@@ -380,13 +385,18 @@ MizuMori | Admin
                     <path d="M12 8v4" />
                     <path d="M12 16h.01" />
                   </svg>
-                  <span x-text="calibrationMessage"></span>
+                  <span x-text="{
+                    idle: '待機中',
+                    measuring: '測定中',
+                    success: '測定完了',
+                    error: '測定失敗',
+                  }[calibrationStatus]"></span>
                   <svg class="loader" x-show="calibrationStatus === 'measuring'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M12 3a9 9 0 1 0 9 9" />
                   </svg>
                 </div>
-                <div class="soil-moisture-calibrate__value">
+                <div class="calibrate-popup__value">
                   <div x-text="value ?? '--'"></div>
                   <span class="unit" x-text="unit"></span>
                 </div>
@@ -413,7 +423,7 @@ MizuMori | Admin
             </div>
             <div class="calibrate-popup__result">
               <div class="pump-flow-rate-calibrate__result">
-                <div class="pump-flow-rate-calibrate__message" :class="calibrationStatus">
+                <div class="calibrate-popup__message" :class="calibrationStatus">
                   <svg x-show="calibrationStatus === 'success'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
@@ -425,13 +435,18 @@ MizuMori | Admin
                     <path d="M12 8v4" />
                     <path d="M12 16h.01" />
                   </svg>
-                  <span x-text="calibrationMessage"></span>
+                  <span x-text="{
+                    idle: '待機中',
+                    measuring: '給水中',
+                    success: '給水完了',
+                    error: '給水失敗',
+                  }[calibrationStatus]"></span>
                   <svg class="loader" x-show="calibrationStatus === 'measuring'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M12 3a9 9 0 1 0 9 9" />
                   </svg>
                 </div>
-                <div class="pump-flow-rate-calibrate__value">
+                <div class="calibrate-popup__value">
                   <div x-text="value ?? '--'"></div>
                   <span class="unit" x-text="unit"></span>
                 </div>
