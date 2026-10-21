@@ -5,7 +5,14 @@ from .paths import SETTINGS_PATH
 
 DEFINITIONS = {
     "sys": {
+        "save_watering_history": {
+            "type": "boolean",
+            "label": "水やり履歴の保存",
+            "description": "水やりの実行記録をデータベースに保存するかどうかを設定します。",
+            "default": False,
+        },
         "sensing_interval_sec": {
+            "type": "number",
             "label": "センシング間隔",
             "description": "土壌水分などのセンサ値を取得する間隔を設定します。",
             "unit": "秒",
@@ -14,6 +21,7 @@ DEFINITIONS = {
             "max": None,
         },
         "startup_waiting_sec": {
+            "type": "number",
             "label": "起動待機時間",
             "description": "システム起動後、センシングを始めるまでの待機時間を設定します。",
             "unit": "秒",
@@ -22,6 +30,7 @@ DEFINITIONS = {
             "max": None,
         },
         "soil_moisture_dry": {
+            "type": "number",
             "label": "乾燥時の土壌水分センサ値",
             "description": "土壌が乾燥しているときのセンサ値を設定します。土壌水分量の算出に使用します。",
             "unit": "",
@@ -30,6 +39,7 @@ DEFINITIONS = {
             "max": 1023,
         },
         "soil_moisture_wet": {
+            "type": "number",
             "label": "湿潤時の土壌水分センサ値",
             "description": "土壌が十分に湿っているときのセンサ値を設定します。土壌水分量の算出に使用します。",
             "unit": "",
@@ -38,6 +48,7 @@ DEFINITIONS = {
             "max": 1023,
         },
         "pump_flow_rate_ml_sec": {
+            "type": "number",
             "label": "ポンプ流量",
             "description": "ポンプが1秒間に排出する水量を設定します。給水量の算出に使用します。",
             "unit": "mL/s",
@@ -46,6 +57,7 @@ DEFINITIONS = {
             "max": None,
         },
         "high_temperature_threshold": {
+            "type": "number",
             "label": "高温警告しきい値",
             "description": "気温がこの値以上になると、高温警告を行います。",
             "unit": "℃",
@@ -54,6 +66,7 @@ DEFINITIONS = {
             "max": 80,
         },
         "low_temperature_threshold": {
+            "type": "number",
             "label": "低温警告しきい値",
             "description": "気温がこの値以下になると、低温警告を行います。",
             "unit": "℃",
@@ -62,6 +75,7 @@ DEFINITIONS = {
             "max": 80,
         },
         "sensor_saving_interval_sec": {
+            "type": "number",
             "label": "センサ値保存間隔",
             "description": "センサ値を保存する間隔を設定します。",
             "unit": "秒",
@@ -72,6 +86,7 @@ DEFINITIONS = {
     },
     "thr": {
         "determination_interval_sec": {
+            "type": "number",
             "label": "給水判定間隔",
             "description": "土壌水分量を確認し、給水の開始を判定する間隔を設定します。",
             "unit": "秒",
@@ -80,6 +95,7 @@ DEFINITIONS = {
             "max": None,
         },
         "start_soil_moisture_percent": {
+            "type": "number",
             "label": "給水開始しきい値",
             "description": "土壌水分量がこの値を下回ると、自動給水を開始します。",
             "unit": "%",
@@ -88,6 +104,7 @@ DEFINITIONS = {
             "max": 100,
         },
         "stop_soil_moisture_percent": {
+            "type": "number",
             "label": "給水終了しきい値",
             "description": "土壌水分量がこの値を上回ると、自動給水を終了します。",
             "unit": "%",
@@ -98,6 +115,7 @@ DEFINITIONS = {
     },
     "fix": {
         "determination_interval_sec": {
+            "type": "number",
             "label": "給水判定間隔",
             "description": "土壌水分率を確認し、給水するかどうかを判定する間隔を設定します。",
             "unit": "秒",
@@ -106,6 +124,7 @@ DEFINITIONS = {
             "max": None,
         },
         "start_soil_moisture_percent": {
+            "type": "number",
             "label": "給水開始しきい値",
             "description": "土壌水分率がこの値を下回ると、設定した量の給水を行います。",
             "unit": "%",
@@ -114,6 +133,7 @@ DEFINITIONS = {
             "max": 100,
         },
         "amount_ml": {
+            "type": "number",
             "label": "給水量",
             "description": "1回の給水でポンプから排出する水量を設定します。",
             "unit": "mL",
@@ -124,6 +144,7 @@ DEFINITIONS = {
     },
     "sch": {
         "interval_sec": {
+            "type": "number",
             "label": "給水間隔",
             "description": "定期給水を実行する間隔を設定します。",
             "unit": "秒",
@@ -132,6 +153,7 @@ DEFINITIONS = {
             "max": None,
         },
         "amount_ml": {
+            "type": "number",
             "label": "給水量",
             "description": "1回の定期給水でポンプから排出する水量を設定します。",
             "unit": "mL",
@@ -232,6 +254,9 @@ class Settings:
 
         if value is None:
             value = definition["default"]
+
+        if definition["type"] == "boolean":
+            return value
 
         if definition["min"] is not None and value < definition["min"]:
             return definition["min"]

@@ -359,6 +359,10 @@ document.addEventListener("alpine:init", () => {
 
     SETTINGS_GROUPS: [
       {
+        title: "システム",
+        ids: ["save_watering_history"],
+      },
+      {
         title: "センサ",
         ids: [
           "sensing_interval_sec",
@@ -398,10 +402,7 @@ document.addEventListener("alpine:init", () => {
         });
 
         for (const id of ids) {
-          settingsLayout.push({
-            type: "setting",
-            ...settings[id],
-          });
+          settingsLayout.push(settings[id]);
         }
       }
 
