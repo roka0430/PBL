@@ -421,12 +421,13 @@ class SystemController:
             self.pump.stop()
 
     def _record_watering_history(self, success, watering_type, amount_ml):
-        self.watering_database.add(
-            success=success,
-            watered_at=datetime.now(),
-            watering_type=watering_type,
-            amount_ml=amount_ml,
-        )
+        if self.settings.get("sys.save_watering_history"):
+            self.watering_database.add(
+                success=success,
+                watered_at=datetime.now(),
+                watering_type=watering_type,
+                amount_ml=amount_ml,
+            )
 
     # -------------------- センサ処理 --------------------
 
