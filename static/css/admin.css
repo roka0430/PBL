@@ -298,6 +298,11 @@
 .auto-watering__mode-item input[type="radio"] {
   grid-row: 1 / 3;
   grid-column: 2;
+  accent-color: var(--color-text-muted);
+}
+
+.auto-watering__mode.enable input[type="radio"] {
+  accent-color: var(--color-primary);
 }
 
 .auto-watering__settings {

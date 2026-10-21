@@ -91,7 +91,7 @@ MizuMori | Admin
               <span class="circle"></span>
             </button>
           </div>
-          <div class="auto-watering__mode">
+          <div class="auto-watering__mode" :class="{ 'enable': enable }">
             <h3 class="auto-watering__heading">給水方式</h3>
             <label class="auto-watering__mode-item">
               <span class="heading">閾値制御</span>
