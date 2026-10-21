@@ -748,10 +748,10 @@ document.addEventListener("alpine:init", () => {
     },
 
     updatePopup() {
-      this.v5s1 = 0;
-      this.v5s2 = 0;
-      this.v10s1 = 0;
-      this.v10s2 = 0;
+      this.v1 = 0;
+      this.v2 = 0;
+      this.v3 = 0;
+      this.v4 = 0;
     },
   }));
 });
