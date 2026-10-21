@@ -484,7 +484,7 @@ class SystemController:
     def _set_calibrating_status(self):
         self.stop_watering()
 
-        deadline = time.monotonic() + 5
+        deadline = time.monotonic() + 3
         while self.status != SystemStatus.IDLE:
             if time.monotonic() >= deadline:
                 raise TimeoutError("Watering did not stop in time")
