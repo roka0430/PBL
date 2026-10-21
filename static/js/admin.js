@@ -414,7 +414,7 @@ document.addEventListener("alpine:init", () => {
     },
   }));
 
-  Alpine.data("settingsPopup", () => ({
+  Alpine.data("numberSettingsPopup", () => ({
     saving: false,
 
     group: null,
@@ -503,6 +503,48 @@ document.addEventListener("alpine:init", () => {
         isValid: true,
         message: "",
       };
+    },
+  }));
+
+  Alpine.data("booleanSettingsPopup", () => ({
+    saving: false,
+
+    group: null,
+    id: null,
+
+    description: null,
+    heading: null,
+    currentValue: null,
+
+    init() {
+      this.$watch(
+        () => this.$store.popup.revision,
+        () => this.updatePopup(),
+      );
+    },
+
+    updatePopup() {
+      this.group = this.$store.popup.settingGroup;
+      this.id = this.$store.popup.settingId;
+
+      const setting = this.$store.settings.getById(this.group, this.id);
+
+      this.description = setting.description;
+      this.heading = setting.label;
+      this.currentValue = setting.value;
+    },
+
+    async save() {
+      this.saving = true;
+
+      const result = await this.$store.settings.update(this.group, this.id, !this.currentValue);
+
+      if (!result.success) {
+        alert("設定値を変更できませんでした");
+      }
+
+      this.$store.popup.close();
+      this.saving = false;
     },
   }));
 
