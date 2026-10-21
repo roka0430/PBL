@@ -242,7 +242,7 @@ MizuMori | Admin
               <div class="settings__entry">
                 <div class="settings__name" x-text="item.label"></div>
                 <div class="settings__value">
-                  <span class="value" x-text="item.value ? 'オン' : 'オフ'"></span>
+                  <span class="value" x-text="item.value ? 'ON' : 'OFF'"></span>
                   <span class="unit" x-text="item.unit"></span>
                 </div>
                 <div class="settings__actions">
@@ -286,7 +286,7 @@ MizuMori | Admin
             <div class="setting-popup__info-spacer"></div>
             <div class="setting-popup__info-meta">
               <h3>デフォルト</h3>
-              <div><span x-text="defaultValue"></span></div>
+              <div><span x-text="defaultValue"></span> <span x-text="unit"></span></div>
             </div>
             <div class="setting-popup__info-meta">
               <h3>設定範囲</h3>
@@ -326,19 +326,19 @@ MizuMori | Admin
             <div class="setting-popup__current-setting">
               <h3>現在の設定値</h3>
               <div>
-                <span x-text="currentValue ? 'オン' : 'オフ'"></span>
+                <span x-text="currentValue ? 'ON' : 'OFF'"></span>
               </div>
             </div>
             <div class="setting-popup__info-spacer"></div>
             <div class="setting-popup__info-meta">
               <h3>デフォルト</h3>
-              <div><span x-text="defaultValue ? 'オン' : 'オフ'"></span></div>
+              <div><span x-text="defaultValue ? 'ON' : 'OFF'"></span></div>
             </div>
           </div>
           <div class="setting-popup__description" x-text="description"></div>
           <div class="setting-popup__actions">
             <button class="setting-popup__action setting-popup__action--cancel" @click="$store.popup.close()">キャンセル</button>
-            <button class="setting-popup__action setting-popup__action--save" :disabled="saving" x-text="currentValue ? 'オフにする' : 'オンにする'" @click="save()">保存する</button>
+            <button class="setting-popup__action setting-popup__action--save" :disabled="saving" x-text="currentValue ? 'OFFにする' : 'ONにする'" @click="save()">保存する</button>
           </div>
         </div>
       </div>
@@ -365,7 +365,7 @@ MizuMori | Admin
             <div class="calibrate-popup__info-spacer"></div>
             <div class="setting-popup__info-meta">
               <h3>デフォルト</h3>
-              <div><span x-text="defaultValue"></span></div>
+              <div><span x-text="defaultValue"></span> <span x-text="unit"></span></div>
             </div>
             <div class="calibrate-popup__info-meta">
               <h3>設定範囲</h3>

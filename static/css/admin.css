@@ -476,6 +476,8 @@
   flex: 1;
 
   min-width: 0;
+  transform: translateY(1px);
+
   font-size: 0.9rem;
 }
 
@@ -483,6 +485,8 @@
   display: flex;
   gap: 4px;
   align-items: baseline;
+
+  transform: translateY(1px);
 
   font-weight: bold;
   line-height: 1;
@@ -726,6 +730,7 @@
 
 .setting-popup__entry .box .input {
   flex: 1;
+  min-width: 0;
 }
 
 .setting-popup__entry .box .input::-webkit-inner-spin-button,
