@@ -262,8 +262,8 @@ MizuMori | Admin
     </section>
   </div>
   <div class="popups" x-show="$store.popup.opened">
-    <div class="popups__content">
-      <div class="setting-popup" x-show="$store.popup.id === 'edit-number'" x-data="numberSettingsPopup" @click.outside="$store.popup.close()">
+    <div class="popups__contents">
+      <div class="popups__content setting-popup" x-show="$store.popup.id === 'edit-number'" x-data="numberSettingsPopup" @click.outside="$store.popup.close()">
         <div class="popups__header setting-popup__header">
           <h2 x-text="heading"></h2>
           <button class="popups__close" @click="$store.popup.close()">
@@ -310,10 +310,7 @@ MizuMori | Admin
           </div>
         </div>
       </div>
-
-      <!-- TODO  -->
-
-      <div class="setting-popup" x-show="$store.popup.id === 'edit-boolean'" x-data="booleanSettingsPopup" @click.outside="$store.popup.close()">
+      <div class="popups__content setting-popup" x-show="$store.popup.id === 'edit-boolean'" x-data="booleanSettingsPopup" @click.outside="$store.popup.close()">
         <div class="popups__header setting-popup__header">
           <h2 x-text="heading"></h2>
           <button class="popups__close" @click="$store.popup.close()">
@@ -345,7 +342,7 @@ MizuMori | Admin
           </div>
         </div>
       </div>
-      <div class="calibrate-popup" x-show="$store.popup.id === 'calibration'" x-data="calibrationPopup" @click.outside="if(!calibrating) $store.popup.close()">
+      <div class="popups__content calibrate-popup" x-show="$store.popup.id === 'calibration'" x-data="calibrationPopup" @click.outside="if(!calibrating) $store.popup.close()">
         <div class="popups__header calibrate-popup__header">
           <h2 x-text="heading"></h2>
           <button class="popups__close" @click="if(!calibrating) $store.popup.close()">
