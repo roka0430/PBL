@@ -972,11 +972,18 @@
   gap: 10px;
 }
 
+.pump-flow-rate-calibrate__entry label {
+  flex: 1;
+  min-width: 0;
+}
+
 .pump-flow-rate-calibrate__entry span {
   font-size: 0.8rem;
 }
 
 .pump-flow-rate-calibrate__entry input {
+  width: 100%;
+
   padding-block: 5px;
   padding-inline: 10px;
 
