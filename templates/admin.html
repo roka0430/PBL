@@ -313,7 +313,7 @@ MizuMori | Admin
             </div>
           </div>
           <div class="calibrate-popup__description" x-text="description"></div>
-          <div class="calibrate-popup__body soil-moisture-calibrate" x-show="settingId ===  'soil_moisture_dry'">
+          <div class="calibrate-popup__body soil-moisture-calibrate" x-show="settingId === 'sys.soil_moisture_dry'">
             <div class="calibrate-popup__notice">
               <h3>測定時の注意点</h3>
               <ul>
@@ -355,7 +355,7 @@ MizuMori | Admin
               <button class="success" :disabled="calibrating || !complete" @click="save()">測定結果を保存</button>
             </div>
           </div>
-          <div class="calibrate-popup__body wet-soil-calibrate" x-show="settingId ===  'soil_moisture_wet'">
+          <div class="calibrate-popup__body soil-moisture-calibrate" x-show="settingId === 'sys.soil_moisture_wet'">
             <div class="calibrate-popup__notice">
               <h3>測定時の注意点</h3>
               <ul>
@@ -387,6 +387,51 @@ MizuMori | Admin
                   </svg>
                 </div>
                 <div class="soil-moisture-calibrate__value">
+                  <div x-text="value ?? '--'"></div>
+                  <span class="unit" x-text="unit"></span>
+                </div>
+              </div>
+            </div>
+            <div class="calibrate-popup__actions">
+              <button :disabled="calibrating" @click="if(!calibrating) $store.popup.close()">キャンセル</button>
+              <button class="success" :disabled="calibrating || !complete || !validation || saving" @click="save()">測定結果を保存</button>
+            </div>
+          </div>
+          <div class="calibrate-popup__body pump-flow-rate-calibrate" x-show="settingId === 'sys.pump_flow_rate_ml_sec'">
+            <div class="calibrate-popup__notice">
+              <h3>測定時の注意点</h3>
+              <ul>
+                <li class="instruction">給水量を測定できる十分大きな容器を用意してください。</li>
+                <li class="instruction">5秒給水と10秒給水をそれぞれ2回ずつ測定してください。</li>
+                <li class="warning">測定開始時に実行中の給水処理は停止されます。</li>
+                <li class="warning">測定開始と同時にポンプが駆動します。水濡れや水の飛散に注意してください。</li>
+              </ul>
+            </div>
+            <div class="calibrate-popup__actions">
+              <button @click="pumpFlowRateCalibrate(5)" :disabled="calibrating">5秒給水</button>
+              <button @click="pumpFlowRateCalibrate(10)" :disabled="calibrating">10秒給水</button>
+            </div>
+            <div class="calibrate-popup__result">
+              <div class="pump-flow-rate-calibrate__result">
+                <div class="pump-flow-rate-calibrate__message" :class="calibrationStatus">
+                  <svg x-show="calibrationStatus === 'success'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                    <path d="M9 12l2 2l4 -4" />
+                  </svg>
+                  <svg x-show="calibrationStatus === 'error'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-alert-circle">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                    <path d="M12 8v4" />
+                    <path d="M12 16h.01" />
+                  </svg>
+                  <span x-text="calibrationMessage"></span>
+                  <svg class="loader" x-show="calibrationStatus === 'measuring'" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M12 3a9 9 0 1 0 9 9" />
+                  </svg>
+                </div>
+                <div class="pump-flow-rate-calibrate__value">
                   <div x-text="value ?? '--'"></div>
                   <span class="unit" x-text="unit"></span>
                 </div>

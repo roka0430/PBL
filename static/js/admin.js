@@ -533,7 +533,7 @@ document.addEventListener("alpine:init", () => {
       this.id = this.$store.popup.settingId;
       const setting = this.$store.settings.getById(this.group, this.id);
 
-      this.settingId = setting.id;
+      this.settingId = `${this.group}.${this.id}`;
       this.description = setting.description;
       this.heading = setting.label;
       this.unit = setting.unit;
@@ -613,7 +613,6 @@ document.addEventListener("alpine:init", () => {
       });
 
       if (!res.ok) {
-        console.log("error");
         this.calibrating = false;
         this.calibrationStatus = "error";
         return;
@@ -641,7 +640,33 @@ document.addEventListener("alpine:init", () => {
       });
 
       if (!res.ok) {
-        console.log("error");
+        this.calibrating = false;
+        this.calibrationStatus = "error";
+        return;
+      }
+
+      const result = await res.json();
+
+      this.calibrating = false;
+      this.complete = true;
+      this.value = result.value;
+      this.calibrationStatus = "success";
+    },
+
+    async pumpFlowRateCalibrate(seconds) {
+      if (!confirm(`${seconds}秒給水を開始しますか？`)) {
+        return;
+      }
+
+      this.value = null;
+      this.calibrating = true;
+      this.calibrationStatus = "measuring";
+
+      const res = await fetch("/api/calibration/pump-flow-rate", {
+        method: "POST",
+      });
+
+      if (!res.ok) {
         this.calibrating = false;
         this.calibrationStatus = "error";
         return;
