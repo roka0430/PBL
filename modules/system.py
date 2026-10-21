@@ -213,9 +213,11 @@ class SystemController:
 
     #
 
-    def calibrate(self, key):
+    def calibrate(self, key, options={}):
         if key == "sys.soil_moisture_dry" or key == "sys.soil_moisture_wet":
             value = self._calibrate_soil_moisture()
+        elif key == "sys.pump_flow_rate_ml_sec":
+            value = self._calibrate_pump_flow_rate(options)
         else:
             raise ValueError(f"Unknown calibration key: {key}")
 
@@ -404,14 +406,13 @@ class SystemController:
     #
 
     def _watering(self, amount_ml):
+        duration_sec = amount_ml / self.settings.get("sys.pump_flow_rate_ml_sec")
+        self._watering_for_duration(duration_sec)
+
+    def _watering_for_duration(self, duration_sec):
         try:
-            duration_sec = amount_ml / self.settings.get("sys.pump_flow_rate_ml_sec")
-
             self.pump.start()
-
             stopped = self.watering_stop_event.wait(duration_sec)
-
-            self.pump.stop()
 
             if stopped:
                 return
@@ -511,3 +512,16 @@ class SystemController:
         finally:
             with self._status_lock:
                 self.status = SystemStatus.IDLE
+
+    def _calibrate_pump_flow_rate(self, options):
+        self._set_calibrating_status()
+        duration_sec = options["duration_sec"]
+
+        try:
+            self.watering_stop_event.clear()
+            self._watering_for_duration(duration_sec)
+        finally:
+            with self._status_lock:
+                self.status = SystemStatus.IDLE
+
+        return None

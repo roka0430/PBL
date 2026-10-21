@@ -319,6 +319,7 @@ def post_auto_watering_mode():
 @admin_api_required
 def post_calibrate_soil_moisture_dry():
     key = "sys.soil_moisture_dry"
+
     try:
         value = app.system.calibrate(key)
         return jsonify({"status": "success", "key": key, "value": value}), 200
@@ -330,9 +331,24 @@ def post_calibrate_soil_moisture_dry():
 @admin_api_required
 def post_calibrate_soil_moisture_wet():
     key = "sys.soil_moisture_wet"
+
     try:
         value = app.system.calibrate(key)
         return jsonify({"status": "success", "key": key, "value": value}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "error": str(e)}), 500
+
+
+@app.post("/api/calibration/pump-flow-rate")
+@admin_api_required
+def post_calibrate_pump_flow_rate():
+    key = "sys.pump_flow_rate_ml_sec"
+    data = request.get_json()
+    duration_sec = float(data.get("duration_sec"))
+
+    try:
+        app.system.calibrate(key, {"duration_sec": duration_sec})
+        return jsonify({"status": "success", "key": key}), 200
     except Exception as e:
         return jsonify({"status": "error", "error": str(e)}), 500
 

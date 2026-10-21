@@ -653,8 +653,8 @@ document.addEventListener("alpine:init", () => {
       this.calibrationStatus = "success";
     },
 
-    async pumpFlowRateCalibrate(seconds) {
-      if (!confirm(`${seconds}秒給水を開始しますか？`)) {
+    async pumpFlowRateCalibrate(duration_sec) {
+      if (!confirm(`${duration_sec}秒給水を開始しますか？`)) {
         return;
       }
 
@@ -664,6 +664,8 @@ document.addEventListener("alpine:init", () => {
 
       const res = await fetch("/api/calibration/pump-flow-rate", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ duration_sec: duration_sec }),
       });
 
       if (!res.ok) {
