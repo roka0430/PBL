@@ -200,10 +200,13 @@ document.addEventListener("alpine:init", () => {
       SCHEDULED: "scheduled",
     },
 
+    changeModeDelayMS: 1000,
+
     settings: [],
     mode: null,
     enable: false,
     updating: true,
+    canChangeMode: true,
 
     async init() {
       await this.syncWateringMode();
@@ -264,17 +267,45 @@ document.addEventListener("alpine:init", () => {
     },
 
     toggleMode() {
+      if (!this.canChangeMode) {
+        return;
+      }
+
+      if (!confirm(`自動給水を${this.enable ? "無効" : "有効"}化しますか？`)) {
+        return;
+      }
+
+      this.canChangeMode = false;
+
       this.enable = !this.enable;
-      this.changeMode();
+      this.syncMode();
+
+      setTimeout(() => {
+        this.canChangeMode = true;
+      }, this.changeModeDelayMS);
     },
 
     async changeMode() {
+      this.canChangeMode = false;
+
+      if (this.enable) {
+        await this.syncMode();
+      }
+
+      setTimeout(() => {
+        this.canChangeMode = true;
+      }, this.changeModeDelayMS);
+    },
+
+    async syncMode() {
+      console.log(this.getCurrentMode);
+
       this.updating = true;
 
       const res = await fetch("/api/auto-watering-mode", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mode: this.getCurrentMode() }),
+        body: JSON.stringify({ mode: this.getCurrentMode }),
       });
 
       if (!res.ok) {
@@ -285,7 +316,7 @@ document.addEventListener("alpine:init", () => {
       this.loadSettings();
     },
 
-    getCurrentMode() {
+    get getCurrentMode() {
       if (!this.enable) {
         return this.MODES.OFF;
       }
