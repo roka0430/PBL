@@ -559,7 +559,7 @@
   flex-direction: column;
 
   width: 500px;
-  max-height: 90vh;
+  max-height: 80vh;
 
   background: var(--color-background);
   border: solid 1px var(--color-border);
@@ -618,7 +618,7 @@
     bottom: 0;
 
     width: 100%;
-    max-height: calc(100% - 36px);
+    max-height: calc(100% - 52px);
 
     padding-bottom: 15;
     border-bottom: none;
