@@ -59,8 +59,6 @@ class Camera:
                 if not success:
                     raise RuntimeError("Failed to capture image")
 
-            time.sleep(0.1)
-
             success, frame = camera.read()
             if not success:
                 raise RuntimeError("Failed to capture image")
