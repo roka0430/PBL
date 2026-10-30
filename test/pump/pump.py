@@ -1,21 +1,34 @@
-from time import sleep
+import time
+
 from gpiozero import PWMOutputDevice
 
-MOTOR_PIN = 26
-PWM_FREQUENCY = 5000
-DUTY_CYCLE = 0.5
 
-RUN_TIME = 3
+class Pump:
+    MOTOR_PIN = 26
 
-motor = PWMOutputDevice(MOTOR_PIN, frequency=PWM_FREQUENCY, initial_value=0)
+    PWM_FREQUENCY = 5000
+    DUTY_CYCLE = 0.6
 
-print("Motor OFF")
-sleep(1)
+    def __init__(self):
+        self._motor = PWMOutputDevice(
+            self.MOTOR_PIN, frequency=self.PWM_FREQUENCY, initial_value=0
+        )
 
-print("Motor ON")
-motor.value = DUTY_CYCLE
-sleep(RUN_TIME)
+    def start(self):
+        self._motor.value = self.DUTY_CYCLE
 
-print("Motor OFF")
-motor.off()
-motor.close()
+    def stop(self):
+        self._motor.off()
+
+    def close(self):
+        self._motor.off()
+        self._motor.close()
+
+
+pump = Pump()
+
+try:
+    pump.start()
+    time.sleep(3)  # ポンプ駆動時間
+finally:
+    pump.close()

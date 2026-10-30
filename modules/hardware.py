@@ -15,7 +15,7 @@ from .dataclasses import Image
 
 class Pump:
     MOTOR_PIN = 26
-    PWM_FREQUENCY = 500
+    PWM_FREQUENCY = 500  # TODO 適切な周波数とデューティ比に
     DUTY_CYCLE = 0.6
 
     def __init__(self):
