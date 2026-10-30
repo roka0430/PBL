@@ -183,3 +183,81 @@ sudo systemctl disable pbl.service
 ```bash
 sudo systemctl restart pbl.service
 ```
+
+## リバースプロキシ
+
+### Caddyのインストール
+
+```bash
+sudo apt install --y debian-keyring debian-archive-keyring apt-transport-https curl
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+sudo chmod o+r /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+sudo chmod o+r /etc/apt/sources.list.d/caddy-stable.list
+sudo apt update
+sudo apt install caddy
+```
+
+### Caddyのインストールの確認
+
+```bash
+caddy version
+```
+
+### Caddyのsystemdの確認
+
+サービスの状態：
+
+```bash
+sudo systemctl status caddy
+```
+
+自動起動が有効か：
+
+```bash
+sudo systemctl is-enabled caddy
+```
+
+自動起動を有効化する：
+
+```bash
+sudo systemctl enable caddy
+```
+
+### Caddyfileの設定
+
+```bash
+sudo nano /etc/caddy/Caddyfile
+```
+
+```bash
+:80 {
+    reverse_proxy 127.0.0.1:5000
+}
+```
+
+### Caddyfileの検証
+
+フォーマットの整形：
+
+```bash
+sudo caddy fmt --overwrite /etc/caddy/Caddyfile
+```
+
+構文の検証：
+
+```bash
+sudo caddy validate --config /etc/caddy/Caddyfile
+```
+
+### Caddyの再起動と設定の反映
+
+```bash
+sudo systemctl reload caddy
+```
+
+状態の確認：
+
+```bash
+sudo systemctl status caddy
+```

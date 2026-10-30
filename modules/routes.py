@@ -32,8 +32,6 @@ class User(UserMixin):
         self.role = role
 
 
-PORT = 5000
-
 # ---------- 環境変数 ----------
 SECRET_KEY = os.environ["SECRET_KEY"]
 ADMIN_PASSWORD_HASH = os.environ["ADMIN_PASSWORD_HASH"]
@@ -361,3 +359,4 @@ def post_calibrate_pump_flow_rate():
 def run_server(system):
     app.system = system
     app.run(host="0.0.0.0", port=5000, debug=False, use_reloader=False)
+    # app.run(host="127.0.0.1", port=5000, debug=False, use_reloader=False) # TODO リバースプロキシ使用時
