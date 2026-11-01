@@ -356,7 +356,6 @@ def post_calibrate_pump_flow_rate():
 # ==================================================
 
 
-def run_server(system):
+def run_server(system, host, port):
     app.system = system
-    app.run(host="0.0.0.0", port=5000, debug=False, use_reloader=False)
-    # app.run(host="127.0.0.1", port=5000, debug=False, use_reloader=False) # TODO リバースプロキシ使用時
+    app.run(host=host, port=port, debug=False, use_reloader=False)

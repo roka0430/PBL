@@ -7,10 +7,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from modules.mdns import get_local_ip, start_mdns
-from modules.routes import run_server, PORT
+from modules.routes import run_server
 from modules.system import SystemController
 
 logging.getLogger("werkzeug").setLevel(logging.WARNING)
+
+# HOST = "127.0.0.1" # リバースプロキシ
+HOST = "0.0.0.0"  # 全て
+PORT = 5000
 
 
 def main():
@@ -27,7 +31,7 @@ def main():
 
     server_thread = threading.Thread(
         target=run_server,
-        args=(system,),
+        args=(system, HOST, PORT),
         daemon=True,
     )
 
